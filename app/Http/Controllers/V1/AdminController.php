@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\V1\Controllers;
+namespace App\Http\Controllers\V1;
 
-use App\Http\V1\Requests\LoginRequest;
-use App\Http\V1\Requests\RegisterRequest;
-use App\Http\V1\Services\UserService;
+use App\Http\Requests\V1\LoginRequest;
+use App\Http\Requests\V1\RegisterRequest;
+use App\Http\Services\V1\UserService;
 use Auth;
 use Exception;
 use Illuminate\Http\JsonResponse;

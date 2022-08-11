@@ -19,10 +19,13 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/home';
 
+
     /**
-     * @var string $apiNamespace
+     * Controllers namespace
+     *
+     * @var string
      */
-    protected $apiNamespace ='App\Http\Controllers';
+    protected $api_namespace ='App\Http\Controllers';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
@@ -36,7 +39,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->routes(function () {
             Route::middleware(['api', 'api_version:v1'])
                 ->prefix('api/v1')
-                ->namespace($this->getControllerNamespace('V1'))
+                ->namespace($this->api_namespace. '\V1')
                 ->group(base_path('routes/api_v1.php'));
 
             Route::middleware('web')
@@ -55,17 +58,5 @@ class RouteServiceProvider extends ServiceProvider
             /** @phpstan-ignore-next-line  */
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
-    }
-
-
-    /**
-     * Get the Controllers namespace based on the api version
-     *
-     * @param string $version
-     * @return string
-     */
-    private function getControllerNamespace(string $version): string
-    {
-        return "App\Http\{$version}\Controllers";
     }
 }

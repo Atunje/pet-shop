@@ -1,7 +1,6 @@
 <?php
 
-use App\Http\V1\Controllers\AdminController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\V1\AdminController;
 use Illuminate\Support\Facades\Route;
 
 /*

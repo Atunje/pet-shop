@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\V1\Services;
+namespace App\Http\Services\V1;
 
-use App\Http\V1\Resources\UserResource;
+use App\Http\Resources\V1\UserResource;
 use App\Models\User;
 use Auth;
 use Exception;

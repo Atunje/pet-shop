@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\V1\Requests;
+namespace App\Http\Requests\V1;
 
 use Illuminate\Validation\Rules\Password;
 

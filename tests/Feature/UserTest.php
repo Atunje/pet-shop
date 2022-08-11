@@ -79,4 +79,27 @@ class UserTest extends TestCase
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
+
+
+    public function test_admin_can_logout()
+    {
+        //create user with default password - password
+        $user = User::factory()->create();
+
+        $response = $this->post(self::USER_ENDPOINT . 'login', [
+            "email" => $user->email,
+            "password" => "password"
+        ]);
+
+        //get the auth token
+        $content = json_decode($response->content(), true);
+        $token = $content['data']['token'];
+
+        $this->refreshApplication();
+
+        //try logging out again
+        $headers = ["Authorization" => "Bearer $token", "Accept" => "application/json"];
+        $response = $this->get(self::USER_ENDPOINT . 'logout', $headers);
+        $response->assertStatus(200);
+    }
 }

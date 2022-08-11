@@ -5,8 +5,10 @@ namespace App\Http\Controllers\V1;
 use App\Http\Requests\V1\LoginRequest;
 use App\Http\Requests\V1\RegisterRequest;
 use App\Http\Services\V1\UserService;
+use Auth;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -112,4 +114,31 @@ class UserController extends Controller
 
         return response()->json(['success' => 0, 'error' => __('auth.failed')], Response::HTTP_UNAUTHORIZED);
     }
+
+
+    /**
+     * @OA\Get(
+     *      path="/api/v1/user/logout",
+     *      operationId="userLogout",
+     *      tags={"User"},
+     *      summary="User Logout",
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=404, description="Page Not Found"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     * Logs current user out
+     *
+     * @return JsonResponse
+     */
+    public function logout(Request $request)
+    {
+        if(Auth::logout()) {
+            return response()->json(['success' => 1]);
+        }
+
+        return response()->json(['success' => 0, 'error' => __('auth.logout_error')], Response::HTTP_UNAUTHORIZED);
+    }
+
 }

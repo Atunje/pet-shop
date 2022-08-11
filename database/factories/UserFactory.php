@@ -18,24 +18,61 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->name(),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->LastName(),
             'email' => fake()->safeEmail(),
             'email_verified_at' => now(),
+            'avatar' => fake()->uuid(),
+            'phone_number' => fake()->phoneNumber(),
+            'address' => fake()->address(),
+            'is_marketing' => false,
+            'is_admin' => false,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
         ];
     }
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * Indicate that the user's is_marketing field is true
      *
      * @return static
      */
-    public function unverified()
+    public function marketing()
     {
         return $this->state(function (array $attributes) {
             return [
-                'email_verified_at' => null,
+                'is_marketing' => true,
+            ];
+        });
+    }
+
+
+    /**
+     * Indicate that the user is admin
+     *
+     * @return static
+     */
+    public function admin()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_admin' => true,
+            ];
+        });
+    }
+
+
+    /**
+     * Indicate that the user's is_marketing field is true and is admin
+     *
+     * @return static
+     */
+    public function admin_marketing()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_marketing' => true,
+                'is_admin' => true
             ];
         });
     }

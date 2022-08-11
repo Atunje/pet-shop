@@ -3,30 +3,39 @@
 namespace Tests\Feature;
 
 // use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\User;
 use Tests\TestCase;
 
 class AdminTest extends TestCase
 {
+    const ADMIN_ENDPOINT = '/v1/admin/';
+
+
     /**
-     * A basic test example.
+     * Test the root endpoint
      *
      * @return void
      */
     public function test_the_application_returns_a_successful_response()
     {
-        $response = $this->get('/api/v1');
+        $response = $this->get(self::ROOT_ENDPOINT);
         $response->assertStatus(200);
     }
 
 
     /**
-     * A basic test example.
+     * Test admin can register
      *
      * @return void
      */
-    public function test_authenticated_route_without_access_token()
+    public function test_admin_registration()
     {
-        $response = $this->json('GET', '/api/v1/user');
-        $response->assertStatus(401);
+        $user = User::factory()->make()->toArray();
+        $user['password'] = 'password1';
+        $user['password_confirmation'] = 'password1';
+        $user['is_marketing'] = 'is_marketing';
+
+        $response = $this->post(self::ADMIN_ENDPOINT . 'create', $user);
+        $response->assertStatus(200);
     }
 }

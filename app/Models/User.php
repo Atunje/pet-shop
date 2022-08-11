@@ -4,12 +4,27 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use SoftDeletes, HasFactory, Notifiable;
+
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            $user->uuid = Str::uuid()->toString();
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -17,10 +32,15 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
-        'password',
+        'phone_number',
+        'address',
+        'avatar',
+        'is_marketing'
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -29,8 +49,9 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
+        'is_admin'
     ];
+
 
     /**
      * The attributes that should be cast.
@@ -39,5 +60,18 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_login_at' => 'datetime',
+    ];
+
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array<string, string|boolean>
+     */
+    protected $attributes = [
+        'uuid' => '',
+        'is_admin' => false,
+        'is_marketing' => false
     ];
 }

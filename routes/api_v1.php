@@ -15,20 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix'=>'v1'], function() {
-
-    Route::get('/', function () {
-        return ['message' => 'Welcome', 'success' => 1];
-    });
-
-    Route::group(['middleware' => ['auth:api']], function() {
-        Route::get('user', function(Request $request) {
-            return ['message' => 'Welcome', 'success' => 1, 'user' => $request->user()];
-        });
-    });
-
-    Route::group(['prefix'=>'admin'], function() {
-        Route::post('create', [AdminController::class, 'register']);
-    });
-
+Route::get('/', function () {
+    return ['message' => 'Welcome', 'success' => 1];
 });
+
+Route::group(['prefix'=>'admin'], function() {
+    Route::post('create', [AdminController::class, 'register']);
+});
+
+

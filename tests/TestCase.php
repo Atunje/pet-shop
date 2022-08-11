@@ -8,5 +8,5 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    const ROOT_ENDPOINT = '/v1/';
+    const ROOT_ENDPOINT = '/v1';
 }

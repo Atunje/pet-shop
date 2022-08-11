@@ -4,7 +4,6 @@ namespace App\Http\V1\Services;
 
 use App\Http\V1\Resources\UserResource;
 use App\Models\User;
-use Auth;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 

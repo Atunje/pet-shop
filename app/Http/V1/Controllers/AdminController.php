@@ -63,6 +63,8 @@ class AdminController extends Controller
     public function register(RegisterRequest $request)
     {
         $user_resource = $this->userService->registerAdmin($request->all());
+
+        $user_resource->token = $this->userService->adminLogin($request->only('email', 'password'));
         return response()->json(['success' => 1, 'data' => $user_resource]);
     }
 

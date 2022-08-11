@@ -8,6 +8,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class UserResource extends JsonResource
 {
     /**
+     * The user access token.
+     *
+     * @var string|null
+     */
+    public $token;
+
+
+    /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
@@ -24,7 +32,8 @@ class UserResource extends JsonResource
             'phone_number' => $this->phone_number,
             'is_marketing' => $this->is_marketing,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'updated_at' => $this->updated_at,
+            'token' => $this->whenNotNull($this->token)
         ];
     }
 }

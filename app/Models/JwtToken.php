@@ -62,4 +62,16 @@ class JwtToken extends Model
     {
         return $this->is_valid;
     }
+
+
+    /**
+     * Update last time used
+     *
+     * @return bool
+     */
+    public function saveLastUsedTime()
+    {
+        $this->last_used_at = now();
+        return $this->save();
+    }
 }

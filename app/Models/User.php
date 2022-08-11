@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\HasJwtTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,7 +12,7 @@ use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
-    use SoftDeletes, HasFactory, Notifiable;
+    use HasJwtTokens, SoftDeletes, HasFactory, Notifiable;
 
 
     /**
@@ -74,4 +75,16 @@ class User extends Authenticatable
         'is_admin' => false,
         'is_marketing' => false
     ];
+
+
+    /**
+     * Called when user logs in
+     *
+     * @return void
+     */
+    public function loggedIn()
+    {
+        $this->last_login_at = now();
+        $this->save();
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\V1\Services;
 
 use App\Http\V1\Resources\UserResource;
 use App\Models\User;
+use Auth;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 
@@ -44,5 +45,18 @@ class UserService
 
         //throw new UserCouldNotBeCreatedException($user);
         throw new Exception('User could not be created');
+    }
+
+
+    /**
+     * Validates admin credentials and returns access token
+     *
+     * @param array $credentials
+     * @return string|null
+     */
+    public function adminLogin($credentials)
+    {
+        $credentials['is_admin'] = true;
+        return Auth::attempt($credentials);
     }
 }

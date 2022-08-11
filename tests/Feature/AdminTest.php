@@ -36,6 +36,12 @@ class AdminTest extends TestCase
         $user['is_marketing'] = 'is_marketing';
 
         $response = $this->post(self::ADMIN_ENDPOINT . 'create', $user);
+
         $response->assertStatus(200);
+
+        //check if access token was created
+        $data = json_decode($response->content(), true);
+        $user_data = $data['data'];
+        $this->assertArrayHasKey('token', $user_data);
     }
 }

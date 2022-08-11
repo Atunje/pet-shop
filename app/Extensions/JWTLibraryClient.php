@@ -62,9 +62,9 @@ abstract class JWTLibraryClient
      * Issue the jwt and return the string
      *
      * @param string $user_identifier
-     * @return string
+     * @return IssuedToken
      */
-    abstract public function issueToken(string $user_identifier): string;
+    abstract public function issueToken(string $user_identifier): IssuedToken;
 
 
     /**

@@ -80,4 +80,25 @@ class JWTGuard implements Guard
         $user = $this->provider->retrieveByCredentials($credentials);
         return $user !== null;
     }
+
+
+    /**
+     * Validates user's credentials and returns access token
+     *
+     * @param array $credentials
+     * @return string|null
+     */
+    public function attempt(array $credentials = [])
+    {
+        $user = $this->provider->retrieveByCredentials($credentials);
+
+        if($user !== null) {
+            $token = $user->createToken();
+            $user->loggedIn();
+
+            return $token;
+        }
+
+        return null;
+    }
 }

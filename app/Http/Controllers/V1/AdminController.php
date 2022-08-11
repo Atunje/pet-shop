@@ -9,6 +9,7 @@ use Auth;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminController extends Controller
 {
@@ -111,7 +112,7 @@ class AdminController extends Controller
             return response()->json(['success' => 1, 'data' => ['token' => $token]]);
         }
 
-        return response()->json(['success' => 0, 'error' => __('auth.failed')], 422);
+        return response()->json(['success' => 0, 'error' => __('auth.failed')], Response::HTTP_UNAUTHORIZED);
     }
 
 
@@ -137,7 +138,7 @@ class AdminController extends Controller
             return response()->json(['success' => 1]);
         }
 
-        return response()->json(['success' => 0, 'error' => __('auth.logout_error')], 422);
+        return response()->json(['success' => 0, 'error' => __('auth.logout_error')], Response::HTTP_UNAUTHORIZED);
     }
 
 }

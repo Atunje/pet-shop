@@ -7,6 +7,7 @@ use App\Http\Requests\V1\RegisterRequest;
 use App\Http\Services\V1\UserService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
@@ -109,6 +110,6 @@ class UserController extends Controller
             return response()->json(['success' => 1, 'data' => ['token' => $token]]);
         }
 
-        return response()->json(['success' => 0, 'error' => __('auth.failed')], 422);
+        return response()->json(['success' => 0, 'error' => __('auth.failed')], Response::HTTP_UNAUTHORIZED);
     }
 }

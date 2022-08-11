@@ -5,6 +5,7 @@ namespace Tests\Feature;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use Tests\TestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminTest extends TestCase
 {
@@ -74,7 +75,7 @@ class AdminTest extends TestCase
             "password" => "password"
         ]);
 
-        $response->assertStatus(422);
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
 
@@ -88,7 +89,7 @@ class AdminTest extends TestCase
             "password" => "wrong_password"
         ]);
 
-        $response->assertStatus(422);
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
 

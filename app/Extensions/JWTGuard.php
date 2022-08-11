@@ -2,6 +2,7 @@
 
 namespace App\Extensions;
 
+use _PHPStan_9a6ded56a\Nette\Neon\Exception;
 use Illuminate\Http\Request;
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Guard;
@@ -68,7 +69,14 @@ class JWTGuard implements Guard
         $jwt_token = $this->jwtLibraryClient->getJwtToken($token);
 
         if($jwt_token !== null) {
-            return $this->provider->retrieveById($jwt_token->user_id);
+            $user = $this->provider->retrieveById($jwt_token->user_id);
+
+            if($user !== null) {
+                //set this jwtToken as current
+                $user->setCurrentJwtToken($jwt_token);
+            }
+
+            return $user;
         }
 
         return null;
@@ -92,7 +100,7 @@ class JWTGuard implements Guard
     {
         $user = $this->provider->retrieveByCredentials($credentials);
 
-        if($user !== null) {
+        if($user !== null && $this->provider->validateCredentials($user, $credentials)) {
             $token = $user->createToken();
             $user->loggedIn();
 
@@ -100,5 +108,22 @@ class JWTGuard implements Guard
         }
 
         return null;
+    }
+
+
+    /**
+     * Logs user out
+     *
+     * @return bool
+     */
+    public function logout()
+    {
+        $user = $this->request->user();
+
+        if($user !== null) {
+            return $user->invalidateToken();
+        }
+
+        return true;
     }
 }

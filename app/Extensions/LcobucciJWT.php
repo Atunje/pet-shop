@@ -33,7 +33,7 @@ class LcobucciJWT extends JWTLibraryClient
             ->issuedBy($this->issuer) // Configures the issuer (iss claim)
             ->identifiedBy($unique_id) // Configures the id (jti claim), replicating as a header item
             ->issuedAt($now) // Configures the time that the token was issue (iat claim)
-            ->canOnlyBeUsedAfter($now->modify('+1 minute')) // Configures the time that the token can be used (nbf claim)
+            ->canOnlyBeUsedAfter($now) // Configures the time that the token can be used (nbf claim)
             ->expiresAt($expires_at) // Configures the expiration time of the token (exp claim)
             ->withClaim('uid', $user_identifier) // Configures a new claim, called "uid"
             ->getToken($this->config->signer(), $this->config->signingKey()); // Builds a new token
@@ -50,22 +50,26 @@ class LcobucciJWT extends JWTLibraryClient
      */
     public function getJwtToken(string $token): ?JwtToken
     {
-        //parse the token
-        $unencrypted_token = $this->config->parser()->parse($token);
+        try {
+            //parse the token
+            $unencrypted_token = $this->config->parser()->parse($token);
 
-        //validate token against the constraints set
-        $constraints = $this->config->validationConstraints();
-        if ($this->config->validator()->validate($unencrypted_token, ...$constraints)) {
-            //get the jwt token that was stored
-            $unique_id = $unencrypted_token->claims()->get('jti');
-            $jwtToken = $this->getStoredJwtToken($unique_id);
+            //validate token against the constraints set
+            $constraints = $this->config->validationConstraints();
+            if ($this->config->validator()->validate($unencrypted_token, ...$constraints)) {
+                //get the jwt token that was stored
+                $unique_id = $unencrypted_token->claims()->get('jti');
+                $jwtToken = $this->getStoredJwtToken($unique_id);
 
-            if ($jwtToken!== null && $jwtToken->isValid()) {
-                return $jwtToken;
+                if ($jwtToken !== null && $jwtToken->isValid()) {
+                    return $jwtToken;
+                }
             }
-        }
 
-        return null;
+            return null;
+        } catch(\Exception $e) {
+            return null;
+        }
     }
 
 

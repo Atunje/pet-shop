@@ -2,10 +2,13 @@
 
 namespace App\Http\V1\Controllers;
 
+use App\Http\V1\Requests\LoginRequest;
 use App\Http\V1\Requests\RegisterRequest;
 use App\Http\V1\Services\UserService;
+use Auth;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
@@ -66,6 +69,75 @@ class AdminController extends Controller
 
         $user_resource->token = $this->userService->adminLogin($request->only('email', 'password'));
         return response()->json(['success' => 1, 'data' => $user_resource]);
+    }
+
+
+    /**
+     * @OA\Post(
+     *      path="/api/v1/admin/login",
+     *      operationId="adminLogin",
+     *      tags={"Admin"},
+     *      summary="Admin Login",
+     *      @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  required={
+     *                      "email",
+     *                      "password",
+     *                  },
+     *                  @OA\Property(property="email", type="email"),
+     *                  @OA\Property(property="password", type="string")
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=404, description="Page Not Found"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     *
+     * Admin login
+     *
+     * @param LoginRequest $request
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function login(LoginRequest $request)
+    {
+        $token = $this->userService->adminLogin($request->only('email', 'password'));
+        if($token !== null) {
+            return response()->json(['success' => 1, 'data' => ['token' => $token]]);
+        }
+
+        return response()->json(['success' => 0, 'error' => __('auth.failed')], 422);
+    }
+
+
+    /**
+     * @OA\Get(
+     *      path="/api/v1/admin/logout",
+     *      operationId="adminLogout",
+     *      tags={"Admin"},
+     *      summary="Admin Logout",
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=404, description="Page Not Found"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     * Logs current user out
+     *
+     * @return JsonResponse
+     */
+    public function logout(Request $request)
+    {
+        if(Auth::logout()) {
+            return response()->json(['success' => 1]);
+        }
+
+        return response()->json(['success' => 0, 'error' => __('auth.logout_error')], 422);
     }
 
 }

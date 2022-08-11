@@ -21,6 +21,11 @@ Route::get('/', function () {
 
 Route::group(['prefix'=>'admin'], function() {
     Route::post('create', [AdminController::class, 'register']);
+    Route::post('login', [AdminController::class, 'login']);
+
+    Route::group(['middleware' => ['auth']], function() {
+        Route::get('logout', [AdminController::class, 'logout']);
+    });
 });
 
 

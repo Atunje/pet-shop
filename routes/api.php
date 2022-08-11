@@ -14,6 +14,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/user', function (Request $request) {
-    return ['success' => 1, 'message' => 'Welcome!'];
+Route::group(['prefix'=>'v1'], function() {
+
+    Route::get('/', function () {
+        return ['message' => 'Welcome', 'success' => 1];
+    });
+
+    Route::group(['middleware' => ['auth:api']], function() {
+        Route::get('user', function(Request $request) {
+            return ['message' => 'Welcome', 'success' => 1, 'user' => $request->user()];
+        });
+    });
+
 });

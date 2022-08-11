@@ -107,7 +107,7 @@ class AdminController extends Controller
     public function login(LoginRequest $request)
     {
         $token = $this->userService->adminLogin($request->only('email', 'password'));
-        if($token !== null) {
+        if ($token !== null) {
             return response()->json(['success' => 1, 'data' => ['token' => $token]]);
         }
 

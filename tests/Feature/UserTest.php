@@ -32,4 +32,50 @@ class UserTest extends TestCase
         $data = $content['data'];
         $this->assertArrayHasKey('token', $data);
     }
+
+
+    public function test_user_can_login()
+    {
+        //create admin user with default password - password
+        $user = User::factory()->create();
+
+        $response = $this->post(self::USER_ENDPOINT . 'login', [
+            "email" => $user->email,
+            "password" => "password"
+        ]);
+
+        $response->assertStatus(200);
+
+        //check if access token was created
+        $content = json_decode($response->content(), true);
+        $data = $content['data'];
+        $this->assertArrayHasKey('token', $data);
+    }
+
+    public function test_admin_cannot_login_on_user_route()
+    {
+        //create user with default password - password
+        $user = User::factory()->admin()->create();
+
+        $response = $this->post(self::USER_ENDPOINT . 'login', [
+            "email" => $user->email,
+            "password" => "password"
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+
+    public function test_user_cannot_login_with_invalid_credentials()
+    {
+        //create user with default password - password
+        $user = User::factory()->admin()->create();
+
+        $response = $this->post(self::USER_ENDPOINT . 'login', [
+            "email" => $user->email,
+            "password" => "wrong_password"
+        ]);
+
+        $response->assertStatus(422);
+    }
 }

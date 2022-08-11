@@ -30,6 +30,7 @@ Route::group(['prefix'=>'admin'], function() {
 
 Route::group(['prefix'=>'user'], function() {
     Route::post('create', [UserController::class, 'create']);
+    Route::post('login', [UserController::class, 'login']);
 });
 
 

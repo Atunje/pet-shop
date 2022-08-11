@@ -81,7 +81,7 @@ class UserTest extends TestCase
     }
 
 
-    public function test_admin_can_logout()
+    public function test_user_can_logout()
     {
         //create user with default password - password
         $user = User::factory()->create();
@@ -102,4 +102,34 @@ class UserTest extends TestCase
         $response = $this->get(self::USER_ENDPOINT . 'logout', $headers);
         $response->assertStatus(200);
     }
+
+
+    public function test_user_can_view_own_profile()
+    {
+        //create user with default password - password
+        $user = User::factory()->create();
+
+        //login
+        $response = $this->post(self::USER_ENDPOINT . 'login', [
+            "email" => $user->email,
+            "password" => "password"
+        ]);
+
+        //get the auth token
+        $content = json_decode($response->content(), true);
+        $token = $content['data']['token'];
+
+        $this->refreshApplication();
+
+        //profile endpoint
+        $headers = ["Authorization" => "Bearer $token"];
+        $response = $this->get(self::USER_ENDPOINT, $headers);
+        $response->assertStatus(200);
+
+        //check if the email matches
+        $content = json_decode($response->content(), true);
+        $email = $content['data']['email'];
+        $this->assertEquals($user->email, $email);
+    }
+
 }

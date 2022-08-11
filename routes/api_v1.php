@@ -33,7 +33,8 @@ Route::group(['prefix'=>'user'], function() {
     Route::post('login', [UserController::class, 'login']);
 
     Route::group(['middleware' => ['auth']], function() {
-        Route::get('logout', [AdminController::class, 'logout']);
+        Route::get('/', [UserController::class, 'show']);
+        Route::get('logout', [UserController::class, 'logout']);
     });
 });
 

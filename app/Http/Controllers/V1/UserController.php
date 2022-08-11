@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Requests\V1\LoginRequest;
 use App\Http\Requests\V1\RegisterRequest;
+use App\Http\Resources\V1\UserResource;
 use App\Http\Services\V1\UserService;
 use Auth;
 use Exception;
@@ -128,6 +129,7 @@ class UserController extends Controller
      *      @OA\Response(response=422, description="Unprocessable Entity"),
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
+     *
      * Logs current user out
      *
      * @return JsonResponse
@@ -139,6 +141,33 @@ class UserController extends Controller
         }
 
         return response()->json(['success' => 0, 'error' => __('auth.logout_error')], Response::HTTP_UNAUTHORIZED);
+    }
+
+
+    /**
+     * @OA\Get(
+     *      path="/api/v1/user",
+     *      operationId="viewUserAccount",
+     *      tags={"User"},
+     *      summary="View a User Account",
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=404, description="Page Not Found"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     *
+     * Returns user info
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function show(Request $request)
+    {
+        return response()->json([
+            'success' => 1,
+            'data' => new UserResource($request->user())
+        ]);
     }
 
 }

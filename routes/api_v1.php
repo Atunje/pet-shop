@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\V1\AdminController;
+use App\Http\Controllers\V1\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +26,10 @@ Route::group(['prefix'=>'admin'], function() {
     Route::group(['middleware' => ['auth']], function() {
         Route::get('logout', [AdminController::class, 'logout']);
     });
+});
+
+Route::group(['prefix'=>'user'], function() {
+    Route::post('create', [UserController::class, 'create']);
 });
 
 

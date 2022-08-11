@@ -25,6 +25,20 @@ class UserService
 
 
     /**
+     * Register new user
+     *
+     * @param array $data
+     * @return UserResource
+     * @throws Exception
+     */
+    public function registerUser($data)
+    {
+        $user = $this->create($data);
+        return new UserResource($user);
+    }
+
+
+    /**
      * Create a user record
      *
      * @param array $data
@@ -57,6 +71,19 @@ class UserService
     public function adminLogin($credentials)
     {
         $credentials['is_admin'] = true;
+        return Auth::attempt($credentials);
+    }
+
+
+    /**
+     * Validates user credentials and returns access token
+     *
+     * @param array $credentials
+     * @return string|null
+     */
+    public function userLogin($credentials)
+    {
+        $credentials['is_admin'] = false;
         return Auth::attempt($credentials);
     }
 }

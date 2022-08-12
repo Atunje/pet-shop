@@ -102,4 +102,15 @@ class UserService
         $data['is_marketing'] = !empty($data['is_marketing']);
         return $user->update($data);
     }
+
+    /**
+     * Deletes user record
+     *
+     * @param User $user
+     * @return bool
+     */
+    public function delete($user)
+    {
+        return $user->delete();
+    }
 }

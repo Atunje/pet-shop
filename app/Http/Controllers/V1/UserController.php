@@ -14,7 +14,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class UserController extends Controller
 {
@@ -201,14 +200,56 @@ class UserController extends Controller
         try {
             Gate::denyIf(fn($user) => $user->isAdmin());
 
-            if ($user !== null && $this->userService->update($user, $request->all())) {
+            if ($this->userService->update($user, $request->all())) {
                 return response()->json(['success' => 1]);
             }
 
             return response()->json(['success' => 0, 'error' => __('profile.edit_failed')]);
         } catch (AuthorizationException $e) {
-            return response()->json(['success' => 0, 'error' => __('profile.admin_edit_disallowed')], Response::HTTP_UNAUTHORIZED);
+            return response()->json([
+                'success' => 0,
+                'error' => __('profile.admin_edit_disallowed')
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 
+
+    /**
+     * @OA\Get(
+     *      path="/api/v1/user/delete",
+     *      operationId="deleteUserAccount",
+     *      tags={"User"},
+     *      summary="Delete a User Account",
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=404, description="Page Not Found"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     *
+     * Delete user record
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    public function delete(Request $request)
+    {
+        $user = $request->user();
+
+        try {
+            Gate::denyIf(fn($user) => $user->isAdmin());
+
+            if ($this->userService->delete($user)) {
+                return response()->json(['success' => 1]);
+            }
+
+            return response()->json(['success' => 0, 'error' => __('profile.delete_failed')]);
+        } catch(AuthorizationException) {
+            return response()->json([
+                'success' => 0,
+                'error' => __('profile.admin_delete_disallowed')
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+    }
 }

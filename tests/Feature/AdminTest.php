@@ -161,4 +161,27 @@ class AdminTest extends TestCase
         $this->assertNotEquals($user->address, $updated['address']);
         $this->assertNotEquals($user->is_marketing, 1);
     }
+
+    public function test_admin_account_cannot_be_deleted()
+    {
+        //create admin user with default password - password
+        $user = User::factory()->admin()->create();
+
+        //login
+        $response = $this->post(self::ADMIN_ENDPOINT . 'login', [
+            "email" => $user->email,
+            "password" => "password"
+        ]);
+
+        //get the auth token
+        $content = json_decode($response->content(), true);
+        $token = $content['data']['token'];
+
+        $this->refreshApplication();
+
+        //delete
+        $headers = ["Authorization" => "Bearer $token"];
+        $response = $this->delete(UserTest::USER_ENDPOINT, $headers);
+        $response->assertStatus(401);
+    }
 }

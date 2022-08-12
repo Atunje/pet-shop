@@ -27,7 +27,7 @@ class UserTest extends TestCase
 
         $response = $this->post(self::USER_ENDPOINT . 'create', $user);
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
 
         //check if access token was created
         $content = json_decode($response->content(), true);
@@ -46,7 +46,7 @@ class UserTest extends TestCase
             "password" => "password"
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
 
         //check if access token was created
         $content = json_decode($response->content(), true);
@@ -125,7 +125,7 @@ class UserTest extends TestCase
         //profile endpoint
         $headers = ["Authorization" => "Bearer $token"];
         $response = $this->get(self::USER_ENDPOINT, $headers);
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
 
         //check if the email matches
         $content = json_decode($response->content(), true);
@@ -167,7 +167,7 @@ class UserTest extends TestCase
         //profile endpoint
         $headers = ["Authorization" => "Bearer $token"];
         $response = $this->put(self::USER_ENDPOINT . "edit", $updated, $headers);
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
 
         $user->refresh();
         $this->assertEquals($user->first_name, $updated['first_name']);
@@ -177,5 +177,37 @@ class UserTest extends TestCase
         $this->assertEquals($user->avatar, $updated['avatar']);
         $this->assertEquals($user->address, $updated['address']);
         $this->assertEquals($user->is_marketing, 1);
+    }
+
+
+    public function test_user_can_delete_own_account()
+    {
+        $this->withoutExceptionHandling();
+
+        //create user with default password - password
+        $user = User::factory()->create();
+
+        //login
+        $response = $this->post(self::USER_ENDPOINT . 'login', [
+            "email" => $user->email,
+            "password" => "password"
+        ]);
+
+        //get the auth token
+        $content = json_decode($response->content(), true);
+        $token = $content['data']['token'];
+
+        $this->refreshApplication();
+
+        //delete account
+        $headers = ["Authorization" => "Bearer $token"];
+        $response = $this->delete(self::USER_ENDPOINT, $headers);
+        $response->assertStatus(Response::HTTP_OK);
+
+        $this->refreshApplication();
+
+        //test if account is still assessible
+        $response = $this->get(self::USER_ENDPOINT, $headers);
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 }

@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests\V1;
 
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rules;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class UpdateUserRequest extends APIFormRequest
 {
@@ -20,7 +21,7 @@ class UpdateUserRequest extends APIFormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, string|null>
+     * @return array<string, array<int, Rules\Password|Rules\Unique|string|null>|string>
      */
     public function rules()
     {

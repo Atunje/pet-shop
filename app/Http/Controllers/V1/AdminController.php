@@ -142,5 +142,4 @@ class AdminController extends Controller
 
         return response()->json(['success' => 0, 'error' => __('auth.logout_error')], Response::HTTP_UNAUTHORIZED);
     }
-
 }

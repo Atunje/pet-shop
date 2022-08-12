@@ -229,7 +229,7 @@ class UserController extends Controller
         try {
             Gate::denyIf(fn($user) => $user->isAdmin());
 
-            if ($this->userService->update($user, $request->all())) {
+            if ($user !== null && $this->userService->update($user, $request->all())) {
                 return response()->json(['success' => 1]);
             }
 
@@ -270,12 +270,12 @@ class UserController extends Controller
         try {
             Gate::denyIf(fn($user) => $user->isAdmin());
 
-            if ($this->userService->delete($user)) {
+            if ($user !== null && $this->userService->delete($user)) {
                 return response()->json(['success' => 1]);
             }
 
             return response()->json(['success' => 0, 'error' => __('profile.delete_failed')]);
-        } catch(AuthorizationException) {
+        } catch(AuthorizationException $e) {
             return response()->json([
                 'success' => 0,
                 'error' => __('profile.admin_delete_disallowed')

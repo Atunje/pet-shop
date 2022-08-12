@@ -19,7 +19,7 @@ class RegisterRequest extends APIFormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, string>
+     * @return array<string, array<int, Password|string|null>|string>
      */
     public function rules()
     {

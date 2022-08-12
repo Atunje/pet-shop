@@ -153,27 +153,29 @@ class UserTest extends TestCase
 
         $faker = Factory::create();
 
-        $updated = $user;
-        $updated->phone_number = $faker->phoneNumber();
-        $updated->address = $faker->address();
-        $updated->is_marketing = "is_marketing";
-        $updated->first_name = $faker->firstName();
-        $updated->last_name = $faker->lastName();
-        $updated->email = $faker->safeEmail();
-        $updated->avatar = $faker->uuid();
+        $updated = $user->toArray();
+        $updated['phone_number'] = $faker->phoneNumber();
+        $updated['address'] = $faker->address();
+        $updated['is_marketing'] = "is_marketing";
+        $updated['first_name'] = $faker->firstName();
+        $updated['last_name'] = $faker->lastName();
+        $updated['email'] = $faker->safeEmail();
+        $updated['avatar'] = $faker->uuid();
+        $updated['password'] = "password";
+        $updated['password_confirmation'] = "password";
 
         //profile endpoint
         $headers = ["Authorization" => "Bearer $token"];
-        $response = $this->put(self::USER_ENDPOINT . "edit", $updated->toArray(), $headers);
+        $response = $this->put(self::USER_ENDPOINT . "edit", $updated, $headers);
         $response->assertStatus(200);
 
-        $user->fresh();
-        $this->assertEquals($user->first_name, $updated->first_name);
-        $this->assertEquals($user->last_name, $updated->last_name);
-        $this->assertEquals($user->email, $updated->email);
-        $this->assertEquals($user->phone_number, $updated->phone_number);
-        $this->assertEquals($user->avatar, $updated->avatar);
-        $this->assertEquals($user->address, $updated->address);
-        $this->assertTrue($user->is_marketing);
+        $user->refresh();
+        $this->assertEquals($user->first_name, $updated['first_name']);
+        $this->assertEquals($user->last_name, $updated['last_name']);
+        $this->assertEquals($user->email, $updated['email']);
+        $this->assertEquals($user->phone_number, $updated['phone_number']);
+        $this->assertEquals($user->avatar, $updated['avatar']);
+        $this->assertEquals($user->address, $updated['address']);
+        $this->assertEquals($user->is_marketing, 1);
     }
 }

@@ -207,7 +207,7 @@ class UserController extends Controller
 
             return response()->json(['success' => 0, 'error' => __('profile.edit_failed')]);
         } catch (AuthorizationException $e) {
-            return response()->json(['success' => 0, 'error' => __('profile.admin_edit_disallowed')]);
+            return response()->json(['success' => 0, 'error' => __('profile.admin_edit_disallowed')], Response::HTTP_UNAUTHORIZED);
         }
     }
 

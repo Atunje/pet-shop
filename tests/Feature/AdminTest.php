@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
+use Faker\Factory;
 use Tests\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -113,5 +114,51 @@ class AdminTest extends TestCase
         $headers = ["Authorization" => "Bearer $token", "Accept" => "application/json"];
         $response = $this->get(self::ADMIN_ENDPOINT . 'logout', $headers);
         $response->assertStatus(200);
+    }
+
+
+    public function test_admin_account_cannot_be_edited()
+    {
+        //create admin user with default password - password
+        $user = User::factory()->admin()->create();
+
+        //login
+        $response = $this->post(self::ADMIN_ENDPOINT . 'login', [
+            "email" => $user->email,
+            "password" => "password"
+        ]);
+
+        //get the auth token
+        $content = json_decode($response->content(), true);
+        $token = $content['data']['token'];
+
+        $this->refreshApplication();
+
+        $faker = Factory::create();
+
+        $updated = $user->toArray();
+        $updated['phone_number'] = $faker->phoneNumber();
+        $updated['address'] = $faker->address();
+        $updated['is_marketing'] = "is_marketing";
+        $updated['first_name'] = $faker->firstName();
+        $updated['last_name'] = $faker->lastName();
+        $updated['email'] = $faker->safeEmail();
+        $updated['avatar'] = $faker->uuid();
+        $updated['password'] = "password";
+        $updated['password_confirmation'] = "password";
+
+        //profile endpoint
+        $headers = ["Authorization" => "Bearer $token"];
+        $response = $this->put(UserTest::USER_ENDPOINT . "edit", $updated, $headers);
+        $response->assertStatus(401);
+
+        $user->refresh();
+        $this->assertNotEquals($user->first_name, $updated['first_name']);
+        $this->assertNotEquals($user->last_name, $updated['last_name']);
+        $this->assertNotEquals($user->email, $updated['email']);
+        $this->assertNotEquals($user->phone_number, $updated['phone_number']);
+        $this->assertNotEquals($user->avatar, $updated['avatar']);
+        $this->assertNotEquals($user->address, $updated['address']);
+        $this->assertNotEquals($user->is_marketing, 1);
     }
 }

@@ -68,7 +68,7 @@ class User extends Authenticatable
     /**
      * The model's default values for attributes.
      *
-     * @var array<string, string|boolean>
+     * @var array<string, string|bool>
      */
     protected $attributes = [
         'uuid' => '',

@@ -65,10 +65,12 @@ class Handler extends ExceptionHandler
     {
         if ($e instanceof NotFoundHttpException) {
             return response()->json(['success' => 0, 'error' => 'Resource Not Found!'], SymfonyResponse::HTTP_NOT_FOUND);
-        } else if($e instanceof UnauthorizedException) {
-            return response()->json(['success' => 0, 'error' => 'Unauthorized'], SymfonyResponse::HTTP_UNAUTHORIZED);
-        } else {
-            return parent::render($request, $e);
         }
+
+        if($e instanceof UnauthorizedException) {
+            return response()->json(['success' => 0, 'error' => 'Unauthorized'], SymfonyResponse::HTTP_UNAUTHORIZED);
+        }
+
+        return parent::render($request, $e);
     }
 }

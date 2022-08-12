@@ -20,7 +20,7 @@ class UpdateUserRequest extends APIFormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, mixed>
+     * @return array<string, string|null>
      */
     public function rules()
     {

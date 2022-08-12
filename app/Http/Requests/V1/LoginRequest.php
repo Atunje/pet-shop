@@ -17,7 +17,7 @@ class LoginRequest extends APIFormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, mixed>
+     * @return array<string, string>
      */
     public function rules()
     {

@@ -133,7 +133,7 @@ class AdminController extends Controller
      *
      * @return JsonResponse
      */
-    public function logout(Request $request)
+    public function logout()
     {
         if(Auth::logout()) {
             return response()->json(['success' => 1]);

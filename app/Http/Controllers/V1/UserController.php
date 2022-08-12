@@ -138,7 +138,7 @@ class UserController extends Controller
      *
      * @return JsonResponse
      */
-    public function logout(Request $request)
+    public function logout()
     {
         if(Auth::logout()) {
             return response()->json(['success' => 1]);
@@ -206,7 +206,7 @@ class UserController extends Controller
             }
 
             return response()->json(['success' => 0, 'error' => __('profile.edit_failed')]);
-        } catch(AuthorizationException $e) {
+        } catch (AuthorizationException $e) {
             return response()->json(['success' => 0, 'error' => __('profile.admin_edit_disallowed')]);
         }
     }

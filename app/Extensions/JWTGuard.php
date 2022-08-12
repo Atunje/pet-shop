@@ -2,7 +2,6 @@
 
 namespace App\Extensions;
 
-use _PHPStan_9a6ded56a\Nette\Neon\Exception;
 use Illuminate\Http\Request;
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Guard;

@@ -32,12 +32,10 @@ Route::group(['prefix'=>'user'], function() {
     Route::post('create', [UserController::class, 'create']);
     Route::post('login', [UserController::class, 'login']);
 
-    Route::group(['middleware' => ['auth']], function() {
+    Route::group(['middleware' => ['auth:api']], function() {
         Route::get('/', [UserController::class, 'show']);
         Route::delete('/', [UserController::class, 'delete']);
         Route::put('/edit', [UserController::class, 'update']);
         Route::get('logout', [UserController::class, 'logout']);
     });
 });
-
-

@@ -123,6 +123,7 @@ class AdminController extends Controller
      *      operationId="adminLogout",
      *      tags={"Admin"},
      *      summary="Admin Logout",
+     *      security = {"bearerAuth"},
      *      @OA\Response(response=200, description="OK"),
      *      @OA\Response(response=401, description="Unauthorized"),
      *      @OA\Response(response=404, description="Page Not Found"),

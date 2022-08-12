@@ -126,6 +126,7 @@ class UserController extends Controller
      *      operationId="userLogout",
      *      tags={"User"},
      *      summary="User Logout",
+     *      security = {"bearerAuth"},
      *      @OA\Response(response=200, description="OK"),
      *      @OA\Response(response=401, description="Unauthorized"),
      *      @OA\Response(response=404, description="Page Not Found"),
@@ -153,6 +154,7 @@ class UserController extends Controller
      *      operationId="viewUserAccount",
      *      tags={"User"},
      *      summary="View a User Account",
+     *      security = {"bearerAuth"},
      *      @OA\Response(response=200, description="OK"),
      *      @OA\Response(response=401, description="Unauthorized"),
      *      @OA\Response(response=404, description="Page Not Found"),
@@ -175,11 +177,38 @@ class UserController extends Controller
 
 
     /**
-     * @OA\Get(
+     * @OA\Put(
      *      path="/api/v1/user/edit",
-     *      operationId="editUserAccount",
+     *      operationId="editUser",
      *      tags={"User"},
-     *      summary="Edit a User Account",
+     *      security = {"bearerAuth"},
+     *      summary="Edit User account",
+     *      @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  required={
+     *                      "first_name",
+     *                      "last_name",
+     *                      "email",
+     *                      "phone_number",
+     *                      "address",
+     *                      "password",
+     *                      "password_confirmation",
+     *                      "avatar"
+     *                  },
+     *                  @OA\Property(property="first_name", type="string"),
+     *                  @OA\Property(property="last_name", type="string"),
+     *                  @OA\Property(property="email", type="email"),
+     *                  @OA\Property(property="phone_number", type="string"),
+     *                  @OA\Property(property="address", type="string"),
+     *                  @OA\Property(property="password", type="string"),
+     *                  @OA\Property(property="password_confirmation", type="string"),
+     *                  @OA\Property(property="avatar", type="string"),
+     *                  @OA\Property(property="is_marketing", type="string"),
+     *              )
+     *          )
+     *      ),
      *      @OA\Response(response=200, description="OK"),
      *      @OA\Response(response=401, description="Unauthorized"),
      *      @OA\Response(response=404, description="Page Not Found"),
@@ -215,11 +244,12 @@ class UserController extends Controller
 
 
     /**
-     * @OA\Get(
-     *      path="/api/v1/user/delete",
+     * @OA\Delete(
+     *      path="/api/v1/user",
      *      operationId="deleteUserAccount",
      *      tags={"User"},
      *      summary="Delete a User Account",
+     *      security = {"bearerAuth"},
      *      @OA\Response(response=200, description="OK"),
      *      @OA\Response(response=401, description="Unauthorized"),
      *      @OA\Response(response=404, description="Page Not Found"),

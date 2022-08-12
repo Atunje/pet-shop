@@ -4,13 +4,17 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Requests\V1\LoginRequest;
 use App\Http\Requests\V1\RegisterRequest;
+use App\Http\Requests\V1\UpdateUserRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Http\Services\V1\UserService;
 use Auth;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class UserController extends Controller
 {
@@ -168,6 +172,43 @@ class UserController extends Controller
             'success' => 1,
             'data' => new UserResource($request->user())
         ]);
+    }
+
+
+    /**
+     * @OA\Get(
+     *      path="/api/v1/user/edit",
+     *      operationId="editUserAccount",
+     *      tags={"User"},
+     *      summary="Edit a User Account",
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=404, description="Page Not Found"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     *
+     * Updates user record
+     *
+     * @param UpdateUserRequest $request
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    public function update(UpdateUserRequest $request)
+    {
+        $user = $request->user();
+
+        try {
+            Gate::denyIf(fn($user) => $user->isAdmin());
+
+            if ($user !== null && $this->userService->update($user, $request->all())) {
+                return response()->json(['success' => 1]);
+            }
+
+            return response()->json(['success' => 0, 'error' => __('profile.edit_failed')]);
+        } catch(AuthorizationException $e) {
+            return response()->json(['success' => 0, 'error' => __('profile.admin_edit_disallowed')]);
+        }
     }
 
 }

@@ -87,4 +87,15 @@ class User extends Authenticatable
         $this->last_login_at = now();
         $this->save();
     }
+
+
+    /**
+     * Checks if user is admin
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->is_admin;
+    }
 }

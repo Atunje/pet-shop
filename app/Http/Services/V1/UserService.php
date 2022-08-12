@@ -6,6 +6,8 @@ use App\Http\Resources\V1\UserResource;
 use App\Models\User;
 use Auth;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
@@ -85,5 +87,19 @@ class UserService
     {
         $credentials['is_admin'] = false;
         return Auth::attempt($credentials);
+    }
+
+
+    /**
+     * Updates user record
+     *
+     * @param User $user
+     * @param array $data
+     * @return bool
+     */
+    public function update($user, $data)
+    {
+        $data['is_marketing'] = !empty($data['is_marketing']);
+        return $user->update($data);
     }
 }

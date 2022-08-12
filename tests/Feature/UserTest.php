@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
+use Faker\Factory;
 use Tests\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -132,4 +133,47 @@ class UserTest extends TestCase
         $this->assertEquals($user->email, $email);
     }
 
+
+    public function test_user_can_edit_own_profile()
+    {
+        //create user with default password - password
+        $user = User::factory()->create();
+
+        //login
+        $response = $this->post(self::USER_ENDPOINT . 'login', [
+            "email" => $user->email,
+            "password" => "password"
+        ]);
+
+        //get the auth token
+        $content = json_decode($response->content(), true);
+        $token = $content['data']['token'];
+
+        $this->refreshApplication();
+
+        $faker = Factory::create();
+
+        $updated = $user;
+        $updated->phone_number = $faker->phoneNumber();
+        $updated->address = $faker->address();
+        $updated->is_marketing = "is_marketing";
+        $updated->first_name = $faker->firstName();
+        $updated->last_name = $faker->lastName();
+        $updated->email = $faker->safeEmail();
+        $updated->avatar = $faker->uuid();
+
+        //profile endpoint
+        $headers = ["Authorization" => "Bearer $token"];
+        $response = $this->put(self::USER_ENDPOINT . "edit", $updated->toArray(), $headers);
+        $response->assertStatus(200);
+
+        $user->fresh();
+        $this->assertEquals($user->first_name, $updated->first_name);
+        $this->assertEquals($user->last_name, $updated->last_name);
+        $this->assertEquals($user->email, $updated->email);
+        $this->assertEquals($user->phone_number, $updated->phone_number);
+        $this->assertEquals($user->avatar, $updated->avatar);
+        $this->assertEquals($user->address, $updated->address);
+        $this->assertTrue($user->is_marketing);
+    }
 }

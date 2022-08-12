@@ -34,6 +34,7 @@ Route::group(['prefix'=>'user'], function() {
 
     Route::group(['middleware' => ['auth']], function() {
         Route::get('/', [UserController::class, 'show']);
+        Route::put('/edit', [UserController::class, 'update']);
         Route::get('logout', [UserController::class, 'logout']);
     });
 });

@@ -14,9 +14,9 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
-class AdminController extends Controller
+class AdminAuthController extends Controller
 {
-    public function __construct(protected UserService $userService)
+    public function __construct(private readonly UserService $userService)
     {
         //
     }
@@ -142,22 +142,9 @@ class AdminController extends Controller
             return response()->json(['success' => 1]);
         }
 
-        return response()->json([
-            'success' => 0,
-            'error' => __('auth.logout_error')],
+        return response()->json(
+            ['success' => 0, 'error' => __('auth.logout_error')],
             Response::HTTP_UNAUTHORIZED
         );
-    }
-
-
-    /**
-     * Get a paginated list of users
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function users(Request $request)
-    {
-        return response()->json(['success' => 1, "data" => $this->userService->getUsers($request->all())]);
     }
 }

@@ -5,7 +5,6 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Traits\HasJwtTokens;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -105,9 +104,9 @@ class User extends Authenticatable
     /**
      * Run query filters with these columns
      *
-     * @var array
+     * @var array<int, string>
      */
-    private $filterable = [
+    private array $filterable = [
         'first_name',
         'email',
         'phone_number',
@@ -120,7 +119,7 @@ class User extends Authenticatable
     /**
      * Get all users based on the supplied filter params
      *
-     * @param array $filter_params
+     * @param array<string, string> $filter_params
      * @return LengthAwarePaginator
      */
     public static function getAll($filter_params): LengthAwarePaginator
@@ -137,11 +136,12 @@ class User extends Authenticatable
             }
 
             if (isset($filter_params['sortBy'])) {
-                $order = (isset($filter_params['desc']) && $filter_params['desc'] == 0) ? "asc" : "desc";
+                $order = $filter_params['desc'] === "0" ? "asc" : "desc";
                 $query = $query->orderBy($filter_params['sort_by'], $order);
             }
         }
 
-        return $query->paginate($filter_params['limit'] ?? 50);
+        $per_pg = isset($filter_params['limit']) ?  (int) $filter_params['limit'] : 50;
+        return $query->paginate($per_pg);
     }
 }

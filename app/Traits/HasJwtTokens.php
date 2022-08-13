@@ -2,8 +2,8 @@
 
 namespace App\Traits;
 
-use App\Extensions\JWTLibraryClient;
 use App\Models\JwtToken;
+use App\Extensions\JWTLibraryClient;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait HasJwtTokens
@@ -55,7 +55,7 @@ trait HasJwtTokens
      * @param JwtToken $jwt_token
      * @return void
      */
-    public function setCurrentJwtToken($jwt_token)
+    public function setCurrentJwtToken(JwtToken $jwt_token): void
     {
         $this->jwt_token = $jwt_token;
 

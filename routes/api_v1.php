@@ -1,8 +1,12 @@
 <?php
 
-use App\Http\Controllers\V1\AdminController;
-use App\Http\Controllers\V1\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\V1\UsersController;
+use App\Http\Controllers\V1\UserAuthController;
+use App\Http\Controllers\V1\AdminAuthController;
+use App\Http\Controllers\V1\UserProfileController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,23 +24,25 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix'=>'admin'], function() {
-    Route::post('create', [AdminController::class, 'register']);
-    Route::post('login', [AdminController::class, 'login']);
+    Route::post('create', [AdminAuthController::class, 'register']);
+    Route::post('login', [AdminAuthController::class, 'login']);
 
     Route::group(['middleware' => ['auth:api']], function() {
-        Route::get('logout', [AdminController::class, 'logout']);
-        Route::post('user-listing', [AdminController::class, 'users']);
+        Route::get('logout', [AdminAuthController::class, 'logout']);
+
+        Route::post('user-listing', [UsersController::class, 'users']);
     });
 });
 
 Route::group(['prefix'=>'user'], function() {
-    Route::post('create', [UserController::class, 'create']);
-    Route::post('login', [UserController::class, 'login']);
+    Route::post('create', [UserAuthController::class, 'create']);
+    Route::post('login', [UserAuthController::class, 'login']);
 
     Route::group(['middleware' => ['auth:api']], function() {
-        Route::get('/', [UserController::class, 'show']);
-        Route::delete('/', [UserController::class, 'delete']);
-        Route::put('/edit', [UserController::class, 'update']);
-        Route::get('logout', [UserController::class, 'logout']);
+        Route::get('logout', [UserAuthController::class, 'logout']);
+
+        Route::get('/', [UserProfileController::class, 'show']);
+        Route::delete('/', [UserProfileController::class, 'delete']);
+        Route::put('/edit', [UserProfileController::class, 'update']);
     });
 });

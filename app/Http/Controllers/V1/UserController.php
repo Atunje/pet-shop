@@ -234,7 +234,7 @@ class UserController extends Controller
             }
 
             return response()->json(['success' => 0, 'error' => __('profile.edit_failed')]);
-        } catch (AuthorizationException $e) {
+        } catch (AuthorizationException) {
             return response()->json([
                 'success' => 0,
                 'error' => __('profile.admin_edit_disallowed')
@@ -275,7 +275,7 @@ class UserController extends Controller
             }
 
             return response()->json(['success' => 0, 'error' => __('profile.delete_failed')]);
-        } catch(AuthorizationException $e) {
+        } catch(AuthorizationException) {
             return response()->json([
                 'success' => 0,
                 'error' => __('profile.admin_delete_disallowed')

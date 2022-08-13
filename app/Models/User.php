@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Traits\HasJwtTokens;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -97,5 +99,49 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->is_admin;
+    }
+
+
+    /**
+     * Run query filters with these columns
+     *
+     * @var array
+     */
+    private $filterable = [
+        'first_name',
+        'email',
+        'phone_number',
+        'address',
+        'created_at',
+        'is_marketing'
+    ];
+
+
+    /**
+     * Get all users based on the supplied filter params
+     *
+     * @param array $filter_params
+     * @return LengthAwarePaginator
+     */
+    public static function getAll($filter_params): LengthAwarePaginator
+    {
+        $instance = new self();
+
+        $query = $instance->where('is_admin', false);
+
+        if(count($filter_params) > 0) {
+            foreach ($filter_params as $col => $val) {
+                if(in_array($col, $instance->filterable) && $val !== null) {
+                    $query->where($col, $val);
+                }
+            }
+
+            if (isset($filter_params['sortBy'])) {
+                $order = (isset($filter_params['desc']) && $filter_params['desc'] == 0) ? "asc" : "desc";
+                $query = $query->orderBy($filter_params['sort_by'], $order);
+            }
+        }
+
+        return $query->paginate($filter_params['limit'] ?? 50);
     }
 }

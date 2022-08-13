@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Models\User;
 use App\Http\Requests\V1\LoginRequest;
 use App\Http\Requests\V1\RegisterRequest;
+use App\Http\Resources\V1\UserResource;
 use App\Http\Services\V1\UserService;
 use Auth;
 use Exception;
@@ -140,6 +142,22 @@ class AdminController extends Controller
             return response()->json(['success' => 1]);
         }
 
-        return response()->json(['success' => 0, 'error' => __('auth.logout_error')], Response::HTTP_UNAUTHORIZED);
+        return response()->json([
+            'success' => 0,
+            'error' => __('auth.logout_error')],
+            Response::HTTP_UNAUTHORIZED
+        );
+    }
+
+
+    /**
+     * Get a paginated list of users
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function users(Request $request)
+    {
+        return response()->json(['success' => 1, "data" => $this->userService->getUsers($request->all())]);
     }
 }

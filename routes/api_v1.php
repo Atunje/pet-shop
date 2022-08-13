@@ -23,8 +23,9 @@ Route::group(['prefix'=>'admin'], function() {
     Route::post('create', [AdminController::class, 'register']);
     Route::post('login', [AdminController::class, 'login']);
 
-    Route::group(['middleware' => ['auth']], function() {
+    Route::group(['middleware' => ['auth:api']], function() {
         Route::get('logout', [AdminController::class, 'logout']);
+        Route::post('user-listing', [AdminController::class, 'users']);
     });
 });
 

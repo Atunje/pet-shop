@@ -2,15 +2,14 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
+//use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
-use Faker\Factory;
 use Tests\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserTest extends TestCase
 {
-    const USER_ENDPOINT = '/v1/user/';
+    //use RefreshDatabase;
 
 
     /**
@@ -84,47 +83,16 @@ class UserTest extends TestCase
 
     public function test_user_can_logout()
     {
-        //create user with default password - password
-        $user = User::factory()->create();
-
-        $response = $this->post(self::USER_ENDPOINT . 'login', [
-            "email" => $user->email,
-            "password" => "password"
-        ]);
-
-        //get the auth token
-        $content = json_decode($response->content(), true);
-        $token = $content['data']['token'];
-
-        $this->refreshApplication();
-
-        //try logging out again
-        $headers = ["Authorization" => "Bearer $token", "Accept" => "application/json"];
-        $response = $this->get(self::USER_ENDPOINT . 'logout', $headers);
+        $response = $this->get(self::USER_ENDPOINT . 'logout', $this->getUserAuthHeaders());
         $response->assertStatus(200);
     }
 
 
     public function test_user_can_view_own_profile()
     {
-        //create user with default password - password
         $user = User::factory()->create();
 
-        //login
-        $response = $this->post(self::USER_ENDPOINT . 'login', [
-            "email" => $user->email,
-            "password" => "password"
-        ]);
-
-        //get the auth token
-        $content = json_decode($response->content(), true);
-        $token = $content['data']['token'];
-
-        $this->refreshApplication();
-
-        //profile endpoint
-        $headers = ["Authorization" => "Bearer $token"];
-        $response = $this->get(self::USER_ENDPOINT, $headers);
+        $response = $this->get(self::USER_ENDPOINT, $this->getUserAuthHeaders($user));
         $response->assertStatus(Response::HTTP_OK);
 
         //check if the email matches
@@ -136,37 +104,16 @@ class UserTest extends TestCase
 
     public function test_user_can_edit_own_profile()
     {
-        //create user with default password - password
         $user = User::factory()->create();
+        $user_arr = $user->toArray();
 
-        //login
-        $response = $this->post(self::USER_ENDPOINT . 'login', [
-            "email" => $user->email,
-            "password" => "password"
-        ]);
+        $updated = User::factory()->marketing()->make()->toArray();
+        $updated['is_marketing'] = 'is_marketing';
+        $updated['password'] = 'password';
+        $updated['password_confirmation'] = 'password';
+        $updated = array_merge($user_arr, $updated);
 
-        //get the auth token
-        $content = json_decode($response->content(), true);
-        $token = $content['data']['token'];
-
-        $this->refreshApplication();
-
-        $faker = Factory::create();
-
-        $updated = $user->toArray();
-        $updated['phone_number'] = $faker->phoneNumber();
-        $updated['address'] = $faker->address();
-        $updated['is_marketing'] = "is_marketing";
-        $updated['first_name'] = $faker->firstName();
-        $updated['last_name'] = $faker->lastName();
-        $updated['email'] = $faker->safeEmail();
-        $updated['avatar'] = $faker->uuid();
-        $updated['password'] = "password";
-        $updated['password_confirmation'] = "password";
-
-        //profile endpoint
-        $headers = ["Authorization" => "Bearer $token"];
-        $response = $this->put(self::USER_ENDPOINT . "edit", $updated, $headers);
+        $response = $this->put(UserTest::USER_ENDPOINT . "edit", $updated, $this->getUserAuthHeaders($user));
         $response->assertStatus(Response::HTTP_OK);
 
         $user->refresh();
@@ -182,25 +129,7 @@ class UserTest extends TestCase
 
     public function test_user_can_delete_own_account()
     {
-        $this->withoutExceptionHandling();
-
-        //create user with default password - password
-        $user = User::factory()->create();
-
-        //login
-        $response = $this->post(self::USER_ENDPOINT . 'login', [
-            "email" => $user->email,
-            "password" => "password"
-        ]);
-
-        //get the auth token
-        $content = json_decode($response->content(), true);
-        $token = $content['data']['token'];
-
-        $this->refreshApplication();
-
-        //delete account
-        $headers = ["Authorization" => "Bearer $token"];
+        $headers = $this->getUserAuthHeaders();
         $response = $this->delete(self::USER_ENDPOINT, $headers);
         $response->assertStatus(Response::HTTP_OK);
 

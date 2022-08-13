@@ -2,15 +2,14 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
+//use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
-use Faker\Factory;
 use Tests\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminTest extends TestCase
 {
-    const ADMIN_ENDPOINT = '/v1/admin/';
+    //use RefreshDatabase;
 
 
     /**
@@ -30,7 +29,7 @@ class AdminTest extends TestCase
      *
      * @return void
      */
-    public function test_admin_registration()
+    public function test_admin_registration(): void
     {
         $user = User::factory()->make()->toArray();
         $user['password'] = 'password1';
@@ -96,60 +95,23 @@ class AdminTest extends TestCase
 
     public function test_admin_can_logout()
     {
-        //create user with default password - password
-        $user = User::factory()->admin()->create();
-
-        $response = $this->post(self::ADMIN_ENDPOINT . 'login', [
-            "email" => $user->email,
-            "password" => "password"
-        ]);
-
-        //get the auth token
-        $content = json_decode($response->content(), true);
-        $token = $content['data']['token'];
-
-        $this->refreshApplication();
-
-        //try logging out again
-        $headers = ["Authorization" => "Bearer $token", "Accept" => "application/json"];
-        $response = $this->get(self::ADMIN_ENDPOINT . 'logout', $headers);
+        $response = $this->get(self::ADMIN_ENDPOINT . 'logout', $this->getAdminAuthHeaders());
         $response->assertStatus(200);
     }
 
 
     public function test_admin_account_cannot_be_edited()
     {
-        //create admin user with default password - password
         $user = User::factory()->admin()->create();
+        $user_arr = $user->toArray();
 
-        //login
-        $response = $this->post(self::ADMIN_ENDPOINT . 'login', [
-            "email" => $user->email,
-            "password" => "password"
-        ]);
+        $updated = User::factory()->admin_marketing()->make()->toArray();
+        $updated['is_marketing'] = 'is_marketing';
+        $updated['password'] = 'password';
+        $updated['password_confirmation'] = 'password';
+        $updated = array_merge($user_arr, $updated);
 
-        //get the auth token
-        $content = json_decode($response->content(), true);
-        $token = $content['data']['token'];
-
-        $this->refreshApplication();
-
-        $faker = Factory::create();
-
-        $updated = $user->toArray();
-        $updated['phone_number'] = $faker->phoneNumber();
-        $updated['address'] = $faker->address();
-        $updated['is_marketing'] = "is_marketing";
-        $updated['first_name'] = $faker->firstName();
-        $updated['last_name'] = $faker->lastName();
-        $updated['email'] = $faker->safeEmail();
-        $updated['avatar'] = $faker->uuid();
-        $updated['password'] = "password";
-        $updated['password_confirmation'] = "password";
-
-        //profile endpoint
-        $headers = ["Authorization" => "Bearer $token"];
-        $response = $this->put(UserTest::USER_ENDPOINT . "edit", $updated, $headers);
+        $response = $this->put(UserTest::USER_ENDPOINT . "edit", $updated, $this->getAdminAuthHeaders($user));
         $response->assertStatus(401);
 
         $user->refresh();
@@ -164,24 +126,13 @@ class AdminTest extends TestCase
 
     public function test_admin_account_cannot_be_deleted()
     {
-        //create admin user with default password - password
-        $user = User::factory()->admin()->create();
-
-        //login
-        $response = $this->post(self::ADMIN_ENDPOINT . 'login', [
-            "email" => $user->email,
-            "password" => "password"
-        ]);
-
-        //get the auth token
-        $content = json_decode($response->content(), true);
-        $token = $content['data']['token'];
-
-        $this->refreshApplication();
-
-        //delete
-        $headers = ["Authorization" => "Bearer $token"];
-        $response = $this->delete(UserTest::USER_ENDPOINT, $headers);
+        $response = $this->delete(UserTest::USER_ENDPOINT, $this->getAdminAuthHeaders());
         $response->assertStatus(401);
+    }
+
+    public function test_admin_can_view_user_listing()
+    {
+        $response = $this->post(self::ADMIN_ENDPOINT . "user-listing", $this->getAdminAuthHeaders());
+        $response->assertStatus(200);
     }
 }

@@ -2,12 +2,12 @@
 
 namespace App\Http\Services\V1;
 
+use App\Http\Resources\V1\UserCollection;
 use App\Http\Resources\V1\UserResource;
 use App\Models\User;
 use Auth;
 use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
@@ -112,5 +112,16 @@ class UserService
     public function delete($user)
     {
         return (bool) $user->delete();
+    }
+
+
+    /**
+     * @param array $filter_params
+     * @return UserCollection
+     */
+    public function getUsers(array $filter_params)
+    {
+        $users = User::getAll($filter_params);
+        return new UserCollection($users);
     }
 }

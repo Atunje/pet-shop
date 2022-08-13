@@ -4,15 +4,10 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Requests\V1\LoginRequest;
 use App\Http\Requests\V1\RegisterRequest;
-use App\Http\Requests\V1\UpdateUserRequest;
-use App\Http\Resources\V1\UserResource;
 use App\Http\Services\V1\UserService;
 use Auth;
 use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserAuthController extends Controller

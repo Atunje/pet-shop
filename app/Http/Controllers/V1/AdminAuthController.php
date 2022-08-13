@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Models\User;
 use App\Http\Requests\V1\LoginRequest;
 use App\Http\Requests\V1\RegisterRequest;
-use App\Http\Resources\V1\UserResource;
 use App\Http\Services\V1\UserService;
 use Auth;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 

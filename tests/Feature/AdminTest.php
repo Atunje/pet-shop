@@ -126,13 +126,13 @@ class AdminTest extends TestCase
 
     public function test_admin_account_cannot_be_deleted()
     {
-        $response = $this->delete(UserTest::USER_ENDPOINT, $this->getAdminAuthHeaders());
+        $response = $this->delete(UserTest::USER_ENDPOINT, [], $this->getAdminAuthHeaders());
         $response->assertStatus(401);
     }
 
     public function test_admin_can_view_user_listing()
     {
-        $response = $this->post(self::ADMIN_ENDPOINT . "user-listing", $this->getAdminAuthHeaders());
+        $response = $this->post(self::ADMIN_ENDPOINT . "user-listing", [], $this->getAdminAuthHeaders());
         $response->assertStatus(200);
     }
 }

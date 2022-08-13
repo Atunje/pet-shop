@@ -120,9 +120,10 @@ class User extends Authenticatable
      * Get all users based on the supplied filter params
      *
      * @param array<string, string> $filter_params
+     * @param int $per_pg
      * @return LengthAwarePaginator
      */
-    public static function getAll($filter_params): LengthAwarePaginator
+    public static function getAll($filter_params, $per_pg): LengthAwarePaginator
     {
         $instance = new self();
 
@@ -141,7 +142,6 @@ class User extends Authenticatable
             }
         }
 
-        $per_pg = isset($filter_params['limit']) ?  (int) $filter_params['limit'] : 50;
         return $query->paginate($per_pg);
     }
 }

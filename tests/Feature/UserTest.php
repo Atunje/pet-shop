@@ -130,7 +130,7 @@ class UserTest extends TestCase
     public function test_user_can_delete_own_account()
     {
         $headers = $this->getUserAuthHeaders();
-        $response = $this->delete(self::USER_ENDPOINT, $headers);
+        $response = $this->delete(self::USER_ENDPOINT, [], $headers);
         $response->assertStatus(Response::HTTP_OK);
 
         $this->refreshApplication();

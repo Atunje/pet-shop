@@ -7,6 +7,7 @@ use App\Extensions\JWTGuard;
 use App\Extensions\JWTLibraryClient;
 use Auth;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 use InvalidArgumentException;
 
 class AuthServiceProvider extends ServiceProvider
@@ -28,6 +29,11 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+
+        //define admin to protect admin routes with middleware
+        Gate::define('admin', function ($user) {
+            return $user->isAdmin();
+        });
 
         // add custom guard
         Auth::extend('jwt', function ($app, $name, array $config) {

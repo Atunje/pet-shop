@@ -28,6 +28,13 @@ class UsersController extends Controller
     }
 
 
+    /**
+     * Edit user account
+     *
+     * @param User $user
+     * @param UpdateUserRequest $request
+     * @return JsonResponse
+     */
     public function edit(User $user, UpdateUserRequest $request)
     {
         if ($this->userService->update($user, $request->all())) {
@@ -38,6 +45,12 @@ class UsersController extends Controller
     }
 
 
+    /**
+     * Delete user account
+     *
+     * @param User $user
+     * @return JsonResponse
+     */
     public function destroy(User $user)
     {
         if ($this->userService->delete($user)) {

@@ -31,12 +31,12 @@ class UpdateUserRequest extends APIFormRequest
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users')->ignore($this->user()),
+                Rule::unique('users')->ignore($this->user),
             ],
             'phone_number' => [
                 'required',
                 'string',
-                Rule::unique('users')->ignore($this->user()),
+                Rule::unique('users')->ignore($this->user),
             ],
             'password' => ['required', 'confirmed', Password::defaults()],
             'avatar' => 'required|uuid',

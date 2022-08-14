@@ -113,7 +113,7 @@ class UserTest extends TestCase
         $updated['password_confirmation'] = 'password';
         $updated = array_merge($user_arr, $updated);
 
-        $response = $this->put(UserTest::USER_ENDPOINT . "edit", $updated, $this->getUserAuthHeaders($user));
+        $response = $this->put(self::USER_ENDPOINT . "edit", $updated, $this->getUserAuthHeaders($user));
         $response->assertStatus(Response::HTTP_OK);
 
         $user->refresh();

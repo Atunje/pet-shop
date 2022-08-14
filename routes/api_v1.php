@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\UsersController;
 use App\Http\Controllers\V1\UserAuthController;
@@ -28,14 +27,11 @@ Route::group(['prefix'=>'admin'], function() {
     Route::post('create', [AdminAuthController::class, 'register']);
     Route::post('login', [AdminAuthController::class, 'login']);
 
-    Route::post('user-listing', function(Request $request){
-        return $request->headers;
-    });
-
     Route::group(['middleware' => ['auth:api']], function() {
         Route::get('logout', [AdminAuthController::class, 'logout']);
 
-
+        Route::post('user-listing', [UsersController::class, 'index']);
+        Route::put('user-edit/{user:uuid}', [UsersController::class, 'edit']);
     });
 });
 

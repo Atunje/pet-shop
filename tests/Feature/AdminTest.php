@@ -111,7 +111,7 @@ class AdminTest extends TestCase
         $updated['password_confirmation'] = 'password';
         $updated = array_merge($user_arr, $updated);
 
-        $response = $this->put(UserTest::USER_ENDPOINT . "edit", $updated, $this->getAdminAuthHeaders($user));
+        $response = $this->put(self::USER_ENDPOINT . "edit", $updated, $this->getAdminAuthHeaders($user));
         $response->assertStatus(401);
 
         $user->refresh();
@@ -134,5 +134,32 @@ class AdminTest extends TestCase
     {
         $response = $this->post(self::ADMIN_ENDPOINT . "user-listing", [], $this->getAdminAuthHeaders());
         $response->assertStatus(200);
+    }
+
+
+    public function test_admin_can_edit_user()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = User::factory()->create();
+        $user_arr = $user->toArray();
+
+        $updated = User::factory()->marketing()->make()->toArray();
+        $updated['is_marketing'] = 'is_marketing';
+        $updated['password'] = 'password';
+        $updated['password_confirmation'] = 'password';
+        $updated = array_merge($user_arr, $updated);
+
+        $response = $this->put(self::ADMIN_ENDPOINT . "user-edit/" . $user->uuid, $updated, $this->getAdminAuthHeaders());
+        $response->assertStatus(Response::HTTP_OK);
+
+        $user->refresh();
+        $this->assertEquals($user->first_name, $updated['first_name']);
+        $this->assertEquals($user->last_name, $updated['last_name']);
+        $this->assertEquals($user->email, $updated['email']);
+        $this->assertEquals($user->phone_number, $updated['phone_number']);
+        $this->assertEquals($user->avatar, $updated['avatar']);
+        $this->assertEquals($user->address, $updated['address']);
+        $this->assertEquals($user->is_marketing, 1);
     }
 }

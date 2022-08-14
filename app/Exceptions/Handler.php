@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Validation\UnauthorizedException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
@@ -63,7 +64,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
-        if ($e instanceof NotFoundHttpException) {
+        if ($e instanceof NotFoundHttpException || $e instanceof MethodNotAllowedHttpException) {
             return response()->json(['success' => 0, 'error' => 'Resource Not Found!'], SymfonyResponse::HTTP_NOT_FOUND);
         }
 

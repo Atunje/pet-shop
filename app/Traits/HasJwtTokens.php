@@ -15,7 +15,6 @@ trait HasJwtTokens
      */
     protected $jwt_token;
 
-
     /**
      * Get the access tokens that belong to model.
      *
@@ -25,7 +24,6 @@ trait HasJwtTokens
     {
         return $this->hasMany(JwtToken::class);
     }
-
 
     /**
      * Create a new jwt token for the user.
@@ -42,12 +40,11 @@ trait HasJwtTokens
             'token_title' => 'JWT',
             'unique_id' => $issued_token->unique_id,
             'expires_at' => $issued_token->expires_at,
-            'is_valid' => true
+            'is_valid' => true,
         ]);
 
         return $issued_token->token;
     }
-
 
     /**
      * Set $jwt_token
@@ -55,13 +52,12 @@ trait HasJwtTokens
      * @param JwtToken $jwt_token
      * @return void
      */
-    public function setCurrentJwtToken(JwtToken $jwt_token): void
+    public function setCurrentJwtToken($jwt_token): void
     {
         $this->jwt_token = $jwt_token;
 
         $this->jwt_token->saveLastUsedTime();
     }
-
 
     /**
      * Invalidate the current token

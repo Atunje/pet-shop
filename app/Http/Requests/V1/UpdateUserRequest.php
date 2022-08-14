@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\V1;
 
-use Illuminate\Validation\Rules;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules;
 use Illuminate\Validation\Rules\Password;
 
 class UpdateUserRequest extends APIFormRequest

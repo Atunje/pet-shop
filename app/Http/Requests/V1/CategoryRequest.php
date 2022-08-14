@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\V1;
 
+use Illuminate\Validation\Rule;
+
 class CategoryRequest extends APIFormRequest
 {
     /**
@@ -21,8 +23,18 @@ class CategoryRequest extends APIFormRequest
      */
     public function rules()
     {
+        if (isset($this->category)) {
+            return [
+                'title' => [
+                    'required',
+                    'string',
+                    Rule::unique('categories')->ignore($this->category),
+                ],
+            ];
+        }
+
         return [
-            'title' => 'required|string'
+            'title' => 'required|string|unique:categories',
         ];
     }
 }

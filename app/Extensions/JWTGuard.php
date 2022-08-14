@@ -19,14 +19,12 @@ class JWTGuard implements Guard
      */
     protected $user;
 
-
     /**
      * Request
      *
      * @var Request
      */
     private $request;
-
 
     /**
      * Jwt implementation class of the selected jwt library
@@ -35,14 +33,12 @@ class JWTGuard implements Guard
      */
     private $jwtLibraryClient;
 
-
     public function __construct(UserProvider $provider, Request $request, JWTLibraryClient $jwtLibraryClient)
     {
         $this->provider = $provider;
         $this->request = $request;
         $this->jwtLibraryClient = $jwtLibraryClient;
     }
-
 
     public function user(): Authenticatable|null
     {
@@ -61,19 +57,15 @@ class JWTGuard implements Guard
         return $this->user;
     }
 
-
     public function getTokenUser(string $token): ?Authenticatable
     {
         //get the jwt token
         $jwt_token = $this->jwtLibraryClient->getJwtToken($token);
 
-        if($jwt_token !== null) {
+        if ($jwt_token !== null) {
             $user = $this->provider->retrieveById($jwt_token->user_id);
 
-            if($user !== null) {
-                //set this jwtToken as current
-                $user->setCurrentJwtToken($jwt_token);
-            }
+            $user?->setCurrentJwtToken($jwt_token);
 
             return $user;
         }
@@ -81,13 +73,11 @@ class JWTGuard implements Guard
         return null;
     }
 
-
     public function validate(array $credentials = []): bool
     {
         $user = $this->provider->retrieveByCredentials($credentials);
         return $user !== null;
     }
-
 
     /**
      * Validates user's credentials and returns access token
@@ -99,7 +89,7 @@ class JWTGuard implements Guard
     {
         $user = $this->provider->retrieveByCredentials($credentials);
 
-        if($user !== null && $this->provider->validateCredentials($user, $credentials)) {
+        if ($user !== null && $this->provider->validateCredentials($user, $credentials)) {
             $token = $user->createToken();
             $user->loggedIn();
 
@@ -108,7 +98,6 @@ class JWTGuard implements Guard
 
         return null;
     }
-
 
     /**
      * Logs user out
@@ -119,7 +108,7 @@ class JWTGuard implements Guard
     {
         $user = $this->request->user();
 
-        if($user !== null) {
+        if ($user !== null) {
             return $user->invalidateToken();
         }
 

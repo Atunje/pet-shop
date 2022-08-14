@@ -15,9 +15,8 @@ class JwtToken extends Model
         'token_title',
         'unique_id',
         'expires_at',
-        'is_valid'
+        'is_valid',
     ];
-
 
     /**
      * The attributes that should be hidden for serialization.
@@ -25,9 +24,8 @@ class JwtToken extends Model
      * @var array<int, string>
      */
     protected $hidden = [
-        'is_valid'
+        'is_valid',
     ];
-
 
     /**
      * The attributes that should be cast.
@@ -40,7 +38,6 @@ class JwtToken extends Model
         'refreshed_at' => 'datetime',
     ];
 
-
     /**
      * Makes token invalid when user logs out
      *
@@ -52,7 +49,6 @@ class JwtToken extends Model
         return $this->save();
     }
 
-
     /**
      * Checks the validity status of token
      *
@@ -62,7 +58,6 @@ class JwtToken extends Model
     {
         return $this->is_valid;
     }
-
 
     /**
      * Update last time used

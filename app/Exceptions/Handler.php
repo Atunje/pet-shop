@@ -2,17 +2,17 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Auth\Access\AuthorizationException;
+use Throwable;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\UnauthorizedException;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Validation\UnauthorizedException;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -68,9 +68,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e): SymfonyResponse
     {
-
-        if ($e instanceof ModelNotFoundException)
-        {
+        if ($e instanceof ModelNotFoundException) {
             $model = $this->getModelName($e->getModel());
             return $this->createResponse(
                 __('http.model_not_found', ["model" => $model]),
@@ -78,18 +76,20 @@ class Handler extends ExceptionHandler
             );
         }
 
-        return match(true) {
+        return match (true) {
             $e instanceof NotFoundHttpException, $e instanceof MethodNotAllowedHttpException => $this->createResponse(
-                __('http.not_found'),SymfonyResponse::HTTP_NOT_FOUND
+                __('http.not_found'),
+                SymfonyResponse::HTTP_NOT_FOUND
             ),
             $e instanceof UnauthorizedException,
-                $e instanceof AuthorizationException,
-                $e instanceof AuthenticationException =>
-                $this->createResponse(__('http.unauthorized'), SymfonyResponse::HTTP_UNAUTHORIZED),
+            $e instanceof AuthorizationException,
+            $e instanceof AuthenticationException => $this->createResponse(
+                __('http.unauthorized'),
+                SymfonyResponse::HTTP_UNAUTHORIZED
+            ),
             default => parent::render($request, $e)
         };
     }
-
 
     /**
      * @param class-string $model_path
@@ -98,10 +98,9 @@ class Handler extends ExceptionHandler
     private function getModelName(string $model_path)
     {
         $path = explode("\\", $model_path);
-        $index = count($path) -1;
+        $index = count($path) - 1;
         return $path[$index];
     }
-
 
     private function createResponse(mixed $error, int $status_code): JsonResponse
     {

@@ -13,14 +13,12 @@ abstract class JWTLibraryClient
      */
     protected string $issuer;
 
-
     /**
      * JWT Expiry in seconds
      *
      * @var int
      */
     protected int $expires_in;
-
 
     /**
      * JWT private key
@@ -29,7 +27,6 @@ abstract class JWTLibraryClient
      */
     protected string $private_key;
 
-
     /**
      * JWT public key
      *
@@ -37,17 +34,15 @@ abstract class JWTLibraryClient
      */
     protected string $public_key;
 
-
     public function __construct()
     {
         $this->private_key = strval(env('JWT_SECRET'));
         $this->public_key = strval(env('JWT_PUBLIC'));
         $this->issuer = strval(env('APP_URL'));
-        $this->expires_in = intval(env('JWT_EXPIRES_IN', 3600));
+        $this->expires_in = intval(env('JWT_EXPIRES_IN', 36000));
 
         $this->configure();
     }
-
 
     /**
      * Get the stored jwtToken if token is valid
@@ -57,7 +52,6 @@ abstract class JWTLibraryClient
      */
     abstract public function getJwtToken(string $token): ?JwtToken;
 
-
     /**
      * Issue the jwt and return the string
      *
@@ -66,14 +60,12 @@ abstract class JWTLibraryClient
      */
     abstract public function issueToken(string $user_identifier): IssuedToken;
 
-
     /**
      * Initial configuration
      *
      * @return void
      */
     abstract protected function configure(): void;
-
 
     /**
      * Get stored jwt token

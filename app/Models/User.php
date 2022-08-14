@@ -6,16 +6,15 @@ namespace App\Models;
 use App\Traits\HasJwtTokens;
 use App\Traits\HasUUIDField;
 use App\Traits\FilterableModel;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class User extends Authenticatable
 {
     use HasJwtTokens, HasUUIDField, FilterableModel, SoftDeletes, HasFactory, Notifiable;
-
 
     /**
      * The attributes that are mass assignable.
@@ -29,9 +28,8 @@ class User extends Authenticatable
         'phone_number',
         'address',
         'avatar',
-        'is_marketing'
+        'is_marketing',
     ];
-
 
     /**
      * The attributes that should be hidden for serialization.
@@ -40,9 +38,8 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'is_admin'
+        'is_admin',
     ];
-
 
     /**
      * The attributes that should be cast.
@@ -54,7 +51,6 @@ class User extends Authenticatable
         'last_login_at' => 'datetime',
     ];
 
-
     /**
      * The model's default values for attributes.
      *
@@ -63,9 +59,8 @@ class User extends Authenticatable
     protected $attributes = [
         'uuid' => '',
         'is_admin' => false,
-        'is_marketing' => false
+        'is_marketing' => false,
     ];
-
 
     /**
      * Called when user logs in
@@ -78,7 +73,6 @@ class User extends Authenticatable
         $this->save();
     }
 
-
     /**
      * Checks if user is admin
      *
@@ -88,7 +82,6 @@ class User extends Authenticatable
     {
         return $this->is_admin;
     }
-
 
     /**
      * Run query filters with these columns
@@ -101,9 +94,8 @@ class User extends Authenticatable
         'phone_number',
         'address',
         'created_at',
-        'is_marketing'
+        'is_marketing',
     ];
-
 
     /**
      * Get users

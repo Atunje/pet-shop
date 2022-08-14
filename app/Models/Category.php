@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\Traits\FilterableModel;
 use App\Traits\HasUUIDField;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\FilterableModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Category extends Model
 {
@@ -14,6 +14,6 @@ class Category extends Model
 
     protected $fillable = [
         'title',
-        'slug'
+        'slug',
     ];
 }

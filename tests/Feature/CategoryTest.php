@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 //use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\Category;
+use App\Models\Brand;
 use Exception;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
@@ -32,7 +32,7 @@ class CategoryTest extends TestCase
         ], $this->getUserAuthHeaders());
         $response->assertStatus(200);
 
-        $category = Category::where('title', $title);
+        $category = Brand::where('title', $title);
         $this->assertNotNull($category);
     }
 
@@ -40,7 +40,7 @@ class CategoryTest extends TestCase
     public function test_updating_of_category()
     {
         //create a category
-        $category = Category::factory()->create();
+        $category = Brand::factory()->create();
         $new_title = fake()->sentence(rand(1,4));
 
         $response = $this->put(self::CATEGORY_ENDPOINT . $category->uuid, [
@@ -55,7 +55,7 @@ class CategoryTest extends TestCase
 
     public function test_viewing_of_a_category()
     {
-        $category = Category::factory()->create();
+        $category = Brand::factory()->create();
         $response = $this->get(self::CATEGORY_ENDPOINT . $category->uuid, $this->getUserAuthHeaders());
         $response->assertStatus(200)
             ->assertJson(fn (AssertableJson $json) =>
@@ -66,11 +66,11 @@ class CategoryTest extends TestCase
 
     public function test_deleting_a_category()
     {
-        $category = Category::factory()->create();
+        $category = Brand::factory()->create();
         $response = $this->delete(self::CATEGORY_ENDPOINT . $category->uuid, [], $this->getUserAuthHeaders());
         $response->assertStatus(200);
 
-        $category = Category::find($category->id);
+        $category = Brand::find($category->id);
         $this->assertNull($category);
     }
 }

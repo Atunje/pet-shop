@@ -3,10 +3,10 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Str;
+use Illuminate\Http\RedirectResponse;
 
 class ForceJsonMiddleware
 {
@@ -20,7 +20,7 @@ class ForceJsonMiddleware
     public function handle(Request $request, Closure $next)
     {
         $header_accept = strval($request->header('accept'));
-        if(! Str::contains($header_accept, ['/json', '+json'])) {
+        if (! Str::contains($header_accept, ['/json', '+json'])) {
             $request->headers->set('accept', 'application/json');
         }
         return $next($request);

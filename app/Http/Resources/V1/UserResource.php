@@ -14,7 +14,6 @@ class UserResource extends JsonResource
      */
     public $token;
 
-
     /**
      * Transform the resource into an array.
      *
@@ -36,7 +35,7 @@ class UserResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'last_login_at' => $this->last_login_at,
-            'token' => $this->whenNotNull($this->token)
+            'token' => $this->whenNotNull($this->token),
         ];
     }
 }

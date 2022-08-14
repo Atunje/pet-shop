@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Models\Category;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Http\Requests\V1\CategoryRequest;
 use App\Http\Resources\V1\CategoryResource;
-use App\Models\Category;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CategoriesController extends Controller
 {
@@ -19,8 +19,8 @@ class CategoriesController extends Controller
      */
     public function index(Request $request)
     {
-        $per_pg = $request->has('limit') ?  intval($request->limit) : 10;
-        $data =  CategoryResource::collection(Category::getAll($request->all(), $per_pg))->resource;
+        $per_pg = $request->has('limit') ? intval($request->limit) : 10;
+        $data = CategoryResource::collection(Category::getAll($request->all(), $per_pg))->resource;
 
         return response()->json(['success' => 1, 'data' => $data]);
     }
@@ -38,9 +38,7 @@ class CategoriesController extends Controller
 
         $category = Category::create($inputs);
         return response()->json(['success' => 1, 'data' => new CategoryResource($category)]);
-
     }
-
 
     /**
      * Display the specified resource.

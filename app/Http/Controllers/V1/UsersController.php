@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Http\Requests\V1\UpdateUserRequest;
-use App\Http\Services\V1\UserService;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Services\V1\UserService;
+use App\Http\Requests\V1\UpdateUserRequest;
 
 class UsersController extends Controller
 {
@@ -14,7 +14,6 @@ class UsersController extends Controller
     {
         //
     }
-
 
     /**
      * Get a paginated list of users
@@ -26,7 +25,6 @@ class UsersController extends Controller
     {
         return response()->json(['success' => 1, "data" => $this->userService->getUsers($request->all())]);
     }
-
 
     /**
      * Edit user account
@@ -43,7 +41,6 @@ class UsersController extends Controller
 
         return response()->json(['success' => 0, 'error' => __('profile.edit_failed')]);
     }
-
 
     /**
      * Delete user account

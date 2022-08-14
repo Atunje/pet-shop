@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Http\Requests\V1\UpdateUserRequest;
-use App\Http\Resources\V1\UserResource;
-use App\Http\Services\V1\UserService;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Services\V1\UserService;
+use App\Http\Resources\V1\UserResource;
+use App\Http\Requests\V1\UpdateUserRequest;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class UserProfileController extends Controller
 {
@@ -17,7 +17,6 @@ class UserProfileController extends Controller
     {
         //
     }
-
 
     /**
      * @OA\Get(
@@ -42,10 +41,9 @@ class UserProfileController extends Controller
     {
         return response()->json([
             'success' => 1,
-            'data' => new UserResource($request->user())
+            'data' => new UserResource($request->user()),
         ]);
     }
-
 
     /**
      * @OA\Put(
@@ -98,7 +96,7 @@ class UserProfileController extends Controller
         $user = $request->user();
 
         try {
-            Gate::denyIf(fn($user) => $user->isAdmin());
+            Gate::denyIf(fn ($user) => $user->isAdmin());
 
             if ($user !== null && $this->userService->update($user, $request->all())) {
                 return response()->json(['success' => 1]);
@@ -108,11 +106,10 @@ class UserProfileController extends Controller
         } catch (AuthorizationException) {
             return response()->json([
                 'success' => 0,
-                'error' => __('profile.admin_edit_disallowed')
+                'error' => __('profile.admin_edit_disallowed'),
             ], Response::HTTP_UNAUTHORIZED);
         }
     }
-
 
     /**
      * @OA\Delete(
@@ -139,17 +136,17 @@ class UserProfileController extends Controller
         $user = $request->user();
 
         try {
-            Gate::denyIf(fn($user) => $user->isAdmin());
+            Gate::denyIf(fn ($user) => $user->isAdmin());
 
             if ($user !== null && $this->userService->delete($user)) {
                 return response()->json(['success' => 1]);
             }
 
             return response()->json(['success' => 0, 'error' => __('profile.delete_failed')]);
-        } catch(AuthorizationException) {
+        } catch (AuthorizationException) {
             return response()->json([
                 'success' => 0,
-                'error' => __('profile.admin_delete_disallowed')
+                'error' => __('profile.admin_delete_disallowed'),
             ], Response::HTTP_UNAUTHORIZED);
         }
     }

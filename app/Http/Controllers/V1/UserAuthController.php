@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Http\Requests\V1\LoginRequest;
-use App\Http\Requests\V1\RegisterRequest;
-use App\Http\Services\V1\UserService;
 use Auth;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use App\Http\Services\V1\UserService;
+use App\Http\Requests\V1\LoginRequest;
+use App\Http\Requests\V1\RegisterRequest;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserAuthController extends Controller
@@ -16,7 +16,6 @@ class UserAuthController extends Controller
     {
         //
     }
-
 
     /**
      * @OA\Post(
@@ -71,7 +70,6 @@ class UserAuthController extends Controller
         return response()->json(['success' => 1, 'data' => $user_resource]);
     }
 
-
     /**
      * @OA\Post(
      *      path="/api/v1/user/login",
@@ -107,13 +105,12 @@ class UserAuthController extends Controller
     public function login(LoginRequest $request)
     {
         $token = $this->userService->userLogin($request->only('email', 'password'));
-        if($token !== null) {
+        if ($token !== null) {
             return response()->json(['success' => 1, 'data' => ['token' => $token]]);
         }
 
         return response()->json(['success' => 0, 'error' => __('auth.failed')], Response::HTTP_UNAUTHORIZED);
     }
-
 
     /**
      * @OA\Get(
@@ -135,7 +132,7 @@ class UserAuthController extends Controller
      */
     public function logout()
     {
-        if(Auth::logout()) {
+        if (Auth::logout()) {
             return response()->json(['success' => 1]);
         }
 

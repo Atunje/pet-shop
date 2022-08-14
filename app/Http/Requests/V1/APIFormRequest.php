@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\V1;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 abstract class APIFormRequest extends FormRequest
 {
@@ -31,7 +31,7 @@ abstract class APIFormRequest extends FormRequest
         throw new HttpResponseException(response()->json([
             'success' => 0,
             'error' => "Invalid Input!",
-            'errors' => $validator->errors()
+            'errors' => $validator->errors(),
         ], Response::HTTP_UNPROCESSABLE_ENTITY));
     }
 }

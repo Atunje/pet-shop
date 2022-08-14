@@ -2,11 +2,11 @@
 
 namespace App\Http\Services\V1;
 
-use App\Http\Resources\V1\UserResource;
-use App\Models\User;
 use Auth;
 use Exception;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\V1\UserResource;
 
 class UserService
 {
@@ -23,7 +23,6 @@ class UserService
         return new UserResource($user);
     }
 
-
     /**
      * Register new user
      *
@@ -36,7 +35,6 @@ class UserService
         $user = $this->create($data);
         return new UserResource($user);
     }
-
 
     /**
      * Create a user record
@@ -61,7 +59,6 @@ class UserService
         throw new Exception('User could not be created');
     }
 
-
     /**
      * Validates admin credentials and returns access token
      *
@@ -74,7 +71,6 @@ class UserService
         return Auth::attempt($credentials);
     }
 
-
     /**
      * Validates user credentials and returns access token
      *
@@ -86,7 +82,6 @@ class UserService
         $credentials['is_admin'] = false;
         return Auth::attempt($credentials);
     }
-
 
     /**
      * Updates user record
@@ -112,14 +107,13 @@ class UserService
         return (bool) $user->delete();
     }
 
-
     /**
      * @param array $filter_params
      * @return mixed
      */
     public function getUsers(array $filter_params)
     {
-        $per_pg = isset($filter_params['limit']) ?  (int) $filter_params['limit'] : 10;
+        $per_pg = isset($filter_params['limit']) ? (int) $filter_params['limit'] : 10;
         return UserResource::collection(User::getUsers($filter_params, $per_pg))->resource;
     }
 }

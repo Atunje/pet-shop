@@ -11,7 +11,7 @@ trait FilterableModel
      *
      * @param array<string, string> $filter_params
      * @param int $per_pg
-     * @param array<string, string|bool|int> $extra_where
+     * @param array<string, mixed> $extra_where
      * @param array<int, string> $filterable
      * @return LengthAwarePaginator
      */
@@ -22,13 +22,13 @@ trait FilterableModel
         $query = $instance->query();
 
         //add the extra where statement to the query
-        if(!empty($extra_where)) {
+        if (!empty($extra_where)) {
             $query->where($extra_where);
         }
 
-        if(count($filter_params) > 0) {
+        if (count($filter_params) > 0) {
             foreach ($filter_params as $col => $val) {
-                if(in_array($col, $filterable) && $val !== null) {
+                if (in_array($col, $filterable) && $val !== null) {
                     //add the filterable fields
                     $query->where($col, $val);
                 }
@@ -43,11 +43,10 @@ trait FilterableModel
         return $query->paginate($per_pg);
     }
 
-
     /**
      * Get all db records
      *
-     * @param array $filter_params
+     * @param array<string, mixed> $filter_params
      * @param int $per_pg
      * @return LengthAwarePaginator
      */

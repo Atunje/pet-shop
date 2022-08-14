@@ -2,9 +2,10 @@
 
 namespace App\Extensions;
 
+use Exception;
 use App\Models\JwtToken;
-use Illuminate\Support\Str;
 use Lcobucci\JWT\Signer;
+use Illuminate\Support\Str;
 use Lcobucci\Clock\SystemClock;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Key\InMemory;
@@ -41,7 +42,6 @@ class LcobucciJWT extends JWTLibraryClient
         return new IssuedToken($token->toString(), $unique_id, $expires_at);
     }
 
-
     /**
      * Get the stored jwtToken if token is valid
      *
@@ -67,11 +67,10 @@ class LcobucciJWT extends JWTLibraryClient
             }
 
             return null;
-        } catch(\Exception $e) {
+        } catch (Exception) {
             return null;
         }
     }
-
 
     protected function configure(): void
     {

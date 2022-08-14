@@ -2,7 +2,11 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\UnauthorizedException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -62,16 +66,45 @@ class Handler extends ExceptionHandler
      *
      * @throws Throwable
      */
-    public function render($request, Throwable $e)
+    public function render($request, Throwable $e): SymfonyResponse
     {
-        if ($e instanceof NotFoundHttpException || $e instanceof MethodNotAllowedHttpException) {
-            return response()->json(['success' => 0, 'error' => 'Resource Not Found!'], SymfonyResponse::HTTP_NOT_FOUND);
+
+        if ($e instanceof ModelNotFoundException)
+        {
+            $model = $this->getModelName($e->getModel());
+            return $this->createResponse(
+                __('http.model_not_found', ["model" => $model]),
+                SymfonyResponse::HTTP_NOT_FOUND
+            );
         }
 
-        if($e instanceof UnauthorizedException) {
-            return response()->json(['success' => 0, 'error' => 'Unauthorized'], SymfonyResponse::HTTP_UNAUTHORIZED);
-        }
+        return match(true) {
+            $e instanceof NotFoundHttpException, $e instanceof MethodNotAllowedHttpException => $this->createResponse(
+                __('http.not_found'),SymfonyResponse::HTTP_NOT_FOUND
+            ),
+            $e instanceof UnauthorizedException,
+                $e instanceof AuthorizationException,
+                $e instanceof AuthenticationException =>
+                $this->createResponse(__('http.unauthorized'), SymfonyResponse::HTTP_UNAUTHORIZED),
+            default => parent::render($request, $e)
+        };
+    }
 
-        return parent::render($request, $e);
+
+    /**
+     * @param class-string $model_path
+     * @return string
+     */
+    private function getModelName(string $model_path)
+    {
+        $path = explode("\\", $model_path);
+        $index = count($path) -1;
+        return $path[$index];
+    }
+
+
+    private function createResponse(mixed $error, int $status_code): JsonResponse
+    {
+        return response()->json(['success' => 0, 'error' => $error], $status_code);
     }
 }

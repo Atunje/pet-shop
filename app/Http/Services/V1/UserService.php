@@ -122,6 +122,6 @@ class UserService
     public function getUsers(array $filter_params)
     {
         $per_pg = isset($filter_params['limit']) ?  (int) $filter_params['limit'] : 10;
-        return UserResource::collection(User::getAll($filter_params, $per_pg))->resource;
+        return UserResource::collection(User::getUsers($filter_params, $per_pg))->resource;
     }
 }

@@ -4,29 +4,18 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Traits\HasJwtTokens;
+use App\Traits\HasUUIDField;
+use App\Traits\FilterableModel;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
-    use HasJwtTokens, SoftDeletes, HasFactory, Notifiable;
+    use HasJwtTokens, HasUUIDField, FilterableModel, SoftDeletes, HasFactory, Notifiable;
 
-
-    /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    protected static function booted()
-    {
-        static::creating(function ($user) {
-            $user->uuid = Str::uuid()->toString();
-        });
-    }
 
     /**
      * The attributes that are mass assignable.
@@ -106,7 +95,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    private array $filterable = [
+    private static array $filterable = [
         'first_name',
         'email',
         'phone_number',
@@ -116,32 +105,8 @@ class User extends Authenticatable
     ];
 
 
-    /**
-     * Get all users based on the supplied filter params
-     *
-     * @param array<string, string> $filter_params
-     * @param int $per_pg
-     * @return LengthAwarePaginator
-     */
-    public static function getAll($filter_params, $per_pg): LengthAwarePaginator
+    public static function getUsers($filter_params, $per_pg): LengthAwarePaginator
     {
-        $instance = new self();
-
-        $query = $instance->where('is_admin', false);
-
-        if(count($filter_params) > 0) {
-            foreach ($filter_params as $col => $val) {
-                if(in_array($col, $instance->filterable) && $val !== null) {
-                    $query->where($col, $val);
-                }
-            }
-
-            if (isset($filter_params['sortBy'])) {
-                $order = $filter_params['desc'] === "0" ? "asc" : "desc";
-                $query = $query->orderBy($filter_params['sort_by'], $order);
-            }
-        }
-
-        return $query->paginate($per_pg);
+        return self::getRecords($filter_params, $per_pg, self::$filterable, ['is_admin' => false]);
     }
 }

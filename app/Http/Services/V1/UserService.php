@@ -2,12 +2,10 @@
 
 namespace App\Http\Services\V1;
 
-use App\Http\Resources\V1\UserCollection;
 use App\Http\Resources\V1\UserResource;
 use App\Models\User;
 use Auth;
 use Exception;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Hash;
 
 class UserService

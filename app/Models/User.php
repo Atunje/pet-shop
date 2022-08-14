@@ -105,6 +105,13 @@ class User extends Authenticatable
     ];
 
 
+    /**
+     * Get users
+     *
+     * @param array $filter_params
+     * @param int $per_pg
+     * @return LengthAwarePaginator
+     */
     public static function getUsers($filter_params, $per_pg): LengthAwarePaginator
     {
         return self::getRecords($filter_params, $per_pg, self::$filterable, ['is_admin' => false]);

@@ -47,12 +47,12 @@ trait FilterableModel
     /**
      * Get all db records
      *
-     * @param $params
-     * @param $per_pg
+     * @param array $filter_params
+     * @param int $per_pg
      * @return LengthAwarePaginator
      */
-    public static function getUsers($params, $per_pg): LengthAwarePaginator
+    public static function getAll($filter_params, $per_pg): LengthAwarePaginator
     {
-        return self::getRecords($params, $per_pg);
+        return self::getRecords($filter_params, $per_pg);
     }
 }

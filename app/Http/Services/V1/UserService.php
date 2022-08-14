@@ -117,7 +117,7 @@ class UserService
 
     /**
      * @param array $filter_params
-     * @return UserCollection
+     * @return mixed
      */
     public function getUsers(array $filter_params)
     {

@@ -36,4 +36,14 @@ class UsersController extends Controller
 
         return response()->json(['success' => 0, 'error' => __('profile.edit_failed')]);
     }
+
+
+    public function destroy(User $user)
+    {
+        if ($this->userService->delete($user)) {
+            return response()->json(['success' => 1]);
+        }
+
+        return response()->json(['success' => 0, 'error' => __('profile.delete_failed')]);
+    }
 }

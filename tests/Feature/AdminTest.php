@@ -126,7 +126,7 @@ class AdminTest extends TestCase
 
     public function test_admin_account_cannot_be_deleted()
     {
-        $response = $this->delete(UserTest::USER_ENDPOINT, [], $this->getAdminAuthHeaders());
+        $response = $this->delete(self::USER_ENDPOINT, [], $this->getAdminAuthHeaders());
         $response->assertStatus(401);
     }
 
@@ -139,8 +139,6 @@ class AdminTest extends TestCase
 
     public function test_admin_can_edit_user()
     {
-        $this->withoutExceptionHandling();
-
         $user = User::factory()->create();
         $user_arr = $user->toArray();
 
@@ -161,5 +159,22 @@ class AdminTest extends TestCase
         $this->assertEquals($user->avatar, $updated['avatar']);
         $this->assertEquals($user->address, $updated['address']);
         $this->assertEquals($user->is_marketing, 1);
+    }
+
+
+    public function test_admin_can_delete_user_account()
+    {
+        $this->withoutExceptionHandling();
+
+        //create user
+        $user = User::factory()->create();
+
+        //delete the user with admin account
+        $response = $this->delete(self::ADMIN_ENDPOINT . "user-delete/" . $user->uuid, [], $this->getAdminAuthHeaders());
+        $response->assertStatus(200);
+
+        //fetch the user afresh from the db
+        $user = User::find($user->id);
+        $this->assertNull($user);
     }
 }

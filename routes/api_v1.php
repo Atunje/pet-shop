@@ -32,6 +32,7 @@ Route::group(['prefix'=>'admin'], function() {
 
         Route::post('user-listing', [UsersController::class, 'index']);
         Route::put('user-edit/{user:uuid}', [UsersController::class, 'edit']);
+        Route::delete('user-delete/{user:uuid}', [UsersController::class, 'destroy']);
     });
 });
 

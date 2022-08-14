@@ -11,10 +11,10 @@ trait HasUUIDField
      *
      * @return void
      */
-    protected static function booted()
+    protected static function booted(): void
     {
-        static::creating(function ($user) {
-            $user->uuid = Str::uuid()->toString();
+        static::creating(function ($model) {
+            $model->uuid = Str::uuid()->toString();
         });
     }
 }

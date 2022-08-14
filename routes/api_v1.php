@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\V1\CategoriesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\UsersController;
 use App\Http\Controllers\V1\UserAuthController;
@@ -46,5 +47,16 @@ Route::group(['prefix'=>'user'], function() {
         Route::get('/', [UserProfileController::class, 'show']);
         Route::delete('/', [UserProfileController::class, 'delete']);
         Route::put('/edit', [UserProfileController::class, 'update']);
+    });
+});
+
+Route::group(['prefix'=>'category'], function() {
+    Route::get('/', [CategoriesController::class, 'index']);
+    Route::get('{category:uuid}', [CategoriesController::class, 'show']);
+
+    Route::group(['middleware' => ['auth:api']], function() {
+        Route::post('create', [CategoriesController::class, 'store']);
+        Route::put('{category:uuid}', [CategoriesController::class, 'update']);
+        Route::delete('{category:uuid}', [CategoriesController::class, 'destroy']);
     });
 });

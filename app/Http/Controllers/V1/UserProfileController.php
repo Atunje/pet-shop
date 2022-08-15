@@ -39,10 +39,7 @@ class UserProfileController extends Controller
      */
     public function show(Request $request)
     {
-        return response()->json([
-            'success' => 1,
-            'data' => new UserResource($request->user()),
-        ]);
+        return $this->jsonResponse(data: new UserResource($request->user()));
     }
 
     /**
@@ -99,15 +96,15 @@ class UserProfileController extends Controller
             Gate::denyIf(fn ($user) => $user->isAdmin());
 
             if ($user !== null && $this->userService->update($user, $request->all())) {
-                return response()->json(['success' => 1]);
+                return $this->jsonResponse();
             }
 
             return response()->json(['success' => 0, 'error' => __('profile.edit_failed')]);
         } catch (AuthorizationException) {
-            return response()->json([
-                'success' => 0,
-                'error' => __('profile.admin_edit_disallowed'),
-            ], Response::HTTP_UNAUTHORIZED);
+            return $this->jsonResponse(
+                status_code: Response::HTTP_UNAUTHORIZED,
+                error: __('profile.admin_edit_disallowed')
+            );
         }
     }
 
@@ -139,15 +136,15 @@ class UserProfileController extends Controller
             Gate::denyIf(fn ($user) => $user->isAdmin());
 
             if ($user !== null && $this->userService->delete($user)) {
-                return response()->json(['success' => 1]);
+                return $this->jsonResponse();
             }
 
             return response()->json(['success' => 0, 'error' => __('profile.delete_failed')]);
         } catch (AuthorizationException) {
-            return response()->json([
-                'success' => 0,
-                'error' => __('profile.admin_delete_disallowed'),
-            ], Response::HTTP_UNAUTHORIZED);
+            return $this->jsonResponse(
+                status_code: Response::HTTP_UNAUTHORIZED,
+                error: __('profile.admin_delete_disallowed')
+            );
         }
     }
 }

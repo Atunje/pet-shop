@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Services\V1\UserService;
 use App\Http\Requests\V1\UpdateUserRequest;
+use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
 {
@@ -23,7 +24,7 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        return response()->json(['success' => 1, "data" => $this->userService->getUsers($request->all())]);
+        return $this->jsonResponse(data: $this->userService->getUsers($request->all()));
     }
 
     /**
@@ -39,7 +40,10 @@ class UsersController extends Controller
             return response()->json(['success' => 1]);
         }
 
-        return response()->json(['success' => 0, 'error' => __('profile.edit_failed')]);
+        return $this->jsonResponse(
+            status_code: Response::HTTP_UNPROCESSABLE_ENTITY,
+            error: __('profile.edit_failed')
+        );
     }
 
     /**
@@ -51,9 +55,9 @@ class UsersController extends Controller
     public function destroy(User $user)
     {
         if ($this->userService->delete($user)) {
-            return response()->json(['success' => 1]);
+            return $this->jsonResponse();
         }
 
-        return response()->json(['success' => 0, 'error' => __('profile.delete_failed')]);
+        return $this->jsonResponse(status_code: Response::HTTP_UNPROCESSABLE_ENTITY, error: 'profile.delete_failed');
     }
 }

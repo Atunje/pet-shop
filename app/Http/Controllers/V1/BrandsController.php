@@ -22,7 +22,7 @@ class BrandsController extends Controller
         $per_pg = $request->has('limit') ? intval($request->limit) : 10;
         $data = BrandResource::collection(Brand::getAll($request->all(), $per_pg))->resource;
 
-        return response()->json(['success' => 1, 'data' => $data]);
+        return $this->jsonResponse(data:$data);
     }
 
     /**
@@ -37,7 +37,7 @@ class BrandsController extends Controller
         $inputs['slug'] = Str::slug(strval($request->title));
 
         $brand = Brand::create($inputs);
-        return response()->json(['success' => 1, 'data' => new BrandResource($brand)]);
+        return $this->jsonResponse(data:new BrandResource($brand));
     }
 
     /**
@@ -48,7 +48,7 @@ class BrandsController extends Controller
      */
     public function show(Brand $brand)
     {
-        return response()->json(['success' => 1, 'data' => new BrandResource($brand)]);
+        return $this->jsonResponse(data: new BrandResource($brand));
     }
 
     /**
@@ -64,10 +64,10 @@ class BrandsController extends Controller
         $inputs['slug'] = Str::slug(strval($request->title));
 
         if ($brand->update($inputs)) {
-            return response()->json(['success' => 1, 'data' => $brand]);
+            return $this->jsonResponse(data: $brand);
         }
 
-        return response()->json(['success' => 0], Response::HTTP_UNPROCESSABLE_ENTITY);
+        return $this->jsonResponse(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**
@@ -79,9 +79,9 @@ class BrandsController extends Controller
     public function destroy(Brand $brand)
     {
         if ($brand->delete()) {
-            return response()->json(['success' => 1]);
+            return $this->jsonResponse();
         }
 
-        return response()->json(['success' => 0], Response::HTTP_UNPROCESSABLE_ENTITY);
+        return $this->jsonResponse(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }

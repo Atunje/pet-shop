@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\V1;
 
+use App\Traits\HandlesResponse;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,6 +10,8 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 abstract class APIFormRequest extends FormRequest
 {
+    use HandlesResponse;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -28,10 +31,12 @@ abstract class APIFormRequest extends FormRequest
      */
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(response()->json([
-            'success' => 0,
-            'error' => "Invalid Input!",
-            'errors' => $validator->errors(),
-        ], Response::HTTP_UNPROCESSABLE_ENTITY));
+        throw new HttpResponseException(
+            $this->jsonResponse(
+                status_code: Response::HTTP_UNPROCESSABLE_ENTITY,
+                error: __('validation.invalid_inputs'),
+                errors: $validator->errors()
+            )
+        );
     }
 }

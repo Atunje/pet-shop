@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Throwable;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
+use App\Traits\HandlesResponse;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -16,6 +16,8 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
 {
+    use HandlesResponse;
+
     /**
      * A list of exception types with their corresponding custom log levels.
      *
@@ -70,22 +72,22 @@ class Handler extends ExceptionHandler
     {
         if ($e instanceof ModelNotFoundException) {
             $model = $this->getModelName($e->getModel());
-            return $this->createResponse(
-                __('http.model_not_found', ["model" => $model]),
-                SymfonyResponse::HTTP_NOT_FOUND
+            return $this->jsonResponse(
+                status_code: SymfonyResponse::HTTP_NOT_FOUND,
+                error: __('http.model_not_found', ["model" => $model])
             );
         }
 
         return match (true) {
-            $e instanceof NotFoundHttpException, $e instanceof MethodNotAllowedHttpException => $this->createResponse(
-                __('http.not_found'),
-                SymfonyResponse::HTTP_NOT_FOUND
+            $e instanceof NotFoundHttpException, $e instanceof MethodNotAllowedHttpException => $this->jsonResponse(
+                status_code: SymfonyResponse::HTTP_NOT_FOUND,
+                error: __('http.not_found')
             ),
             $e instanceof UnauthorizedException,
             $e instanceof AuthorizationException,
-            $e instanceof AuthenticationException => $this->createResponse(
-                __('http.unauthorized'),
-                SymfonyResponse::HTTP_UNAUTHORIZED
+            $e instanceof AuthenticationException => $this->jsonResponse(
+                status_code: SymfonyResponse::HTTP_UNAUTHORIZED,
+                error: __('http.unauthorized')
             ),
             default => parent::render($request, $e)
         };
@@ -100,10 +102,5 @@ class Handler extends ExceptionHandler
         $path = explode("\\", $model_path);
         $index = count($path) - 1;
         return $path[$index];
-    }
-
-    private function createResponse(mixed $error, int $status_code): JsonResponse
-    {
-        return response()->json(['success' => 0, 'error' => $error], $status_code);
     }
 }

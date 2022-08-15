@@ -67,7 +67,7 @@ class UserAuthController extends Controller
         $user_resource = $this->userService->registerUser($request->all());
 
         $user_resource->token = $this->userService->userLogin($request->only('email', 'password'));
-        return response()->json(['success' => 1, 'data' => $user_resource]);
+        return $this->jsonResponse(data: $user_resource);
     }
 
     /**
@@ -106,10 +106,10 @@ class UserAuthController extends Controller
     {
         $token = $this->userService->userLogin($request->only('email', 'password'));
         if ($token !== null) {
-            return response()->json(['success' => 1, 'data' => ['token' => $token]]);
+            return $this->jsonResponse(data: ['token' => $token]);
         }
 
-        return response()->json(['success' => 0, 'error' => __('auth.failed')], Response::HTTP_UNAUTHORIZED);
+        return $this->jsonResponse(status_code: Response::HTTP_UNAUTHORIZED, error: __('auth.failed'));
     }
 
     /**
@@ -133,9 +133,9 @@ class UserAuthController extends Controller
     public function logout()
     {
         if (Auth::logout()) {
-            return response()->json(['success' => 1]);
+            return $this->jsonResponse();
         }
 
-        return response()->json(['success' => 0, 'error' => __('auth.logout_error')], Response::HTTP_UNAUTHORIZED);
+        return $this->jsonResponse(status_code: Response::HTTP_UNPROCESSABLE_ENTITY, error: __('auth.logout_error'));
     }
 }

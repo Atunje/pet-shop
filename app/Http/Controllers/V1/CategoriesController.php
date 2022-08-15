@@ -22,7 +22,7 @@ class CategoriesController extends Controller
         $per_pg = $request->has('limit') ? intval($request->limit) : 10;
         $data = CategoryResource::collection(Category::getAll($request->all(), $per_pg))->resource;
 
-        return response()->json(['success' => 1, 'data' => $data]);
+        return $this->jsonResponse(data: $data);
     }
 
     /**
@@ -37,7 +37,7 @@ class CategoriesController extends Controller
         $inputs['slug'] = Str::slug(strval($request->title));
 
         $category = Category::create($inputs);
-        return response()->json(['success' => 1, 'data' => new CategoryResource($category)]);
+        return $this->jsonResponse(data: new CategoryResource($category));
     }
 
     /**
@@ -48,7 +48,7 @@ class CategoriesController extends Controller
      */
     public function show(Category $category)
     {
-        return response()->json(['success' => 1, 'data' => new CategoryResource($category)]);
+        return $this->jsonResponse(data: new CategoryResource($category));
     }
 
     /**
@@ -64,10 +64,10 @@ class CategoriesController extends Controller
         $inputs['slug'] = Str::slug(strval($request->title));
 
         if ($category->update($inputs)) {
-            return response()->json(['success' => 1, 'data' => $category]);
+            return $this->jsonResponse(data: $category);
         }
 
-        return response()->json(['success' => 0], Response::HTTP_UNPROCESSABLE_ENTITY);
+        return $this->jsonResponse(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**
@@ -79,9 +79,9 @@ class CategoriesController extends Controller
     public function destroy(Category $category)
     {
         if ($category->delete()) {
-            return response()->json(['success' => 1]);
+            return $this->jsonResponse();
         }
 
-        return response()->json(['success' => 0], Response::HTTP_UNPROCESSABLE_ENTITY);
+        return $this->jsonResponse(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }

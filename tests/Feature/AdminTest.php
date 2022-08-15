@@ -133,7 +133,9 @@ class AdminTest extends TestCase
     public function test_admin_can_view_user_listing()
     {
         $response = $this->post(self::ADMIN_ENDPOINT . "user-listing", [], $this->getAdminAuthHeaders());
-        $response->assertStatus(200);
+        $response->assertStatus(200)
+            //confirm if record is paginated
+            ->assertJsonPath('data.current_page', 1);
     }
 
 

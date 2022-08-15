@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 //use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Brand;
-use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
 class BrandTest extends TestCase
@@ -18,7 +17,9 @@ class BrandTest extends TestCase
     public function test_brand_listing(): void
     {
         $response = $this->get(self::BRAND_ENDPOINT, $this->getUserAuthHeaders());
-        $response->assertStatus(200);
+        $response->assertStatus(200)
+            //confirm if record is paginated
+            ->assertJsonPath('data.current_page', 1);
     }
 
 
@@ -56,10 +57,7 @@ class BrandTest extends TestCase
     {
         $brand = Brand::factory()->create();
         $response = $this->get(self::BRAND_ENDPOINT . $brand->uuid, $this->getUserAuthHeaders());
-        $response->assertStatus(200)
-            ->assertJson(fn (AssertableJson $json) =>
-            $json->has('data')->has('uuid', $brand->uuid)
-            );
+        $response->assertStatus(200)->assertJsonPath('data.uuid', $brand->uuid);
     }
 
 

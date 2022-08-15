@@ -40,7 +40,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('create', [UserAuthController::class, 'create']);
     Route::post('login', [UserAuthController::class, 'login']);
 
-    Route::group(['middleware' => ['auth:api']], function () {
+    Route::group(['middleware' => ['auth:api', 'can:user']], function () {
         Route::get('logout', [UserAuthController::class, 'logout']);
 
         Route::get('/', [UserProfileController::class, 'show']);

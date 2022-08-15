@@ -30,9 +30,14 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //define admin to protect admin routes with middleware
+        //define admin guard to protect admin routes with middleware
         Gate::define('admin', function ($user) {
             return $user->isAdmin();
+        });
+
+        //define user guard to protect admin routes with middleware
+        Gate::define('user', function ($user) {
+            return !$user->isAdmin();
         });
 
         // add custom guard

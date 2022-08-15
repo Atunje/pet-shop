@@ -9,7 +9,7 @@ trait FilterableModel
     /**
      * Get all database records based on the supplied filter params
      *
-     * @param array<string, string> $filter_params
+     * @param array<string, mixed> $filter_params
      * @param int $per_pg
      * @param array<string, mixed> $extra_where
      * @param array<int, string> $filterable
@@ -26,18 +26,16 @@ trait FilterableModel
             $query->where($extra_where);
         }
 
-        if (count($filter_params) > 0) {
-            foreach ($filter_params as $col => $val) {
-                if (in_array($col, $filterable) && $val !== null) {
-                    //add the filterable fields
-                    $query->where($col, $val);
-                }
+        foreach ($filter_params as $col => $val) {
+            if ($val !== null && in_array($col, $filterable)) {
+                //add the filterable fields
+                $query->where($col, $val);
             }
+        }
 
-            if (isset($filter_params['sortBy'])) {
-                $order = $filter_params['desc'] === "0" ? "asc" : "desc";
-                $query = $query->orderBy($filter_params['sort_by'], $order);
-            }
+        if (isset($filter_params['sortBy'])) {
+            $order = $filter_params['desc'] === "0" ? "asc" : "desc";
+            $query = $query->orderBy(strval($filter_params['sort_by']), $order);
         }
 
         return $query->paginate($per_pg);

@@ -19,10 +19,7 @@ class ForceJsonMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $header_accept = strval($request->header('accept'));
-        if (! Str::contains($header_accept, ['/json', '+json'])) {
-            $request->headers->set('accept', 'application/json');
-        }
+        $request->headers->set('accept', 'application/json');
         return $next($request);
     }
 }

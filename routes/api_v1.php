@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\UsersController;
 use App\Http\Controllers\V1\BrandsController;
+use App\Http\Controllers\V1\MainPageController;
 use App\Http\Controllers\V1\ProductsController;
 use App\Http\Controllers\V1\UserAuthController;
 use App\Http\Controllers\V1\AdminAuthController;
@@ -49,6 +50,11 @@ Route::group(['prefix' => 'user'], function () {
         Route::delete('/', [UserProfileController::class, 'delete']);
         Route::put('/edit', [UserProfileController::class, 'update']);
     });
+});
+
+Route::group(['prefix' => 'main'], function () {
+    Route::get('blog', [MainPageController::class, 'posts']);
+    Route::get('blog/{post:uuid}', [MainPageController::class, 'showPost']);
 });
 
 Route::group(['prefix' => 'category'], function () {

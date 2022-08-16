@@ -53,6 +53,7 @@ Route::group(['prefix' => 'user'], function () {
 });
 
 Route::group(['prefix' => 'main'], function () {
+    Route::get('promotions', [MainPageController::class, 'promotions']);
     Route::get('blog', [MainPageController::class, 'posts']);
     Route::get('blog/{post:uuid}', [MainPageController::class, 'showPost']);
 });

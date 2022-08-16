@@ -35,7 +35,7 @@ abstract class APIFormRequest extends FormRequest
             $this->jsonResponse(
                 status_code: Response::HTTP_UNPROCESSABLE_ENTITY,
                 error: __('validation.invalid_inputs'),
-                errors: $validator->errors()
+                errors: $validator->errors()->toArray()
             )
         );
     }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\V1\PaymentsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\UsersController;
 use App\Http\Controllers\V1\BrandsController;
@@ -100,4 +101,12 @@ Route::group(['prefix' => 'order-status'], function () {
         Route::put('{order_status:uuid}', [OrderStatusesController::class, 'update']);
         Route::delete('{order_status:uuid}', [OrderStatusesController::class, 'destroy']);
     });
+});
+
+Route::group(['prefix' => 'payments', 'middleware' => ['auth:api']], function () {
+    Route::get('/', [PaymentsController::class, 'index']);
+    Route::get('{payment:uuid}', [PaymentsController::class, 'show']);
+    Route::post('create', [PaymentsController::class, 'store']);
+    Route::put('{payment:uuid}', [PaymentsController::class, 'update']);
+    Route::delete('{payment:uuid}', [PaymentsController::class, 'destroy']);
 });

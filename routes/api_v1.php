@@ -8,6 +8,7 @@ use App\Http\Controllers\V1\UserAuthController;
 use App\Http\Controllers\V1\AdminAuthController;
 use App\Http\Controllers\V1\CategoriesController;
 use App\Http\Controllers\V1\UserProfileController;
+use App\Http\Controllers\V1\OrderStatusesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,5 +81,16 @@ Route::group(['prefix' => 'product'], function () {
         Route::post('create', [ProductsController::class, 'store']);
         Route::put('{product:uuid}', [ProductsController::class, 'update']);
         Route::delete('{product:uuid}', [ProductsController::class, 'destroy']);
+    });
+});
+
+Route::group(['prefix' => 'order-status'], function () {
+    Route::get('/', [OrderStatusesController::class, 'index']);
+    Route::get('{order_status:uuid}', [OrderStatusesController::class, 'show']);
+
+    Route::group(['middleware' => ['auth:api']], function () {
+        Route::post('create', [OrderStatusesController::class, 'store']);
+        Route::put('{order_status:uuid}', [OrderStatusesController::class, 'update']);
+        Route::delete('{order_status:uuid}', [OrderStatusesController::class, 'destroy']);
     });
 });

@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\V1\PaymentsController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\V1\FilesController;
 use App\Http\Controllers\V1\UsersController;
 use App\Http\Controllers\V1\BrandsController;
 use App\Http\Controllers\V1\MainPageController;
+use App\Http\Controllers\V1\PaymentsController;
 use App\Http\Controllers\V1\ProductsController;
 use App\Http\Controllers\V1\UserAuthController;
 use App\Http\Controllers\V1\AdminAuthController;
@@ -73,7 +74,7 @@ Route::group(['prefix' => 'category'], function () {
 Route::group(['prefix' => 'brand'], function () {
     Route::get('/', [BrandsController::class, 'index']);
     Route::get('{brand:uuid}', [BrandsController::class, 'show']);
-
+    //admin
     Route::group(['middleware' => ['auth:api']], function () {
         Route::post('create', [BrandsController::class, 'store']);
         Route::put('{brand:uuid}', [BrandsController::class, 'update']);
@@ -84,7 +85,7 @@ Route::group(['prefix' => 'brand'], function () {
 Route::group(['prefix' => 'product'], function () {
     Route::get('/', [ProductsController::class, 'index']);
     Route::get('{product:uuid}', [ProductsController::class, 'show']);
-
+    //admin
     Route::group(['middleware' => ['auth:api']], function () {
         Route::post('create', [ProductsController::class, 'store']);
         Route::put('{product:uuid}', [ProductsController::class, 'update']);
@@ -95,7 +96,7 @@ Route::group(['prefix' => 'product'], function () {
 Route::group(['prefix' => 'order-status'], function () {
     Route::get('/', [OrderStatusesController::class, 'index']);
     Route::get('{order_status:uuid}', [OrderStatusesController::class, 'show']);
-
+    //admin
     Route::group(['middleware' => ['auth:api']], function () {
         Route::post('create', [OrderStatusesController::class, 'store']);
         Route::put('{order_status:uuid}', [OrderStatusesController::class, 'update']);
@@ -106,7 +107,15 @@ Route::group(['prefix' => 'order-status'], function () {
 Route::group(['prefix' => 'payments', 'middleware' => ['auth:api']], function () {
     Route::get('/', [PaymentsController::class, 'index']);
     Route::get('{payment:uuid}', [PaymentsController::class, 'show']);
-    Route::post('create', [PaymentsController::class, 'store']);
     Route::put('{payment:uuid}', [PaymentsController::class, 'update']);
     Route::delete('{payment:uuid}', [PaymentsController::class, 'destroy']);
+    //admin
+    Route::group(['middleware' => ['auth:api']], function () {
+        Route::post('create', [PaymentsController::class, 'store']);
+    });
+});
+
+Route::group(['prefix' => 'file'], function () {
+    Route::get('/', [FilesController::class, 'index']);
+    Route::post('/upload', [FilesController::class, 'store']);//->middleware('auth:api');
 });

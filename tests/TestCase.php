@@ -14,6 +14,7 @@ abstract class TestCase extends BaseTestCase
     const USER_ENDPOINT = '/v1/user/';
     const CATEGORY_ENDPOINT = '/v1/category/';
     const BRAND_ENDPOINT = '/v1/brand/';
+    const PRODUCT_ENDPOINT = '/v1/product/';
 
     /**
      * Log an admin user in and return the jwt

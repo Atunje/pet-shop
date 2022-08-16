@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\UsersController;
 use App\Http\Controllers\V1\BrandsController;
+use App\Http\Controllers\V1\ProductsController;
 use App\Http\Controllers\V1\UserAuthController;
 use App\Http\Controllers\V1\AdminAuthController;
 use App\Http\Controllers\V1\CategoriesController;
@@ -68,5 +69,16 @@ Route::group(['prefix' => 'brand'], function () {
         Route::post('create', [BrandsController::class, 'store']);
         Route::put('{brand:uuid}', [BrandsController::class, 'update']);
         Route::delete('{brand:uuid}', [BrandsController::class, 'destroy']);
+    });
+});
+
+Route::group(['prefix' => 'product'], function () {
+    Route::get('/', [ProductsController::class, 'index']);
+    Route::get('{product:uuid}', [ProductsController::class, 'show']);
+
+    Route::group(['middleware' => ['auth:api']], function () {
+        Route::post('create', [ProductsController::class, 'store']);
+        Route::put('{product:uuid}', [ProductsController::class, 'update']);
+        Route::delete('{product:uuid}', [ProductsController::class, 'destroy']);
     });
 });

@@ -3,6 +3,7 @@
 namespace App\Extensions;
 
 use App\Models\JwtToken;
+use App\DTOs\IssuedToken;
 
 abstract class JWTLibraryClient
 {

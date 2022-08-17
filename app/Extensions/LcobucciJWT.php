@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Lcobucci\Clock\SystemClock;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Key\InMemory;
+use Lcobucci\JWT\UnencryptedToken;
 use Lcobucci\JWT\Validation\Constraint\IssuedBy;
 use Lcobucci\JWT\Validation\Constraint\LooseValidAt;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
@@ -53,6 +54,7 @@ class LcobucciJWT extends JWTLibraryClient
     {
         try {
             //parse the token
+            /** @var UnencryptedToken $unencrypted_token */
             $unencrypted_token = $this->config->parser()->parse($token);
 
             //validate token against the constraints set

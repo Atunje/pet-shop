@@ -117,7 +117,8 @@ Route::group(['prefix' => 'payments', 'middleware' => ['auth:api']], function ()
 });
 
 Route::group(['prefix' => 'file'], function () {
-    Route::post('/upload', [FilesController::class, 'store']);//->middleware('auth:api');
+    Route::get('{file:uuid}', [FilesController::class, 'show']);
+    Route::post('/upload', [FilesController::class, 'store'])->middleware('auth:api');
 });
 
 Route::group(['prefix' => 'orders', 'middleware' => ['auth:api']], function () {

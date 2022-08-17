@@ -45,4 +45,15 @@ class FilesController extends Controller
 
         return $this->jsonResponse(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
+
+    /**
+     * File
+     *
+     * @param File $file
+     * @return JsonResponse
+     */
+    public function show(File $file)
+    {
+        return $this->jsonResponse(data: new FileResource($file));
+    }
 }

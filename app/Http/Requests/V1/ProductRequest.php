@@ -40,7 +40,7 @@ class ProductRequest extends APIFormRequest
             'description' => 'required|string',
             'metadata' => 'required|array',
             'metadata.brand' => 'required|uuid|exists:brands,uuid',
-            'metadata.image' => 'required|uuid',
+            'metadata.image' => 'required|uuid|exists:files,uuid',
             'category_uuid' => 'required|uuid|exists:categories,uuid',
         ];
 

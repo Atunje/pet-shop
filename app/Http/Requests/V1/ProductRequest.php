@@ -17,6 +17,18 @@ class ProductRequest extends APIFormRequest
     }
 
     /**
+     * Convert all json fields to arrays
+     *
+     * @return void
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'metadata' => json_decode(strval($this->input('metadata')), true),
+        ]);
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, mixed>
@@ -26,7 +38,9 @@ class ProductRequest extends APIFormRequest
         $rules = [
             'price' => 'required|numeric',
             'description' => 'required|string',
-            'metadata' => 'required|json',
+            'metadata' => 'required|array',
+            'metadata.brand' => 'required|uuid|exists:brands,uuid',
+            'metadata.image' => 'required|uuid',
             'category_uuid' => 'required|uuid|exists:categories,uuid',
         ];
 
@@ -42,5 +56,13 @@ class ProductRequest extends APIFormRequest
         }
 
         return $rules;
+    }
+
+    public function messages()
+    {
+        $messages = parent::messages();
+        $messages['metadata.array'] = "The metadata supplied is not a valid json array";
+
+        return $messages;
     }
 }

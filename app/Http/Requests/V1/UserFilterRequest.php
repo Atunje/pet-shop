@@ -5,7 +5,7 @@ namespace App\Http\Requests\V1;
 use App\DTOs\FilterParams;
 use Illuminate\Foundation\Http\FormRequest;
 
-class FilterRequest extends FormRequest
+class UserFilterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,12 +23,6 @@ class FilterRequest extends FormRequest
             'limit' => $this->limit ?? 10, //default to 10 records
             'desc' => $this->desc ?? true, //default to true
         ]);
-
-        if (! empty($this->date_range)) {
-            $this->merge([
-                'date_range' => json_decode(strval($this->date_range), true), //default to 10 records
-            ]);
-        }
     }
 
     /**
@@ -44,17 +38,13 @@ class FilterRequest extends FormRequest
             "sort_by" => "string|nullable",
             "desc" => "boolean|nullable",
             "date_range" => "array|nullable",
-            "date_range.from" => "date|nullable",
-            "date_range.to" => "date|nullable",
+            "first_name" => "string|nullable",
+            "email" => "email|nullable",
+            "phone_number" => "string|nullable",
+            "address" => "string|nullable",
+            "created_at" => "date|nullable",
+            "is_marketing" => "boolean|nullable",
         ];
-    }
-
-    public function messages(): array
-    {
-        $messages = parent::messages();
-        $messages['date_range.array'] = "The date range must be a json array.";
-
-        return $messages;
     }
 
     public function filterParams(): FilterParams

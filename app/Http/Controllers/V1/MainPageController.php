@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\DTOs\FilterParams;
+use App\Http\Requests\V1\FilterRequest;
 use App\Http\Resources\V1\PromotionResource;
 use App\Models\Post;
 use App\Models\Promotion;
-use Illuminate\Http\Request;
 use App\Http\Resources\V1\PostResource;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -15,11 +16,12 @@ class MainPageController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse
+     * @throws \Exception
      */
-    public function promotions(Request $request)
+    public function promotions(FilterRequest $request)
     {
-        $per_pg = $request->has('limit') ? intval($request->limit) : 10;
-        $data = PromotionResource::collection(Promotion::getAll($request->all(), $per_pg))->resource;
+        $filter_params = $request->filterParams();
+        $data = PromotionResource::collection(Promotion::getAll($filter_params))->resource;
 
         return $this->jsonResponse(data:$data);
     }
@@ -28,11 +30,12 @@ class MainPageController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse
+     * @throws \Exception
      */
-    public function posts(Request $request)
+    public function posts(FilterRequest $request)
     {
-        $per_pg = $request->has('limit') ? intval($request->limit) : 10;
-        $data = PostResource::collection(Post::getAll($request->all(), $per_pg))->resource;
+        $filter_params = $request->filterParams();
+        $data = PostResource::collection(Post::getAll($filter_params))->resource;
 
         return $this->jsonResponse(data:$data);
     }

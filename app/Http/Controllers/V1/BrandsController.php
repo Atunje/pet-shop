@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\DTOs\FilterParams;
 use App\Models\Brand;
+use Exception;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
+use App\Http\Requests\V1\FilterRequest;
 use App\Http\Requests\V1\BrandRequest;
 use App\Http\Resources\V1\BrandResource;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,12 +17,14 @@ class BrandsController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param FilterRequest $request
      * @return JsonResponse
+     * @throws Exception
      */
-    public function index(Request $request)
+    public function index(FilterRequest $request)
     {
-        $per_pg = $request->has('limit') ? intval($request->limit) : 10;
-        $data = BrandResource::collection(Brand::getAll($request->all(), $per_pg))->resource;
+        $filter_params = $request->filterParams();
+        $data = BrandResource::collection(Brand::getAll($filter_params))->resource;
 
         return $this->jsonResponse(data:$data);
     }

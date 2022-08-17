@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\V1;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Services\V1\UserService;
+use App\Http\Resources\V1\UserResource;
 use App\Http\Requests\V1\UpdateUserRequest;
+use App\Http\Requests\V1\UserFilterRequest;
 use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
@@ -19,12 +20,16 @@ class UsersController extends Controller
     /**
      * Get a paginated list of users
      *
-     * @param Request $request
+     * @param UserFilterRequest $request
      * @return JsonResponse
+     * @throws \Exception
      */
-    public function index(Request $request)
+    public function index(UserFilterRequest $request)
     {
-        return $this->jsonResponse(data: $this->userService->getUsers($request->all()));
+        $filter_params = $request->filterParams();
+        $data = UserResource::collection(User::getUsers($filter_params))->resource;
+
+        return $this->jsonResponse(data: $data);
     }
 
     /**

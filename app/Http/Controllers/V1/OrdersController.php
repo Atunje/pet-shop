@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Http\Requests\V1\FilterRequest;
-use App\Http\Requests\V1\OrderRequest;
-use App\Http\Services\V1\OrderService;
+use Throwable;
 use App\Models\Order;
 use Illuminate\Http\JsonResponse;
+use App\Http\Requests\V1\OrderRequest;
+use App\Http\Services\V1\OrderService;
+use App\Http\Requests\V1\FilterRequest;
 use App\Http\Resources\V1\OrderResource;
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
 
 class OrdersController extends Controller
 {
@@ -21,23 +21,24 @@ class OrdersController extends Controller
     /**
      * Display a listing of the resource.
      *
-     *
+     * @param FilterRequest $request
+     * @return JsonResponse
      */
     public function index(FilterRequest $request)
     {
-        $filter_params = $request->validated();
+        $filter_params = $request->filterParams();
         return $this->jsonResponse(data:$this->orderService->getAll($filter_params));
     }
-
 
     /**
      * Display a listing of the resource.
      *
-     *
+     * @param FilterRequest $request
+     * @return JsonResponse
      */
     public function dashboad(FilterRequest $request)
     {
-        $filter_params = $request->validated();
+        $filter_params = $request->filterParams();
         return $this->jsonResponse(data:$this->orderService->getAll($filter_params));
     }
 
@@ -56,7 +57,6 @@ class OrdersController extends Controller
 
         return $this->jsonResponse(Response::HTTP_UNPROCESSABLE_ENTITY, error: __('orders.creation_failed'));
     }
-
 
     /**
      * Display the specified resource.

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\V1;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
+use App\Http\Requests\V1\FilterRequest;
 use App\Http\Requests\V1\ProductRequest;
 use App\Http\Resources\V1\ProductResource;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,11 +15,12 @@ class ProductsController extends Controller
      * Display a listing of the resource.
      *
      * @return JsonResponse
+     * @throws \Exception
      */
-    public function index(Request $request)
+    public function index(FilterRequest $request)
     {
-        $per_pg = $request->has('limit') ? intval($request->limit) : 10;
-        $data = ProductResource::collection(Product::getAll($request->all(), $per_pg))->resource;
+        $filter_params = $request->filterParams();
+        $data = ProductResource::collection(Product::getAll($filter_params))->resource;
 
         return $this->jsonResponse(data:$data);
     }
@@ -32,10 +33,7 @@ class ProductsController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $inputs = $request->all();
-        $inputs['metadata'] = json_decode(strval($request->metadata), true);
-
-        $product = Product::create($inputs);
+        $product = Product::create($request->all());
         return $this->jsonResponse(data:new ProductResource($product));
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Http\Requests\V1\FilterRequest;
 use App\Models\OrderStatus;
 use Illuminate\Http\Request;
 use App\Http\Requests\V1\OrderStatusRequest;
@@ -16,10 +17,10 @@ class OrderStatusesController extends Controller
      *
      * @return JsonResponse
      */
-    public function index(Request $request)
+    public function index(FilterRequest $request)
     {
-        $per_pg = $request->has('limit') ? intval($request->limit) : 10;
-        $data = OrderStatusResource::collection(OrderStatus::getAll($request->all(), $per_pg))->resource;
+        $filter_params = $request->filterParams();
+        $data = OrderStatusResource::collection(OrderStatus::getAll($filter_params))->resource;
 
         return $this->jsonResponse(data:$data);
     }

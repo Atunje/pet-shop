@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\DTOs\FilterParams;
+use App\Http\Requests\V1\FilterRequest;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -17,10 +19,10 @@ class CategoriesController extends Controller
      *
      * @return JsonResponse
      */
-    public function index(Request $request)
+    public function index(FilterRequest $request)
     {
-        $per_pg = $request->has('limit') ? intval($request->limit) : 10;
-        $data = CategoryResource::collection(Category::getAll($request->all(), $per_pg))->resource;
+        $filter_params = $request->filterParams();
+        $data = CategoryResource::collection(Category::getAll($filter_params))->resource;
 
         return $this->jsonResponse(data: $data);
     }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\V1;
 
 use App\Models\Payment;
-use Illuminate\Http\Request;
+use App\Http\Requests\V1\FilterRequest;
 use App\Http\Requests\V1\PaymentRequest;
 use App\Http\Resources\V1\PaymentResource;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,10 +16,10 @@ class PaymentsController extends Controller
      *
      * @return JsonResponse
      */
-    public function index(Request $request)
+    public function index(FilterRequest $request)
     {
-        $per_pg = $request->has('limit') ? intval($request->limit) : 10;
-        $data = PaymentResource::collection(Payment::getAll($request->all(), $per_pg))->resource;
+        $filter_params = $request->filterParams();
+        $data = PaymentResource::collection(Payment::getAll($filter_params))->resource;
 
         return $this->jsonResponse(data:$data);
     }
@@ -32,10 +32,7 @@ class PaymentsController extends Controller
      */
     public function store(PaymentRequest $request)
     {
-        $inputs = $request->all();
-        $inputs['details'] = json_decode(strval($request->details));
-
-        $payment = Payment::create($inputs);
+        $payment = Payment::create($request->all());
         return $this->jsonResponse(data:new PaymentResource($payment));
     }
 
@@ -59,10 +56,7 @@ class PaymentsController extends Controller
      */
     public function update(PaymentRequest $request, Payment $payment)
     {
-        $inputs = $request->all();
-        $inputs['details'] = json_decode(strval($request->details));
-
-        if ($payment->update($inputs)) {
+        if ($payment->update($request->all())) {
             return $this->jsonResponse(data: $payment);
         }
 

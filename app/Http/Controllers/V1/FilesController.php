@@ -32,30 +32,17 @@ class FilesController extends Controller
         $record = new File([
             'name' => Str::random(16),
             'type' => $file->getMimeType(),
-            'size' => round($file->getSize()/1024) . " KB",
+            'size' => round($file->getSize() / 1024) . " KB",
             'path' => 'public/pet-shop/' . $file->getFilename()
         ]);
 
         if ($record->save()) {
             return $this->jsonResponse(data: new FileResource($record));
-        } else {
-            //delete the file
-            unlink($file);
         }
 
+        //delete the file
+        unlink($file);
+
         return $this->jsonResponse(Response::HTTP_UNPROCESSABLE_ENTITY);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return JsonResponse
-     */
-    public function index(Request $request)
-    {
-        $per_pg = $request->has('limit') ? intval($request->limit) : 10;
-        $data = FileResource::collection(File::getAll($request->all(), $per_pg))->resource;
-
-        return $this->jsonResponse(data:$data);
     }
 }

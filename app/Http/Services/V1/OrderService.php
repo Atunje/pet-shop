@@ -2,14 +2,15 @@
 
 namespace App\Http\Services\V1;
 
-use App\Http\Resources\V1\OrderResource;
+use App\DTOs\FilterParams;
+use DB;
+use Throwable;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
-use App\Models\User;
-use Auth;
-use DB;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Throwable;
+use Illuminate\Http\Request;
+use App\Http\Resources\V1\OrderResource;
+use Illuminate\Validation\UnauthorizedException;
 
 class OrderService
 {
@@ -26,28 +27,34 @@ class OrderService
     /**
      * Currently logged in user
      *
-     * @var User|Authenticatable
+     * @var User
      */
     private $user;
 
-    public function __construct()
+    /**
+     * Constructor
+     */
+    public function __construct(Request $request)
     {
-        $this->user = Auth::user();
+        if($request->user() === null) {
+            throw new UnauthorizedException();
+        }
+
+        $this->user = $request->user();
     }
 
     /**
-     * @param $filter_params
+     * @param FilterParams $filter_params
      * @return mixed
      */
     public function getAll($filter_params)
     {
-        if(! $this->user->isAdmin()) {
+        if (! $this->user->isAdmin()) {
             //always filter orders by the logged in user
-            $filter_params['user_uuid'] = $this->user->uuid;
+            $filter_params->__set('user_uuid', $this->user->uuid);
         }
 
-        $per_pg = isset($filter_params['limit']) ? intval($filter_params['limit']) : 10;
-        return OrderResource::collection(Order::getAll($filter_params, $per_pg))->resource;
+        return OrderResource::collection(Order::getAll($filter_params))->resource;
     }
 
     /**
@@ -62,7 +69,7 @@ class OrderService
         $order->amount = $this->calculateAmount($data['products']);
         $order->products = $data['products'];
         $order->delivery_fee = $order->amount > $this->free_delivery_threshold ? 0 : $this->delivery_fee;
-        $order->user_uuid = Auth::user()->uuid;
+        $order->user_uuid = $this->user->uuid;
         $order->shipped_at = " ";
 
         return $order->save() ? $order : null;
@@ -71,23 +78,26 @@ class OrderService
     /**
      * Calculate the total amount of the products and populate the products with product name and price
      *
-     * @params array $products
+     * @param array $products
+     * @return float
      */
-    private function calculateAmount(array &$products): float|int
+    private function calculateAmount(array &$products): float
     {
         $amount = 0;
 
-        foreach($products as $i => $item) {
-            //get product
+        foreach ($products as $i => $item) {
+
             $product = Product::where('uuid', $item['uuid'])->first();
 
-            //set product and price on the item
-            $item['product'] = $product->title;
-            $item['price'] = $product->price;
-            $products[$i] = $item;
+            if ($product !== null) {
+                //set product and price on the item
+                $item['product'] = $product->title;
+                $item['price'] = $product->price;
+                $products[$i] = $item;
 
-            //update the total amount
-            $amount += $item['price'] * $item['quantity'];
+                //update the total amount
+                $amount += $item['price'] * $item['quantity'];
+            }
         }
 
         return round($amount, 2);
@@ -108,7 +118,6 @@ class OrderService
         return $order->update($data);
     }
 
-
     /**
      * Delete order record and the payment attached to it
      *
@@ -118,12 +127,11 @@ class OrderService
      */
     public function delete($order)
     {
-        return DB::transaction(function() use ($order) {
+        return (bool) DB::transaction(function () use ($order) {
             //delete the payment
             $order->payment()->delete();
             //delete the order
             return $order->delete() ?? false;
         });
     }
-
 }

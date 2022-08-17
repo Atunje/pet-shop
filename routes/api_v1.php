@@ -123,6 +123,10 @@ Route::group(['prefix' => 'file'], function () {
 
 Route::group(['prefix' => 'orders', 'middleware' => ['auth:api']], function () {
     Route::get('/', [OrdersController::class, 'index']);
+    Route::get('/dashboard', [OrdersController::class, 'index']);
+    Route::get('{order:uuid}', [OrdersController::class, 'show']);
+    Route::put('{order:uuid}', [OrdersController::class, 'update']);
+    Route::delete('{order:uuid}', [OrdersController::class, 'destroy']);
 
     Route::group(['middleware' => ['can:user']], function () {
         Route::post('create', [OrdersController::class, 'store']);

@@ -16,22 +16,18 @@ class OrderRequest extends APIFormRequest
         return true;
     }
 
-    public function validator($factory)
-    {
-        return $factory->make(
-            $this->sanitize(), $this->container->call([$this, 'rules']), $this->messages()
-        );
-    }
-
-    public function sanitize()
+    /**
+     * Convert all json fields to arrays
+     *
+     * @return void
+     */
+    protected function prepareForValidation(): void
     {
         $this->merge([
-            'products' => json_decode($this->input('products'), true),
-            'address' => json_decode($this->input('address'), true),
+            'products' => json_decode(strval($this->input('products')), true),
+            'address' => json_decode(strval($this->input('address')), true),
         ]);
-        return $this->all();
     }
-
 
     /**
      * Get the validation rules that apply to the request.
@@ -42,6 +38,7 @@ class OrderRequest extends APIFormRequest
     {
         $rules = [
             'order_status_uuid' => 'required|uuid|exists:order_statuses,uuid',
+            'payment_uuid' => 'required|uuid|exists:payments,uuid|unique:orders',
             'products' => 'required|array',
             'products.*.uuid' => 'uuid|exists:products',
             'products.*.quantity' => 'numeric',
@@ -57,8 +54,6 @@ class OrderRequest extends APIFormRequest
                 'exists:payments,uuid',
                 Rule::unique('orders')->ignore($this->order),
             ];
-        } else {
-            $rules['payment_uuid'] = 'required|uuid|exists:payments,uuid|unique:orders';
         }
 
         return $rules;

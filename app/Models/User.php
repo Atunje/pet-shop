@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Exception;
+use App\DTOs\FilterParams;
 use App\Traits\HasJwtTokens;
 use App\Traits\HasUUIDField;
 use App\Traits\FilterableModel;
@@ -95,17 +97,19 @@ class User extends Authenticatable
         'address',
         'created_at',
         'is_marketing',
+        'is_admin',
     ];
 
     /**
      * Get users
      *
-     * @param array $filter_params
-     * @param int $per_pg
+     * @param FilterParams $filter_params
      * @return LengthAwarePaginator
+     * @throws Exception
      */
-    public static function getUsers($filter_params, $per_pg): LengthAwarePaginator
+    public static function getUsers($filter_params): LengthAwarePaginator
     {
-        return self::getRecords($filter_params, $per_pg, self::$filterable, ['is_admin' => false]);
+        $filter_params->__set("is_admin", false);
+        return self::getRecords($filter_params, self::$filterable);
     }
 }

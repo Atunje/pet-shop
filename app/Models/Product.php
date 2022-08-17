@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use DB;
+use Exception;
+use App\DTOs\FilterParams;
 use App\Traits\HasUUIDField;
 use App\Traits\FilterableModel;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -53,40 +54,32 @@ class Product extends Model
     /**
      * Get all db records
      *
-     * @param array<string, mixed> $filter_params
-     * @param int $per_pg
+     * @param FilterParams $filter_params
      * @return LengthAwarePaginator
+     * @throws Exception
      */
-    public static function getAll($filter_params, $per_pg)
+    public static function getAll($filter_params)
     {
-        return self::getRecords($filter_params, $per_pg, ['title', 'price']);
+        return self::getRecords($filter_params, ['title', 'price']);
     }
 
     /**
-     * Extend the original functionality by adding queries using category and brand
+     * Extend the query by adding queries to filter by brand and category
      *
-     * @param Builder<Model> $query
-     * @param array $filter_params
-     * @param array $filterable
      * @return void
      */
-    protected function applyFilterParamsOnQuery($query, $filter_params, $filterable): void
+    protected function additionalQueryFromModel(): void
     {
-        foreach ($filter_params as $col => $val) {
-            if ($val !== null && in_array($col, $filterable)) {
-                //add the filterable fields
-                $query->where($this->table . "." . $col, 'like', '%' . $val . '%');
-            }
+        //add special queries based on category
+        if (isset($this->filter_params->category)) {
+            $this->query->join('categories', 'categories.uuid', '=', "products.category_uuid")
+                ->where('categories.title', $this->filter_params->category);
         }
 
-        if (isset($filter_params['category'])) {
-            $query->join('categories', 'categories.uuid', '=', "products.category_uuid")
-                ->where('categories.title', $filter_params['category']);
-        }
-
-        if (isset($filter_params['brand'])) {
-            $query->join('brands', 'products.metadata', 'like', DB::raw("CONCAT('%', brands.uuid, '%')"))
-                ->where('brands.title', $filter_params['brand']);
+        //add special queries based on category
+        if (isset($this->filter_params->brand)) {
+            $this->query->join('brands', 'products.metadata', 'like', DB::raw("CONCAT('%', brands.uuid, '%')"))
+                ->where('brands.title', $this->filter_params->brand);
         }
     }
 }

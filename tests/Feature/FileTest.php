@@ -25,13 +25,4 @@ class FileTest extends TestCase
         //$response =$this->call('POST', self::FILE_ENDPOINT . "upload", [], [], $fileData, $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);
     }
-
-
-    public function test_file_listing(): void
-    {
-        $response = $this->get(self::FILE_ENDPOINT, $this->getUserAuthHeaders());
-        $response->assertStatus(Response::HTTP_OK)
-            //confirm if record is paginated
-            ->assertJsonPath('data.current_page', 1);
-    }
 }

@@ -22,7 +22,7 @@ class OrderResource extends JsonResource
             'delivery_fee' => $this->delivery_fee,
             'amount' => $this->amount,
             'user' => new UserResource($this->user),
-            'order_status' => new OrderStatusResource($this->order_status),
+            'order_status' => new OrderStatusResource($this->orderStatus),
             'payment' => new PaymentResource($this->payment),
             'shipped_at' => $this->shipped_at,
             'created_at' => $this->created_at,

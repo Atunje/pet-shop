@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\File;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,7 +25,8 @@ class ProductFactory extends Factory
             'description' => fake()->text(),
             'category_uuid' => Category::factory()->create()->uuid,
             'metadata' => [
-                'brand' => Brand::factory()->create()->uuid
+                'brand' => Brand::factory()->create()->uuid,
+                'image' => File::factory()->create()->uuid
             ],
         ];
     }

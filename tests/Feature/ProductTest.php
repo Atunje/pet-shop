@@ -51,7 +51,7 @@ class ProductTest extends TestCase
         $this->assertEquals($product->title, $updated->title);
         $this->assertEquals($product->price, $updated->price);
         $this->assertEquals($product->description, $updated->description);
-        $this->assertEquals($product->metadata, $updated->metadata);
+        $this->assertEquals(json_encode($product->metadata), $updated->metadata);
         $this->assertEquals($product->category_uuid, $updated->category_uuid);
     }
 

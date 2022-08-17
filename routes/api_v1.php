@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\V1\OrdersController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\FilesController;
 use App\Http\Controllers\V1\UsersController;
 use App\Http\Controllers\V1\BrandsController;
+use App\Http\Controllers\V1\OrdersController;
 use App\Http\Controllers\V1\MainPageController;
 use App\Http\Controllers\V1\PaymentsController;
 use App\Http\Controllers\V1\ProductsController;
@@ -117,7 +117,6 @@ Route::group(['prefix' => 'payments', 'middleware' => ['auth:api']], function ()
 });
 
 Route::group(['prefix' => 'file'], function () {
-    Route::get('/', [FilesController::class, 'index']);
     Route::post('/upload', [FilesController::class, 'store']);//->middleware('auth:api');
 });
 

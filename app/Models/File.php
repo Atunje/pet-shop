@@ -12,6 +12,6 @@ class File extends Model
     use HasFactory, HasUUIDField, FilterableModel;
 
     protected $fillable = [
-        'name', 'size', 'type', 'path'
+        'name', 'size', 'type', 'path',
     ];
 }

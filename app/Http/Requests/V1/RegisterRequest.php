@@ -29,7 +29,7 @@ class RegisterRequest extends APIFormRequest
             'email' => 'required|email|unique:users',
             'phone_number' => 'required|string|unique:users',
             'password' => ['required', 'confirmed', Password::defaults()],
-            'avatar' => 'required|uuid',
+            'avatar' => 'required|uuid|exists:files,uuid',
             'address' => 'required|string',
             'is_marketing' => 'nullable|string',
         ];

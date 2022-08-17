@@ -39,7 +39,7 @@ class UpdateUserRequest extends APIFormRequest
                 Rule::unique('users')->ignore($this->user),
             ],
             'password' => ['required', 'confirmed', Password::defaults()],
-            'avatar' => 'required|uuid',
+            'avatar' => 'required|uuid|exists:files,uuid',
             'address' => 'required|string',
             'is_marketing' => 'nullable|string',
         ];

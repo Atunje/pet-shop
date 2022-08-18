@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 //use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Product;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class ProductTest extends TestCase
@@ -14,63 +15,123 @@ class ProductTest extends TestCase
     /**
      * @return void
      */
-    public function test_product_listing(): void
+    public function test_user_can_view_product_listing(): void
     {
-        $this->withoutExceptionHandling();
-
         $response = $this->get(self::PRODUCT_ENDPOINT, $this->getUserAuthHeaders());
-        $response->assertStatus(200)
+        $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
     }
 
-    public function test_creation_of_product()
+
+    public function test_admin_can_view_product_listing(): void
     {
-        $new = Product::factory()->make();
-        $new->metadata = json_encode($new->metadata);
+        $response = $this->get(self::PRODUCT_ENDPOINT, $this->getAdminAuthHeaders());
+        $response->assertStatus(Response::HTTP_OK)
+            //confirm if record is paginated
+            ->assertJsonPath('data.current_page', 1);
+    }
 
-        $response = $this->post(self::PRODUCT_ENDPOINT . "create", $new->toArray(), $this->getUserAuthHeaders());
-        $response->assertStatus(200);
 
-        $product = Product::where('title', $new->title);
+
+    public function test_admin_can_create_product()
+    {
+        $product = Product::factory()->make();
+        $product->metadata = json_encode($product->metadata);
+
+        $response = $this->post(self::PRODUCT_ENDPOINT . "create", $product->toArray(), $this->getAdminAuthHeaders());
+        $response->assertStatus(Response::HTTP_OK);
+
+        $product = Product::where('title', $product->title)->first();
         $this->assertNotNull($product);
     }
 
 
-    public function test_updating_a_product()
+    public function test_user_cannot_create_product()
+    {
+        $product = Product::factory()->make();
+        $product->metadata = json_encode($product->metadata);
+
+        $response = $this->post(self::PRODUCT_ENDPOINT . "create", $product->toArray(), $this->getUserAuthHeaders());
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+
+        $product = Product::where('title', $product->title)->first();
+        $this->assertNull($product);
+    }
+
+
+    public function test_admin_can_update_product()
     {
         //create a product
         $product = Product::factory()->create();
-        $updated = Product::factory()->make();
-        $updated->metadata = json_encode($updated->metadata);
+        $update = Product::factory()->make();
+        $update->metadata = json_encode($update->metadata);
 
-        $response = $this->put(self::PRODUCT_ENDPOINT . $product->uuid, $updated->toArray(), $this->getUserAuthHeaders());
-        $response->assertStatus(200);
+        $response = $this->put(self::PRODUCT_ENDPOINT . $product->uuid, $update->toArray(), $this->getAdminAuthHeaders());
+        $response->assertStatus(Response::HTTP_OK);
 
-        $product->refresh();
-        $this->assertEquals($product->title, $updated->title);
-        $this->assertEquals($product->price, $updated->price);
-        $this->assertEquals($product->description, $updated->description);
-        $this->assertEquals(json_encode($product->metadata), $updated->metadata);
-        $this->assertEquals($product->category_uuid, $updated->category_uuid);
+        $product = Product::find($product->id);
+        $this->assertEquals($product->title, $update->title);
+        $this->assertEquals($product->price, $update->price);
+        $this->assertEquals($product->description, $update->description);
+        $this->assertEquals($product->category_uuid, $update->category_uuid);
+        $this->assertEquals(json_encode($product->metadata), $update->metadata);
     }
 
 
-    public function test_viewing_of_a_product()
+
+    public function test_user_cannot_update_product()
+    {
+        //create a product
+        $product = Product::factory()->create();
+        $update = Product::factory()->make();
+        $update->metadata = json_encode($update->metadata);
+
+        $response = $this->put(self::PRODUCT_ENDPOINT . $product->uuid, $update->toArray(), $this->getUserAuthHeaders());
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+
+        $product = Product::find($product->id);
+        $this->assertNotEquals($product->title, $update->title);
+        $this->assertNotEquals($product->price, $update->price);
+        $this->assertNotEquals($product->description, $update->description);
+        $this->assertNotEquals($product->category_uuid, $update->category_uuid);
+        $this->assertNotEquals(json_encode($product->metadata), $update->metadata);
+    }
+
+
+    public function test_admin_can_view_product()
+    {
+        $product = Product::factory()->create();
+        $response = $this->get(self::PRODUCT_ENDPOINT . $product->uuid, $this->getAdminAuthHeaders());
+        $response->assertStatus(Response::HTTP_OK)->assertJsonPath('data.uuid', $product->uuid);
+    }
+
+
+    public function test_user_can_view_product()
     {
         $product = Product::factory()->create();
         $response = $this->get(self::PRODUCT_ENDPOINT . $product->uuid, $this->getUserAuthHeaders());
-        $response->assertStatus(200)->assertJsonPath('data.uuid', $product->uuid);;
+        $response->assertStatus(Response::HTTP_OK)->assertJsonPath('data.uuid', $product->uuid);
     }
 
-
-    public function test_deleting_a_product()
+    public function test_admin_can_delete_product()
     {
         $product = Product::factory()->create();
-        $response = $this->delete(self::PRODUCT_ENDPOINT . $product->uuid, [], $this->getUserAuthHeaders());
-        $response->assertStatus(200);
+        $response = $this->delete(self::PRODUCT_ENDPOINT . $product->uuid, [], $this->getAdminAuthHeaders());
+        $response->assertStatus(Response::HTTP_OK);
 
         $product = Product::find($product->id);
         $this->assertNull($product);
+    }
+
+
+    public function test_user_cannot_delete_product()
+    {
+        $product = Product::factory()->create();
+        $response = $this->delete(self::PRODUCT_ENDPOINT . $product->uuid, [], $this->getUserAuthHeaders());
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+
+        $product = Product::find($product->id);
+        $this->assertNotNull($product);
     }
 }

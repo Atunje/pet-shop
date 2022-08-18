@@ -6,6 +6,7 @@ namespace Tests\Feature;
 use App\Models\Brand;
 use App\Models\Post;
 use App\Models\Promotion;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class MainPageTest extends TestCase
@@ -19,7 +20,7 @@ class MainPageTest extends TestCase
     {
         Promotion::factory(10)->create();
         $response = $this->get(self::MAIN_PAGE_ENDPOINT . 'promotions');
-        $response->assertStatus(200)
+        $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
     }
@@ -31,7 +32,7 @@ class MainPageTest extends TestCase
     {
         Post::factory(10)->create();
         $response = $this->get(self::MAIN_PAGE_ENDPOINT . 'blog');
-        $response->assertStatus(200)
+        $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
     }
@@ -40,6 +41,6 @@ class MainPageTest extends TestCase
     {
         $post = Post::factory()->create();
         $response = $this->get(self::MAIN_PAGE_ENDPOINT . 'blog/' . $post->uuid);
-        $response->assertStatus(200)->assertJsonPath('data.uuid', $post->uuid);
+        $response->assertStatus(Response::HTTP_OK)->assertJsonPath('data.uuid', $post->uuid);
     }
 }

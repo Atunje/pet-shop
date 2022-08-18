@@ -11,6 +11,47 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
+/**
+ * App\Models\Order
+ *
+ * @property int $id
+ * @property string $uuid
+ * @property string $user_uuid
+ * @property string $order_status_uuid
+ * @property string|null $payment_uuid
+ * @property array $products
+ * @property array $address
+ * @property float $delivery_fee
+ * @property float $amount
+ * @property string|null $shipped_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Models\OrderStatus $orderStatus
+ * @property-read \App\Models\Payment|null $payment
+ * @property-read \App\Models\User $user
+ * @method static \Database\Factories\OrderFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Order onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereDeliveryFee($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderStatusUuid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentUuid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereProducts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserUuid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUuid($value)
+ * @method static \Illuminate\Database\Query\Builder|Order withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Order withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Order extends Model
 {
     use HasFactory, HasUUIDField, FilterableModel, SoftDeletes;

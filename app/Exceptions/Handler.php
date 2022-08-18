@@ -3,14 +3,15 @@
 namespace App\Exceptions;
 
 use Throwable;
+use ErrorException;
 use Illuminate\Http\Request;
 use App\Traits\HandlesResponse;
 use Illuminate\Auth\AuthenticationException;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
@@ -64,29 +65,26 @@ class Handler extends ExceptionHandler
      *
      * @param  Request  $request
      * @param Throwable $e
-     * @return  SymfonyResponse
+     * @return  Response
      *
      * @throws Throwable
      */
-    public function render($request, Throwable $e): SymfonyResponse
+    public function render($request, Throwable $e): Response
     {
-        if ($e instanceof ModelNotFoundException) {
-            $model = $this->getModelName($e->getModel());
-            return $this->jsonResponse(
-                status_code: SymfonyResponse::HTTP_NOT_FOUND,
-                error: __('http.model_not_found', ["model" => $model])
-            );
-        }
-
         return match (true) {
+            $e instanceof ModelNotFoundException => $this->jsonResponse(
+                status_code: Response::HTTP_NOT_FOUND,
+                error: __('http.model_not_found', ["model" => $this->getModelName($e->getModel())])
+            ),
             $e instanceof NotFoundHttpException, $e instanceof MethodNotAllowedHttpException => $this->jsonResponse(
-                status_code: SymfonyResponse::HTTP_NOT_FOUND,
+                status_code: Response::HTTP_NOT_FOUND,
                 error: __('http.not_found')
             ),
+            $e instanceof ErrorException => $this->jsonResponse(status_code: Response::HTTP_INTERNAL_SERVER_ERROR),
             $e instanceof UnauthorizedException,
             $e instanceof AuthorizationException,
             $e instanceof AuthenticationException => $this->jsonResponse(
-                status_code: SymfonyResponse::HTTP_UNAUTHORIZED,
+                status_code: Response::HTTP_UNAUTHORIZED,
                 error: __('http.unauthorized')
             ),
             default => parent::render($request, $e)

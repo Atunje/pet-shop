@@ -52,6 +52,16 @@ class Product extends Model
     }
 
     /**
+     * Get the associated brand to this product
+     *
+     * @return File|null
+     */
+    public function getImageFile()
+    {
+        return File::where('uuid', $this->metadata['image'])->first();
+    }
+
+    /**
      * Get all db records
      *
      * @param FilterParams $filter_params

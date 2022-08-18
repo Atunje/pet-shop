@@ -25,6 +25,11 @@ use App\Http\Controllers\V1\OrderStatusesController;
 |
 */
 
+Route::get('/', function () {
+    $response = ["message" => "Welcome to " . config('app.name') . " API v1.0.0", "success" => 1];
+    return response()->json($response, 200);
+});
+
 /** Admin Endpoints */
 Route::group(['prefix' => 'admin'], function () {
     Route::post('create', [AdminAuthController::class, 'register']);

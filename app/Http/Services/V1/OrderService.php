@@ -2,13 +2,15 @@
 
 namespace App\Http\Services\V1;
 
-use App\DTOs\FilterParams;
 use DB;
 use Throwable;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
+use App\DTOs\FilterParams;
+use App\Models\OrderStatus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Http\Resources\V1\OrderResource;
 use Illuminate\Validation\UnauthorizedException;
 
@@ -36,7 +38,7 @@ class OrderService
      */
     public function __construct(Request $request)
     {
-        if($request->user() === null) {
+        if ($request->user() === null) {
             throw new UnauthorizedException();
         }
 
@@ -68,11 +70,25 @@ class OrderService
         $order = new Order($data);
         $order->amount = $this->calculateAmount($data['products']);
         $order->products = $data['products'];
-        $order->delivery_fee = $order->amount > $this->free_delivery_threshold ? 0 : $this->delivery_fee;
+        $order->delivery_fee = $this->getDeliveryFee($order);
         $order->user_uuid = $this->user->uuid;
-        $order->shipped_at = " ";
+        $order->shipped_at = $this->getShippingTime($data['order_status_uuid']);
 
-        return $order->save() ? $order : null;
+        if ($order->save()) {
+            return $order;
+        }
+
+        return null;
+    }
+
+    private function getDeliveryFee(Order $order): int
+    {
+        return $order->amount > $this->free_delivery_threshold ? 0 : $this->delivery_fee;
+    }
+
+    private function getShippingTime(string $status_uuid): ?Carbon
+    {
+        return OrderStatus::isShippedStatus($status_uuid) ? now() : null;
     }
 
     /**
@@ -86,18 +102,16 @@ class OrderService
         $amount = 0;
 
         foreach ($products as $i => $item) {
-
+            /** @var Product $product */
             $product = Product::where('uuid', $item['uuid'])->first();
 
-            if ($product !== null) {
-                //set product and price on the item
-                $item['product'] = $product->title;
-                $item['price'] = $product->price;
-                $products[$i] = $item;
+            //set product and price on the item
+            $item['product'] = $product->title;
+            $item['price'] = $product->price;
+            $products[$i] = $item;
 
-                //update the total amount
-                $amount += $item['price'] * $item['quantity'];
-            }
+            //update the total amount
+            $amount += $item['price'] * $item['quantity'];
         }
 
         return round($amount, 2);
@@ -113,7 +127,8 @@ class OrderService
     public function update(Order $order, array $data)
     {
         $order->amount = $this->calculateAmount($data['products']);
-        $order->delivery_fee = $order->amount > $this->free_delivery_threshold ? 0 : $this->delivery_fee;
+        $order->delivery_fee = $this->getDeliveryFee($order);
+        $order->shipped_at = $this->getShippingTime($data['order_status_uuid']);
 
         return $order->update($data);
     }
@@ -131,7 +146,7 @@ class OrderService
             //delete the payment
             $order->payment()->delete();
             //delete the order
-            return $order->delete() ?? false;
+            return $order->delete();
         });
     }
 }

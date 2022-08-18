@@ -12,7 +12,6 @@ use App\Models\OrderStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Resources\V1\OrderResource;
-use Illuminate\Validation\UnauthorizedException;
 
 class OrderService
 {

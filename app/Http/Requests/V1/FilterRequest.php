@@ -3,9 +3,8 @@
 namespace App\Http\Requests\V1;
 
 use App\DTOs\FilterParams;
-use Illuminate\Foundation\Http\FormRequest;
 
-class FilterRequest extends FormRequest
+class FilterRequest extends APIFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

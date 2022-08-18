@@ -19,10 +19,8 @@ trait FilterableModel
 
     /**
      * Array of key value pairs to add to query's where statement
-     *
-     * @var FilterParams
      */
-    private $filter_params;
+    private FilterParams $filter_params;
 
     /**
      * Array of model fields that can make where statements
@@ -38,22 +36,16 @@ trait FilterableModel
 
     /**
      * Field used to sort the records
-     *
-     * @var ?string
      */
     private ?string $sort_by;
 
     /**
      * Sort the records in descending order
-     *
-     * @var bool
      */
     private bool $sort_descending;
 
     /**
      * Field to use when querying by date range
-     *
-     * @var string
      */
     protected string $date_field = "created_at";
 
@@ -123,7 +115,6 @@ trait FilterableModel
     protected function queryByDateRange(): void
     {
         if (isset($this->filter_params->date_range)) {
-
             $date_range = $this->filter_params->date_range;
             $from = strval($date_range['from']);
             $to = strval($date_range['from']);

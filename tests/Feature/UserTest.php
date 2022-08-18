@@ -116,6 +116,8 @@ class UserTest extends TestCase
         $response = $this->put(self::USER_ENDPOINT . "edit", $updated, $this->getUserAuthHeaders($user));
         $response->assertStatus(Response::HTTP_OK);
 
+        $this->refreshApplication();
+
         $user->refresh();
         $this->assertEquals($user->first_name, $updated['first_name']);
         $this->assertEquals($user->last_name, $updated['last_name']);

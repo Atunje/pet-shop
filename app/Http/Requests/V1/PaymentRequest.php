@@ -35,7 +35,7 @@ class PaymentRequest extends APIFormRequest
     {
         return [
             'type' => 'required|string|in:credit_card,bank_transfer,cash_on_delivery',
-            'details' => 'required|array'
+            'details' => 'required|array',
         ];
     }
 

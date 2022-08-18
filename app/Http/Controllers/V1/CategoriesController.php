@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\DTOs\FilterParams;
-use App\Http\Requests\V1\FilterRequest;
 use App\Models\Category;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
+use App\Http\Requests\V1\FilterRequest;
 use App\Http\Requests\V1\CategoryRequest;
 use App\Http\Resources\V1\CategoryResource;
 use Symfony\Component\HttpFoundation\Response;

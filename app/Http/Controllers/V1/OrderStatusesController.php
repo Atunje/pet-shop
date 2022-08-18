@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Http\Requests\V1\FilterRequest;
 use App\Models\OrderStatus;
-use Illuminate\Http\Request;
+use App\Http\Requests\V1\FilterRequest;
 use App\Http\Requests\V1\OrderStatusRequest;
 use App\Http\Resources\V1\OrderStatusResource;
 use Symfony\Component\HttpFoundation\Response;

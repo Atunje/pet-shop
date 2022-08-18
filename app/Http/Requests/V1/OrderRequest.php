@@ -44,7 +44,7 @@ class OrderRequest extends APIFormRequest
             'products.*.quantity' => 'numeric',
             'address' => 'required|array',
             'address.billing' => 'required|string',
-            'address.shipping' => 'required|string'
+            'address.shipping' => 'required|string',
         ];
 
         if (isset($this->order)) {

@@ -29,7 +29,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function getAuthToken(bool $is_admin = false, ?User $user = null)
     {
-        //create admin user with default password - password
+        //create admin/user with default password - password
         if($user === null) {
             $user = $is_admin ? User::factory()->admin()->create() : User::factory()->create();
         }

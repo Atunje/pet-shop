@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\DTOs\FilterParams;
-use App\Models\Brand;
 use Exception;
+use App\Models\Brand;
 use Illuminate\Support\Str;
 use App\Http\Requests\V1\FilterRequest;
 use App\Http\Requests\V1\BrandRequest;

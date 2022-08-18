@@ -22,7 +22,7 @@ class FileRequest extends APIFormRequest
     public function rules()
     {
         return [
-            'file' => 'required|file|max:512000'
+            'file' => 'required|file|max:512000',
         ];
     }
 }

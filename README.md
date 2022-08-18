@@ -55,7 +55,7 @@ You can now access the server at http://localhost:8000/api/v1
 
 ## Database seeding
 
-**Populate * 50 orders for 10 different users with a random amount of products, these orders will get randomly assigned a order status, if the order status is paid or shipped it is assigned a payment method.**
+**Populate 50 orders for 10 different users with a random amount of products, these orders will get randomly assigned a order status, if the order status is paid or shipped it is assigned a payment method.**
 
 Run the database seeder and you're done
 
@@ -82,14 +82,20 @@ docker-compose exec php php artisan db:seed
 docker-compose exec php php artisan serve --host=0.0.0.0
 ```
 
-The api can be accessed at [http://localhost:8000/api](http://localhost:8000/api/v1).
+The api can be accessed at [http://localhost:8000/api/v1](http://localhost:8000/api/v1).
 
 
 # Code overview
 
 ## Dependencies
 
-- [jwt-auth](https://github.com/lcobucci/jwt) - For authentication using JSON Web Tokens
+- [lcobucci/jwt](https://github.com/lcobucci/jwt) - For authentication using JSON Web Tokens
+
+## Dev Dependencies
+
+- [barryvdh/laravel-ide-helper](https://github.com/barryvdh/laravel-ide-helper) 
+- [nunomaduro/larastan](https://github.com/nunomaduro/larastan)
+- [nunomaduro/phpinsights](https://github.com/nunomaduro/phpinsights)
 
 ## Folders
 
@@ -114,5 +120,15 @@ The api can be accessed at [http://localhost:8000/api](http://localhost:8000/api
 - `.env` - Environment variables can be set in this file
 
 ***Note*** : You can quickly set the database information and other variables in this file and have the application fully working.
+
+----------
+
+## Documentation
+
+The api documentation can be accessed at [http://localhost:8000/api/documentation](http://localhost:8000/api/documentation).
+
+After seeding the database, the default admin credentials are:
+- Email - test_admin@example.com
+- Password - admin
 
 ----------

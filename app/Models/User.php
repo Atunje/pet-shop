@@ -8,7 +8,7 @@ use App\DTOs\FilterParams;
 use App\Traits\HasJwtTokens;
 use App\Traits\HasUUIDField;
 use Illuminate\Support\Carbon;
-use App\Traits\FilterableModel;
+use App\Traits\Filterable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -71,7 +71,7 @@ use Illuminate\Notifications\DatabaseNotificationCollection;
  */
 class User extends Authenticatable
 {
-    use HasJwtTokens, HasUUIDField, FilterableModel, SoftDeletes, HasFactory, Notifiable;
+    use HasJwtTokens, HasUUIDField, Filterable, SoftDeletes, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.

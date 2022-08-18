@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\DTOs\FilterParams;
 use App\Traits\HasUUIDField;
-use App\Traits\FilterableModel;
+use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -54,7 +54,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  */
 class Order extends Model
 {
-    use HasFactory, HasUUIDField, FilterableModel, SoftDeletes;
+    use HasFactory, HasUUIDField, Filterable, SoftDeletes;
 
     protected $fillable = [
         'order_status_uuid',

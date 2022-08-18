@@ -140,7 +140,13 @@ class OrdersController extends Controller
      *                      "address",
      *                  },
      *                  @OA\Property(property="order_status_uuid", type="string"),
-     *                  @OA\Property(property="products", type="text"),
+     *                  @OA\Property(
+     *                   property="products",
+     *                   type="array",
+     *                   @OA\Items(
+     *                        type="object",
+     *                     )
+     *                  ),
      *                  @OA\Property(property="payment_uuid", type="string"),
      *                  @OA\Property(property="address", type="object"),
      *              )
@@ -220,7 +226,13 @@ class OrdersController extends Controller
      *                      "address",
      *                  },
      *                  @OA\Property(property="order_status_uuid", type="string"),
-     *                  @OA\Property(property="products", type="text"),
+     *                  @OA\Property(
+     *                   property="products",
+     *                   type="array",
+     *                   @OA\Items(
+     *                        type="object",
+     *                     )
+     *                  ),
      *                  @OA\Property(property="payment_uuid", type="string"),
      *                  @OA\Property(property="address", type="object"),
      *              )

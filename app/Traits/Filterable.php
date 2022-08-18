@@ -8,7 +8,7 @@ use App\DTOs\FilterParams;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-trait FilterableModel
+trait Filterable
 {
     /**
      * The query to be built and executed

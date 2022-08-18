@@ -17,7 +17,7 @@ class ProductTest extends TestCase
      */
     public function test_user_can_view_product_listing(): void
     {
-        $response = $this->get(self::PRODUCT_ENDPOINT, $this->getUserAuthHeaders());
+        $response = $this->get(self::PRODUCTS_ENDPOINT, $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
@@ -26,7 +26,7 @@ class ProductTest extends TestCase
 
     public function test_admin_can_view_product_listing(): void
     {
-        $response = $this->get(self::PRODUCT_ENDPOINT, $this->getAdminAuthHeaders());
+        $response = $this->get(self::PRODUCTS_ENDPOINT, $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
@@ -92,10 +92,6 @@ class ProductTest extends TestCase
 
         $product = Product::find($product->id);
         $this->assertNotEquals($product->title, $update->title);
-        $this->assertNotEquals($product->price, $update->price);
-        $this->assertNotEquals($product->description, $update->description);
-        $this->assertNotEquals($product->category_uuid, $update->category_uuid);
-        $this->assertNotEquals(json_encode($product->metadata), $update->metadata);
     }
 
 

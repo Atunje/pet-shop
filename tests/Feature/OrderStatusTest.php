@@ -17,7 +17,7 @@ class OrderStatusTest extends TestCase
      */
     public function test_user_can_view_order_status_listing(): void
     {
-        $response = $this->get(self::ORDER_STATUS_ENDPOINT, $this->getUserAuthHeaders());
+        $response = $this->get(self::ORDER_STATUSES_ENDPOINT, $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
@@ -26,7 +26,7 @@ class OrderStatusTest extends TestCase
 
     public function test_admin_can_view_order_status_listing(): void
     {
-        $response = $this->get(self::ORDER_STATUS_ENDPOINT, $this->getAdminAuthHeaders());
+        $response = $this->get(self::ORDER_STATUSES_ENDPOINT, $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);

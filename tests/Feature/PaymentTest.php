@@ -17,7 +17,7 @@ class PaymentTest extends TestCase
      */
     public function test_admin_can_view_payment_listing(): void
     {
-        $response = $this->get(self::PAYMENT_ENDPOINT, $this->getAdminAuthHeaders());
+        $response = $this->get(self::PAYMENTS_ENDPOINT, $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
@@ -29,7 +29,7 @@ class PaymentTest extends TestCase
      */
     public function test_user_cannot_view_payment_listing(): void
     {
-        $response = $this->get(self::PAYMENT_ENDPOINT, $this->getUserAuthHeaders());
+        $response = $this->get(self::PAYMENTS_ENDPOINT, $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 

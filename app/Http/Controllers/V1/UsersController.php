@@ -166,7 +166,12 @@ class UsersController extends Controller
      */
     public function update(User $user, UpdateUserRequest $request)
     {
-        if ($this->userService->update($user, $request->all())) {
+        if ($user->isAdmin()) {
+            return $this->jsonResponse(
+                status_code: Response::HTTP_UNPROCESSABLE_ENTITY,
+                error: __('profile.admin_edit_disallowed')
+            );
+        } else if ($this->userService->update($user, $request->all())) {
             return $this->jsonResponse();
         }
 
@@ -201,7 +206,12 @@ class UsersController extends Controller
      */
     public function destroy(User $user)
     {
-        if ($this->userService->delete($user)) {
+        if ($user->isAdmin()) {
+            return $this->jsonResponse(
+                status_code: Response::HTTP_UNPROCESSABLE_ENTITY,
+                error: __('profile.admin_delete_disallowed')
+            );
+        } else if ($this->userService->delete($user)) {
             return $this->jsonResponse();
         }
 

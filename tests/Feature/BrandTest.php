@@ -17,7 +17,7 @@ class BrandTest extends TestCase
      */
     public function test_user_can_view_brand_listing(): void
     {
-        $response = $this->get(self::BRAND_ENDPOINT, $this->getUserAuthHeaders());
+        $response = $this->get(self::BRANDS_ENDPOINT, $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
@@ -26,7 +26,7 @@ class BrandTest extends TestCase
 
     public function test_admin_can_view_brand_listing(): void
     {
-        $response = $this->get(self::BRAND_ENDPOINT, $this->getAdminAuthHeaders());
+        $response = $this->get(self::BRANDS_ENDPOINT, $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);

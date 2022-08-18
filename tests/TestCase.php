@@ -13,11 +13,16 @@ abstract class TestCase extends BaseTestCase
     const ADMIN_ENDPOINT = '/v1/admin/';
     const USER_ENDPOINT = '/v1/user/';
     const CATEGORY_ENDPOINT = '/v1/category/';
+    const CATEGORIES_ENDPOINT = '/v1/categories/';
     const BRAND_ENDPOINT = '/v1/brand/';
+    const BRANDS_ENDPOINT = '/v1/brands/';
     const PRODUCT_ENDPOINT = '/v1/product/';
+    const PRODUCTS_ENDPOINT = '/v1/products/';
     const ORDER_STATUS_ENDPOINT = '/v1/order-status/';
+    const ORDER_STATUSES_ENDPOINT = '/v1/order-statuses/';
     const MAIN_PAGE_ENDPOINT = '/v1/main/';
-    const PAYMENT_ENDPOINT = '/v1/payments/';
+    const PAYMENT_ENDPOINT = '/v1/payment/';
+    const PAYMENTS_ENDPOINT = '/v1/payments/';
     const FILE_ENDPOINT = '/v1/file/';
 
     /**

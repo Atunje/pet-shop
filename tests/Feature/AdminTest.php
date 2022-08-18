@@ -11,19 +11,6 @@ class AdminTest extends TestCase
 {
     //use RefreshDatabase;
 
-
-    /**
-     * Test the root endpoint
-     *
-     * @return void
-     */
-    public function test_the_application_returns_a_successful_response()
-    {
-        $response = $this->get(self::ROOT_ENDPOINT);
-        $response->assertStatus(200);
-    }
-
-
     /**
      * Test admin can register
      *

@@ -19,13 +19,25 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
+        //pick from existing or create a new one
+        $category = Category::all()->random()->first();
+        if($category == null) {
+            $category = Category::factory()->create();
+        }
+
+        //pick from existing or create a new one
+        $brand = Brand::all()->random()->first();
+        if($brand == null) {
+            $brand = Brand::factory()->create();
+        }
+
         return [
             'title' => fake()->sentence(rand(1,6)),
             'price' => fake()->randomFloat(2,2, 3),
             'description' => fake()->text(),
-            'category_uuid' => Category::factory()->create()->uuid,
+            'category_uuid' => $category->uuid,
             'metadata' => [
-                'brand' => Brand::factory()->create()->uuid,
+                'brand' => $brand->uuid,
                 'image' => File::factory()->create()->uuid
             ],
         ];

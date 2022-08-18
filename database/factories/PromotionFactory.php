@@ -18,7 +18,7 @@ class PromotionFactory extends Factory
     {
         return [
             'title' => fake()->sentence(rand(1,20)),
-            'content' => fake()->text(),
+            'content' => fake()->text(500),
             'metadata' => [
                 'valid_to' => fake()->date(),
                 'valid_fom' => fake()->date()

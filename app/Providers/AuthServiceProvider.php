@@ -30,16 +30,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //define admin guard to protect admin routes with middleware
-        Gate::define('admin', function ($user) {
-            return $user->isAdmin();
-        });
-
-        //define user guard to protect admin routes with middleware
-        Gate::define('user', function ($user) {
-            return !$user->isAdmin();
-        });
-
         // add custom guard
         Auth::extend('jwt', function ($app, $name, array $config) {
             $provider = Auth::createUserProvider($config['provider']);

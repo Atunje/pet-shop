@@ -1208,7 +1208,10 @@
                                         "type": "string"
                                     },
                                     "products": {
-                                        "type": "text"
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object"
+                                        }
                                     },
                                     "payment_uuid": {
                                         "type": "string"
@@ -1311,7 +1314,10 @@
                                         "type": "string"
                                     },
                                     "products": {
-                                        "type": "text"
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object"
+                                        }
                                     },
                                     "payment_uuid": {
                                         "type": "string"
@@ -1463,7 +1469,12 @@
                                 ],
                                 "properties": {
                                     "type": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "credit_card",
+                                            "bank_transfer",
+                                            "cash_on_delivery"
+                                        ]
                                     },
                                     "details": {
                                         "type": "object"
@@ -1558,7 +1569,12 @@
                                 ],
                                 "properties": {
                                     "type": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "enum": [
+                                            "credit_card",
+                                            "bank_transfer",
+                                            "cash_on_delivery"
+                                        ]
                                     },
                                     "details": {
                                         "type": "object"

@@ -79,7 +79,11 @@ class PaymentsController extends Controller
      *                      "type",
      *                      "details",
      *                  },
-     *                  @OA\Property(property="type", type="string"),
+     *                  @OA\Property(
+     *                      property="type",
+     *                      type="string",
+     *                      enum={"credit_card", "bank_transfer", "cash_on_delivery"}
+     *                  ),
      *                  @OA\Property(property="details", type="object"),
      *              )
      *          )
@@ -150,7 +154,11 @@ class PaymentsController extends Controller
      *                      "type",
      *                      "details",
      *                  },
-     *                  @OA\Property(property="type", type="string"),
+     *                  @OA\Property(
+     *                      property="type",
+     *                      type="string",
+     *                      enum={"credit_card", "bank_transfer", "cash_on_delivery"}
+     *                  ),
      *                  @OA\Property(property="details", type="object"),
      *              )
      *          )

@@ -103,12 +103,6 @@ class AdminTest extends TestCase
 
         $user->refresh();
         $this->assertNotEquals($user->first_name, $updated['first_name']);
-        $this->assertNotEquals($user->last_name, $updated['last_name']);
-        $this->assertNotEquals($user->email, $updated['email']);
-        $this->assertNotEquals($user->phone_number, $updated['phone_number']);
-        $this->assertNotEquals($user->avatar, $updated['avatar']);
-        $this->assertNotEquals($user->address, $updated['address']);
-        $this->assertNotEquals($user->is_marketing, 1);
     }
 
     public function test_admin_account_cannot_be_deleted()
@@ -142,12 +136,6 @@ class AdminTest extends TestCase
 
         $user->refresh();
         $this->assertEquals($user->first_name, $updated['first_name']);
-        $this->assertEquals($user->last_name, $updated['last_name']);
-        $this->assertEquals($user->email, $updated['email']);
-        $this->assertEquals($user->phone_number, $updated['phone_number']);
-        $this->assertEquals($user->avatar, $updated['avatar']);
-        $this->assertEquals($user->address, $updated['address']);
-        $this->assertEquals($user->is_marketing, 1);
     }
 
 

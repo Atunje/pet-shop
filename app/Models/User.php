@@ -10,6 +10,7 @@ use App\Traits\HasUUIDField;
 use App\Traits\FilterableModel;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -40,7 +41,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'is_admin',
     ];
 
     /**
@@ -99,6 +99,14 @@ class User extends Authenticatable
         'is_marketing',
         'is_admin',
     ];
+
+    /**
+     * @return HasMany<Order>
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'user_uuid', 'uuid');
+    }
 
     /**
      * Get users

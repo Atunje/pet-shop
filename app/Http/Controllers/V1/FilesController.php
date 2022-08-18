@@ -13,6 +13,30 @@ use Symfony\Component\HttpFoundation\Response;
 class FilesController extends Controller
 {
     /**
+     * @OA\Post(
+     *      path="/api/v1/file/upload",
+     *      operationId="CreateFile",
+     *      tags={"Files"},
+     *      summary="Upload a file",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="multipart/form-data",
+     *              @OA\Schema(
+     *                  required={
+     *                      "file",
+     *                  },
+     *                  @OA\Property(property="file", type="file"),
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=404, description="Page Not Found"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     *
      * Upload file
      *
      * @param FileRequest $request
@@ -46,7 +70,24 @@ class FilesController extends Controller
     }
 
     /**
-     * File
+     * @OA\Get(
+     *      path="/api/v1/file/{uuid}",
+     *      operationId="showFile",
+     *      tags={"Files"},
+     *      summary="Fetch a file",
+     *      @OA\Parameter(
+     *         name="uuid",
+     *         in="path",
+     *         required=true,
+     *      ),
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=404, description="Page Not Found"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     *
+     * Display the specified file
      *
      * @param File $file
      * @return JsonResponse

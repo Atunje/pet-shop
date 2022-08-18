@@ -38,11 +38,9 @@ class OrderService
      */
     public function __construct(Request $request)
     {
-        if ($request->user() === null) {
-            throw new UnauthorizedException();
+        if ($request->user() !== null) {
+            $this->user = $request->user();
         }
-
-        $this->user = $request->user();
     }
 
     /**

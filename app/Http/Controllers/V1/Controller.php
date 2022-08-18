@@ -23,7 +23,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
  *      in="header",
  *      name="Authorization",
  *      type="http",
- *      scheme="Bearer",
+ *      scheme="bearer",
  *      bearerFormat="JWT",
  * )
  */

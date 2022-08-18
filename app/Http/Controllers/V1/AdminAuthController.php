@@ -35,7 +35,6 @@ class AdminAuthController extends Controller
      *                      "address",
      *                      "password",
      *                      "password_confirmation",
-     *                      "avatar"
      *                  },
      *                  @OA\Property(property="first_name", type="string"),
      *                  @OA\Property(property="last_name", type="string"),
@@ -118,7 +117,7 @@ class AdminAuthController extends Controller
      *      operationId="adminLogout",
      *      tags={"Admin"},
      *      summary="Admin Logout",
-     *      security = {"bearerAuth"},
+     *      security={{"bearerAuth":{}}},
      *      @OA\Response(response=200, description="OK"),
      *      @OA\Response(response=401, description="Unauthorized"),
      *      @OA\Response(response=404, description="Page Not Found"),

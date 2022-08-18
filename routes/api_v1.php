@@ -25,10 +25,7 @@ use App\Http\Controllers\V1\OrderStatusesController;
 |
 */
 
-Route::get('/', function () {
-    return ['message' => 'Welcome', 'success' => 1];
-});
-
+/** Admin Endpoints */
 Route::group(['prefix' => 'admin'], function () {
     Route::post('create', [AdminAuthController::class, 'register']);
     Route::post('login', [AdminAuthController::class, 'login']);
@@ -36,11 +33,12 @@ Route::group(['prefix' => 'admin'], function () {
     Route::group(['middleware' => ['auth:api', 'admin']], function () {
         Route::get('logout', [AdminAuthController::class, 'logout']);
         Route::post('user-listing', [UsersController::class, 'index']);
-        Route::put('user-edit/{user:uuid}', [UsersController::class, 'edit']);
+        Route::put('user-edit/{user:uuid}', [UsersController::class, 'update']);
         Route::delete('user-delete/{user:uuid}', [UsersController::class, 'destroy']);
     });
 });
 
+/** User Endpoints */
 Route::group(['prefix' => 'user'], function () {
     Route::post('create', [UserAuthController::class, 'create']);
     Route::post('login', [UserAuthController::class, 'login']);
@@ -54,14 +52,16 @@ Route::group(['prefix' => 'user'], function () {
     });
 });
 
+/** Main Page Endpoints */
 Route::group(['prefix' => 'main'], function () {
     Route::get('promotions', [MainPageController::class, 'promotions']);
     Route::get('blog', [MainPageController::class, 'posts']);
     Route::get('blog/{post:uuid}', [MainPageController::class, 'showPost']);
 });
 
+/** Categories endpoints */
+Route::get('/categories', [CategoriesController::class, 'index']);
 Route::group(['prefix' => 'category'], function () {
-    Route::get('/', [CategoriesController::class, 'index']);
     Route::get('{category:uuid}', [CategoriesController::class, 'show']);
 
     Route::group(['middleware' => ['auth:api', 'admin']], function () {
@@ -71,8 +71,9 @@ Route::group(['prefix' => 'category'], function () {
     });
 });
 
+/** Brands Endpoints */
+Route::get('/brands', [BrandsController::class, 'index']);
 Route::group(['prefix' => 'brand'], function () {
-    Route::get('/', [BrandsController::class, 'index']);
     Route::get('{brand:uuid}', [BrandsController::class, 'show']);
 
     Route::group(['middleware' => ['auth:api', 'admin']], function () {
@@ -82,8 +83,9 @@ Route::group(['prefix' => 'brand'], function () {
     });
 });
 
+/** Products Endpoints */
+Route::get('/products', [ProductsController::class, 'index']);
 Route::group(['prefix' => 'product'], function () {
-    Route::get('/', [ProductsController::class, 'index']);
     Route::get('{product:uuid}', [ProductsController::class, 'show']);
 
     Route::group(['middleware' => ['auth:api', 'admin']], function () {
@@ -93,8 +95,9 @@ Route::group(['prefix' => 'product'], function () {
     });
 });
 
+/** Order statuses Endpoints */
+Route::get('/order-statuses', [OrderStatusesController::class, 'index']);
 Route::group(['prefix' => 'order-status'], function () {
-    Route::get('/', [OrderStatusesController::class, 'index']);
     Route::get('{order_status:uuid}', [OrderStatusesController::class, 'show']);
 
     Route::group(['middleware' => ['auth:api', 'admin']], function () {
@@ -104,22 +107,25 @@ Route::group(['prefix' => 'order-status'], function () {
     });
 });
 
-Route::group(['prefix' => 'payments', 'middleware' => ['auth:api']], function () {
+/** Payments Endpoints */
+Route::get('/payments', [PaymentsController::class, 'index'])->middleware(['auth:api', 'admin']);
+Route::group(['prefix' => 'payment', 'middleware' => ['auth:api']], function () {
     Route::post('create', [PaymentsController::class, 'store'])->middleware('user');
 
     Route::group(['middleware' => 'admin'], function () {
-        Route::get('/', [PaymentsController::class, 'index']);
         Route::get('{payment:uuid}', [PaymentsController::class, 'show']);
         Route::put('{payment:uuid}', [PaymentsController::class, 'update']);
         Route::delete('{payment:uuid}', [PaymentsController::class, 'destroy']);
     });
 });
 
+/** Files Endpoint */
 Route::group(['prefix' => 'file'], function () {
     Route::get('{file:uuid}', [FilesController::class, 'show']);
     Route::post('/upload', [FilesController::class, 'store'])->middleware('auth:api');
 });
 
+/** Orders Endpoint */
 Route::group(['prefix' => 'orders', 'middleware' => ['auth:api', 'admin']], function () {
     Route::get('/', [OrdersController::class, 'index']);
     Route::get('dashboard', [OrdersController::class, 'index']);

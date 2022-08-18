@@ -21,10 +21,10 @@ class UserProfileController extends Controller
     /**
      * @OA\Get(
      *      path="/api/v1/user",
-     *      operationId="viewUserAccount",
+     *      operationId="ViewUser",
      *      tags={"User"},
-     *      summary="View a User Account",
-     *      security = {"bearerAuth"},
+     *      summary="Fetch user",
+     *      security={{"bearerAuth":{}}},
      *      @OA\Response(response=200, description="OK"),
      *      @OA\Response(response=401, description="Unauthorized"),
      *      @OA\Response(response=404, description="Page Not Found"),
@@ -47,7 +47,7 @@ class UserProfileController extends Controller
      *      path="/api/v1/user/edit",
      *      operationId="editUser",
      *      tags={"User"},
-     *      security = {"bearerAuth"},
+     *      security={{"bearerAuth":{}}},
      *      summary="Edit User account",
      *      @OA\RequestBody(
      *          @OA\MediaType(
@@ -61,7 +61,6 @@ class UserProfileController extends Controller
      *                      "address",
      *                      "password",
      *                      "password_confirmation",
-     *                      "avatar"
      *                  },
      *                  @OA\Property(property="first_name", type="string"),
      *                  @OA\Property(property="last_name", type="string"),
@@ -114,7 +113,7 @@ class UserProfileController extends Controller
      *      operationId="deleteUserAccount",
      *      tags={"User"},
      *      summary="Delete a User Account",
-     *      security = {"bearerAuth"},
+     *      security={{"bearerAuth":{}}},
      *      @OA\Response(response=200, description="OK"),
      *      @OA\Response(response=401, description="Unauthorized"),
      *      @OA\Response(response=404, description="Page Not Found"),

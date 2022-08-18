@@ -12,6 +12,46 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class PaymentsController extends Controller
 {
     /**
+     * @OA\Get(
+     *      path="/api/v1/payments",
+     *      operationId="ListPayments",
+     *      tags={"Payments"},
+     *      summary="Fetch payments",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          @OA\Schema(
+     *             type="integer",
+     *         ),
+     *      ),
+     *      @OA\Parameter(
+     *          name="limit",
+     *          in="query",
+     *          @OA\Schema(
+     *             type="integer",
+     *         ),
+     *      ),
+     *      @OA\Parameter(
+     *          name="sort_by",
+     *          in="query",
+     *          @OA\Schema(
+     *             type="integer",
+     *         ),
+     *      ),
+     *      @OA\Parameter(
+     *          name="desc",
+     *          in="query",
+     *          @OA\Schema(
+     *             type="boolean",
+     *          ),
+     *      ),
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=404, description="Page Not Found"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
      * Display a listing of the resource.
      *
      * @return JsonResponse
@@ -25,6 +65,32 @@ class PaymentsController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *      path="/api/v1/payment/create",
+     *      operationId="CreateAPayment",
+     *      tags={"Payments"},
+     *      summary="Create a new payment",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  required={
+     *                      "type",
+     *                      "details",
+     *                  },
+     *                  @OA\Property(property="type", type="string"),
+     *                  @OA\Property(property="details", type="object"),
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=404, description="Page Not Found"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     *
      * Store a newly created resource in storage.
      *
      * @param PaymentRequest $request
@@ -33,10 +99,27 @@ class PaymentsController extends Controller
     public function store(PaymentRequest $request)
     {
         $payment = Payment::create($request->all());
-        return $this->jsonResponse(data:new PaymentResource($payment));
+        return $this->jsonResponse(data: $payment->uuid);
     }
 
     /**
+     * @OA\Get(
+     *      path="/api/v1/payment/{uuid}",
+     *      operationId="Fetch Payment",
+     *      tags={"Payments"},
+     *      summary="Fetch a payment",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *         name="uuid",
+     *         in="path",
+     *         required=true,
+     *      ),
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=404, description="Page Not Found"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
      * Display the specified resource.
      *
      * @param Payment $payment
@@ -48,6 +131,37 @@ class PaymentsController extends Controller
     }
 
     /**
+     * @OA\Put(
+     *      path="/api/v1/payment/{uuid}",
+     *      operationId="UpdatePayment",
+     *      tags={"Payments"},
+     *      summary="Update an existing payment",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *         name="uuid",
+     *         in="path",
+     *         required=true,
+     *      ),
+     *      @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  required={
+     *                      "type",
+     *                      "details",
+     *                  },
+     *                  @OA\Property(property="type", type="string"),
+     *                  @OA\Property(property="details", type="object"),
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=404, description="Page Not Found"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     *
      * Update the specified resource in storage.
      *
      * @param PaymentRequest $request
@@ -57,13 +171,30 @@ class PaymentsController extends Controller
     public function update(PaymentRequest $request, Payment $payment)
     {
         if ($payment->update($request->all())) {
-            return $this->jsonResponse(data: $payment);
+            return $this->jsonResponse(data: new PaymentResource($payment));
         }
 
         return $this->jsonResponse(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**
+     * @OA\Delete(
+     *      path="/api/v1/payment/{uuid}",
+     *      operationId="DeletePayment",
+     *      tags={"Payments"},
+     *      summary="Delete a payment",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *         name="uuid",
+     *         in="path",
+     *         required=true,
+     *      ),
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=404, description="Page Not Found"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
      * Remove the specified resource from storage.
      *
      * @param Payment $payment

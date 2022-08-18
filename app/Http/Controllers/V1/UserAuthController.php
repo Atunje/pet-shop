@@ -35,7 +35,6 @@ class UserAuthController extends Controller
      *                      "address",
      *                      "password",
      *                      "password_confirmation",
-     *                      "avatar"
      *                  },
      *                  @OA\Property(property="first_name", type="string"),
      *                  @OA\Property(property="last_name", type="string"),
@@ -118,7 +117,7 @@ class UserAuthController extends Controller
      *      operationId="userLogout",
      *      tags={"User"},
      *      summary="User Logout",
-     *      security = {"bearerAuth"},
+     *      security={{"bearerAuth":{}}},
      *      @OA\Response(response=200, description="OK"),
      *      @OA\Response(response=401, description="Unauthorized"),
      *      @OA\Response(response=404, description="Page Not Found"),

@@ -171,7 +171,9 @@ class UsersController extends Controller
                 status_code: Response::HTTP_UNPROCESSABLE_ENTITY,
                 error: __('profile.admin_edit_disallowed')
             );
-        } else if ($this->userService->update($user, $request->all())) {
+        }
+
+        if ($this->userService->update($user, $request->validFields())) {
             return $this->jsonResponse();
         }
 
@@ -211,7 +213,9 @@ class UsersController extends Controller
                 status_code: Response::HTTP_UNPROCESSABLE_ENTITY,
                 error: __('profile.admin_delete_disallowed')
             );
-        } else if ($this->userService->delete($user)) {
+        }
+
+        if ($this->userService->delete($user)) {
             return $this->jsonResponse();
         }
 

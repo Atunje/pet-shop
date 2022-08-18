@@ -104,7 +104,7 @@ class ProductsController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $product = Product::create($request->all());
+        $product = Product::create($request->validFields());
         return $this->jsonResponse(data:new ProductResource($product));
     }
 
@@ -182,7 +182,7 @@ class ProductsController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
-        if ($product->update($request->all())) {
+        if ($product->update($request->validFields())) {
             return $this->jsonResponse(data: $product);
         }
 

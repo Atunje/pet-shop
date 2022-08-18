@@ -95,7 +95,7 @@ class OrderStatusesController extends Controller
      */
     public function store(OrderStatusRequest $request)
     {
-        $order_status = OrderStatus::create($request->all());
+        $order_status = OrderStatus::create($request->validFields());
         return $this->jsonResponse(data:new OrderStatusResource($order_status));
     }
 
@@ -163,7 +163,7 @@ class OrderStatusesController extends Controller
      */
     public function update(OrderStatusRequest $request, OrderStatus $order_status)
     {
-        if ($order_status->update($request->all())) {
+        if ($order_status->update($request->validFields())) {
             return $this->jsonResponse(data: $order_status);
         }
 

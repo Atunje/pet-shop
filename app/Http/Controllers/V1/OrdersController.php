@@ -160,7 +160,7 @@ class OrdersController extends Controller
      */
     public function store(OrderRequest $request)
     {
-        $order = $this->orderService->create($request->all());
+        $order = $this->orderService->create($request->validFields());
         if ($order !== null) {
             return $this->jsonResponse(data: new OrderResource($order));
         }
@@ -241,7 +241,7 @@ class OrdersController extends Controller
      */
     public function update(OrderRequest $request, Order $order)
     {
-        if ($this->orderService->update($order, $request->all())) {
+        if ($this->orderService->update($order, $request->validFields())) {
             return $this->jsonResponse(data: new OrderResource($order));
         }
 

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\V1;
 use Exception;
 use App\Models\Brand;
 use Illuminate\Support\Str;
-use App\Http\Requests\V1\FilterRequest;
 use App\Http\Requests\V1\BrandRequest;
+use App\Http\Requests\V1\FilterRequest;
 use App\Http\Resources\V1\BrandResource;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -100,7 +100,7 @@ class BrandsController extends Controller
      */
     public function store(BrandRequest $request)
     {
-        $inputs = $request->all();
+        $inputs = $request->validFields();
         $inputs['slug'] = Str::slug(strval($request->title));
 
         $brand = Brand::create($inputs);
@@ -173,7 +173,7 @@ class BrandsController extends Controller
      */
     public function update(BrandRequest $request, Brand $brand)
     {
-        $inputs = $request->all();
+        $inputs = $request->validFields();
         $inputs['slug'] = Str::slug(strval($request->title));
 
         if ($brand->update($inputs)) {

@@ -63,7 +63,7 @@ class UserAuthController extends Controller
      */
     public function create(RegisterRequest $request)
     {
-        $user_resource = $this->userService->registerUser($request->all());
+        $user_resource = $this->userService->registerUser($request->validFields());
 
         $user_resource->token = $this->userService->userLogin($request->only('email', 'password'));
         return $this->jsonResponse(data: $user_resource);

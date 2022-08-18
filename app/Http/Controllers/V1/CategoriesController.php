@@ -97,7 +97,7 @@ class CategoriesController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        $inputs = $request->all();
+        $inputs = $request->validFields();
         $inputs['slug'] = Str::slug(strval($request->title));
 
         $category = Category::create($inputs);
@@ -170,7 +170,7 @@ class CategoriesController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
-        $inputs = $request->all();
+        $inputs = $request->validFields();
         $inputs['slug'] = Str::slug(strval($request->title));
 
         if ($category->update($inputs)) {

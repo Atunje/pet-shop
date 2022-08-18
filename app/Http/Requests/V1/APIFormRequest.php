@@ -39,4 +39,9 @@ abstract class APIFormRequest extends FormRequest
             )
         );
     }
+
+    public function validFields(): array
+    {
+        return (array) $this->validated();
+    }
 }

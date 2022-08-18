@@ -98,7 +98,7 @@ class PaymentsController extends Controller
      */
     public function store(PaymentRequest $request)
     {
-        $payment = Payment::create($request->all());
+        $payment = Payment::create($request->validFields());
         return $this->jsonResponse(data: $payment->uuid);
     }
 
@@ -170,7 +170,7 @@ class PaymentsController extends Controller
      */
     public function update(PaymentRequest $request, Payment $payment)
     {
-        if ($payment->update($request->all())) {
+        if ($payment->update($request->validFields())) {
             return $this->jsonResponse(data: new PaymentResource($payment));
         }
 

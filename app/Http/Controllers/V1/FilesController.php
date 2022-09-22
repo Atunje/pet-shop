@@ -56,7 +56,7 @@ class FilesController extends Controller
             'name' => Str::random(16),
             'type' => $file->getMimeType(),
             'size' => round($file->getSize() / 1024) . " KB",
-            'path' => 'public/pet-shop/' . $file->getFilename(),
+            'path' => $file->getPath(),
         ]);
 
         if ($record->save()) {

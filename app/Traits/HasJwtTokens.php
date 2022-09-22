@@ -13,14 +13,14 @@ trait HasJwtTokens
      *
      * @var JwtToken
      */
-    protected $jwt_token;
+    protected JwtToken $jwt_token;
 
     /**
      * Get the access tokens that belong to model.
      *
      * @return HasMany<JwtToken>
      */
-    public function tokens()
+    public function tokens(): HasMany
     {
         return $this->hasMany(JwtToken::class);
     }
@@ -30,7 +30,7 @@ trait HasJwtTokens
      *
      * @return string
      */
-    public function createToken()
+    public function createToken(): string
     {
         $jwt_library_client = app(JWTLibraryClient::class);
 
@@ -52,7 +52,7 @@ trait HasJwtTokens
      * @param JwtToken $jwt_token
      * @return void
      */
-    public function setCurrentJwtToken($jwt_token): void
+    public function setCurrentJwtToken(JwtToken $jwt_token): void
     {
         $this->jwt_token = $jwt_token;
 
@@ -64,7 +64,7 @@ trait HasJwtTokens
      *
      * @return bool
      */
-    public function invalidateToken()
+    public function invalidateToken(): bool
     {
         return $this->jwt_token->invalidate();
     }

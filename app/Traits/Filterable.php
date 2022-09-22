@@ -57,7 +57,7 @@ trait Filterable
      * @return LengthAwarePaginator
      * @throws Exception
      */
-    private static function getRecords($filter_params, $filterables = [])
+    private static function getRecords(FilterParams $filter_params, array $filterables = []): LengthAwarePaginator
     {
         $instance = new self();
 
@@ -83,7 +83,7 @@ trait Filterable
      * @param array $filterables
      * @return void
      */
-    private function setInstanceParams($instance, $filter_params, $filterables): void
+    private function setInstanceParams(Filterable $instance, FilterParams $filter_params, array $filterables): void
     {
         $this->filter_params = $filter_params;
         $this->filterables = $filterables;
@@ -155,7 +155,7 @@ trait Filterable
      * @return LengthAwarePaginator
      * @throws Exception
      */
-    public static function getAll($filter_params): LengthAwarePaginator
+    public static function getAll(FilterParams $filter_params): LengthAwarePaginator
     {
         return self::getRecords($filter_params);
     }

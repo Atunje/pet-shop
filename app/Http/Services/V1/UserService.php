@@ -17,7 +17,7 @@ class UserService
      * @return UserResource
      * @throws Exception
      */
-    public function registerAdmin($data)
+    public function registerAdmin(array $data): UserResource
     {
         $user = $this->create($data, true);
         return new UserResource($user);
@@ -30,7 +30,7 @@ class UserService
      * @return UserResource
      * @throws Exception
      */
-    public function registerUser($data)
+    public function registerUser(array $data): UserResource
     {
         $user = $this->create($data);
         return new UserResource($user);
@@ -41,10 +41,10 @@ class UserService
      *
      * @param array $data
      * @param bool $is_admin
-     * @throws Exception
      * @return User
+     *@throws Exception
      */
-    private function create($data, $is_admin = false): User
+    private function create(array $data, bool $is_admin = false): User
     {
         $user = new User($data);
         $user->is_admin = $is_admin;
@@ -65,7 +65,7 @@ class UserService
      * @param array $credentials
      * @return string|null
      */
-    public function adminLogin($credentials)
+    public function adminLogin(array $credentials): ?string
     {
         $credentials['is_admin'] = true;
         return Auth::attempt($credentials);
@@ -77,7 +77,7 @@ class UserService
      * @param array $credentials
      * @return string|null
      */
-    public function userLogin($credentials)
+    public function userLogin(array $credentials): ?string
     {
         $credentials['is_admin'] = false;
         return Auth::attempt($credentials);
@@ -90,7 +90,7 @@ class UserService
      * @param array $data
      * @return bool
      */
-    public function update($user, $data)
+    public function update(User $user, array $data): bool
     {
         $data['is_marketing'] = !empty($data['is_marketing']);
         return $user->update($data);
@@ -102,7 +102,7 @@ class UserService
      * @param User $user
      * @return bool
      */
-    public function delete($user)
+    public function delete(User $user): bool
     {
         return (bool) $user->delete();
     }

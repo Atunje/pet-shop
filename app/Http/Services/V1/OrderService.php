@@ -3,6 +3,7 @@
 namespace App\Http\Services\V1;
 
 use DB;
+use Exception;
 use Throwable;
 use App\Models\User;
 use App\Models\Order;
@@ -45,8 +46,9 @@ class OrderService
     /**
      * @param FilterParams $filter_params
      * @return mixed
+     * @throws Exception
      */
-    public function getAll($filter_params)
+    public function getAll(FilterParams $filter_params): mixed
     {
         if (! $this->user->isAdmin()) {
             //always filter orders by the logged in user
@@ -62,7 +64,7 @@ class OrderService
      * @param array $data
      * @return Order|null
      */
-    public function create($data): ?Order
+    public function create(array $data): ?Order
     {
         $order = new Order($data);
         $order->amount = $this->calculateAmount($data['products']);
@@ -121,7 +123,7 @@ class OrderService
      * @param array $data
      * @return bool
      */
-    public function update(Order $order, array $data)
+    public function update(Order $order, array $data): bool
     {
         $order->amount = $this->calculateAmount($data['products']);
         $order->delivery_fee = $this->getDeliveryFee($order);
@@ -137,7 +139,7 @@ class OrderService
      * @throws Throwable
      * @return bool
      */
-    public function delete($order)
+    public function delete($order): bool
     {
         return (bool) DB::transaction(function () use ($order) {
             //delete the payment

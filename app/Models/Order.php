@@ -105,7 +105,7 @@ class Order extends Model
      * @return LengthAwarePaginator
      * @throws \Exception
      */
-    public static function getAll($filter_params): LengthAwarePaginator
+    public static function getAll(FilterParams $filter_params): LengthAwarePaginator
     {
         return self::getRecords($filter_params, ['user_uuid']);
     }

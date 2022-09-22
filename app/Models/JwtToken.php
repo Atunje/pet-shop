@@ -96,7 +96,7 @@ class JwtToken extends Model
      *
      * @return bool
      */
-    public function saveLastUsedTime()
+    public function saveLastUsedTime(): bool
     {
         $this->last_used_at = now();
         return $this->save();

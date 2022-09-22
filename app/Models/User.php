@@ -123,7 +123,7 @@ class User extends Authenticatable
      *
      * @return void
      */
-    public function loggedIn()
+    public function loggedIn(): void
     {
         $this->last_login_at = now();
         $this->save();
@@ -134,7 +134,7 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->is_admin;
     }
@@ -169,7 +169,7 @@ class User extends Authenticatable
      * @return LengthAwarePaginator
      * @throws Exception
      */
-    public static function getUsers($filter_params): LengthAwarePaginator
+    public static function getUsers(FilterParams $filter_params): LengthAwarePaginator
     {
         $filter_params->__set("is_admin", false);
         return self::getRecords($filter_params, self::$filterable);

@@ -54,7 +54,7 @@ class OrderStatus extends Model
      * @param string $order_status_uuid
      * @return ?self
      */
-    public static function getStatus($order_status_uuid)
+    public static function getStatus(string $order_status_uuid): ?OrderStatus
     {
         return self::where('uuid', $order_status_uuid)->first();
     }
@@ -65,7 +65,7 @@ class OrderStatus extends Model
      * @param string $uuid
      * @return bool
      */
-    public static function isShippedStatus($uuid): bool
+    public static function isShippedStatus(string $uuid): bool
     {
         $status = self::getStatus($uuid);
         return $status !== null && strtolower($status->title) === self::ORDER_SHIPPED_STATUS;

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('order_statuses', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->uuid();
+            $table->uuid()->unique();
             $table->string('title');
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();

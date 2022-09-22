@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->uuid();
+            $table->uuid()->unique();
             $table->string('type');
             $table->text('details');
             $table->timestamps();

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->uuid();
+            $table->uuid()->unique();
             $table->uuid('user_uuid');
             $table->uuid('order_status_uuid');
             $table->uuid('payment_uuid')->nullable();

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->uuid();
+            $table->uuid()->unique();
             $table->string('title');
             $table->string('slug');
             $table->text('content');

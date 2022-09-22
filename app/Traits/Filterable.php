@@ -83,7 +83,7 @@ trait Filterable
      * @param array $filterables
      * @return void
      */
-    private function setInstanceParams(Filterable $instance, FilterParams $filter_params, array $filterables): void
+    private function setInstanceParams(self $instance, FilterParams $filter_params, array $filterables): void
     {
         $this->filter_params = $filter_params;
         $this->filterables = $filterables;

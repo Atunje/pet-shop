@@ -65,26 +65,6 @@ Run the database seeder and you're done
 
     php artisan migrate:refresh
 
-## Docker
-
-To install with [Docker](https://www.docker.com), run following commands:
-
-```
-git clone git@github.com:Atunje/pet-shop.git
-cd pet-shop
-cp .env.example.docker .env
-docker run -v $(pwd):/app composer install
-cd ./docker
-docker-compose up -d
-docker-compose exec php php artisan key:generate
-docker-compose exec php php artisan migrate
-docker-compose exec php php artisan db:seed
-docker-compose exec php php artisan serve --host=0.0.0.0
-```
-
-The api can be accessed at [http://localhost:8000/api/v1](http://localhost:8000/api/v1).
-
-
 # Code overview
 
 ## Dependencies

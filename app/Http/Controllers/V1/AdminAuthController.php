@@ -61,7 +61,7 @@ class AdminAuthController extends Controller
      * @return JsonResponse
      * @throws Exception
      */
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request): JsonResponse
     {
         $user_resource = $this->userService->registerAdmin($request->validFields());
 
@@ -102,7 +102,7 @@ class AdminAuthController extends Controller
      * @return JsonResponse
      * @throws Exception
      */
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): JsonResponse
     {
         $token = $this->userService->adminLogin($request->only('email', 'password'));
         if ($token !== null) {

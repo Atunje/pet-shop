@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
@@ -25,12 +26,19 @@ class AdminTest extends TestCase
 
         $response = $this->post(route('admin.create'), $user);
 
-        $response->assertStatus(200);
-
-        //check if access token was created
-        $content = json_decode($response->content(), true);
-        $data = $content['data'];
-        $this->assertArrayHasKey('token', $data);
+        $response->assertStatus(Response::HTTP_OK)
+                ->assertJson( fn (AssertableJson $json) =>
+                    $json->where('success', 1)
+                        ->has('data', fn ($json) =>
+                            $json->where('first_name', $user['first_name'])
+                                ->where('last_name', $user['last_name'])
+                                ->where('email', $user['email'])
+                                ->where('phone_number', $user['phone_number'])
+                                ->has('token')
+                                ->etc()
+                        )
+                        ->etc()
+                );
     }
 
     public function test_admin_can_login()
@@ -43,12 +51,12 @@ class AdminTest extends TestCase
             'password' => 'password',
         ]);
 
-        $response->assertStatus(200);
-
-        //check if access token was created
-        $content = json_decode($response->content(), true);
-        $data = $content['data'];
-        $this->assertArrayHasKey('token', $data);
+        $response->assertStatus(Response::HTTP_OK)
+            ->assertJson( fn (AssertableJson $json) =>
+            $json->where('success', 1)
+                ->has('data.token')
+                ->etc()
+            );
     }
 
     public function test_user_cannot_login_on_admin_route()
@@ -61,7 +69,11 @@ class AdminTest extends TestCase
             'password' => 'password',
         ]);
 
-        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED)
+            ->assertJson( fn (AssertableJson $json) =>
+                $json->where('success', 0)
+                    ->etc()
+            );
     }
 
     public function test_admin_cannot_login_with_invalid_credentials()
@@ -74,13 +86,17 @@ class AdminTest extends TestCase
             'password' => 'wrong_password',
         ]);
 
-        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED)
+            ->assertJson( fn (AssertableJson $json) =>
+                $json->where('success', 0)
+                    ->etc()
+            );
     }
 
     public function test_admin_can_logout()
     {
         $response = $this->get(route('admin.logout'), $this->getAdminAuthHeaders());
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     public function test_admin_account_cannot_be_edited()
@@ -95,7 +111,7 @@ class AdminTest extends TestCase
         $updated = array_merge($user_arr, $updated);
 
         $response = $this->put(route('user.update'), $updated, $this->getAdminAuthHeaders($user));
-        $response->assertStatus(401);
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
 
         $user->refresh();
         $this->assertNotEquals($user->first_name, $updated['first_name']);
@@ -104,13 +120,17 @@ class AdminTest extends TestCase
     public function test_admin_account_cannot_be_deleted()
     {
         $response = $this->delete(route('user.delete'), [], $this->getAdminAuthHeaders());
-        $response->assertStatus(401);
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED)
+            ->assertJson( fn (AssertableJson $json) =>
+                $json->where('success', 0)
+                    ->etc()
+            );
     }
 
     public function test_admin_can_view_user_listing()
     {
         $response = $this->post(route('admin.user-listing'), [], $this->getAdminAuthHeaders());
-        $response->assertStatus(200)
+        $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
     }
@@ -142,7 +162,7 @@ class AdminTest extends TestCase
 
         //delete the user with admin account
         $response = $this->delete(route('admin.user-delete', ['user' => $user->uuid]), [], $this->getAdminAuthHeaders());
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
 
         //fetch the user afresh from the db
         $user = User::find($user->id);

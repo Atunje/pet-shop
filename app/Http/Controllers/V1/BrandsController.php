@@ -60,7 +60,7 @@ class BrandsController extends Controller
      * @return JsonResponse
      * @throws Exception
      */
-    public function index(FilterRequest $request)
+    public function index(FilterRequest $request): JsonResponse
     {
         $filter_params = $request->filterParams();
         $data = BrandResource::collection(Brand::getAll($filter_params))->resource;
@@ -98,7 +98,7 @@ class BrandsController extends Controller
      * @param BrandRequest $request
      * @return JsonResponse
      */
-    public function store(BrandRequest $request)
+    public function store(BrandRequest $request): JsonResponse
     {
         $inputs = $request->validFields();
         $inputs['slug'] = Str::slug(strval($request->title));
@@ -131,7 +131,7 @@ class BrandsController extends Controller
      * @param Brand $brand
      * @return JsonResponse
      */
-    public function show(Brand $brand)
+    public function show(Brand $brand): JsonResponse
     {
         return $this->jsonResponse(data: new BrandResource($brand));
     }
@@ -172,7 +172,7 @@ class BrandsController extends Controller
      * @param Brand $brand
      * @return JsonResponse
      */
-    public function update(BrandRequest $request, Brand $brand)
+    public function update(BrandRequest $request, Brand $brand): JsonResponse
     {
         $inputs = $request->validFields();
         $inputs['slug'] = Str::slug(strval($request->title));

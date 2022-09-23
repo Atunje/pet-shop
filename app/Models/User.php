@@ -3,24 +3,24 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Exception;
 use App\DTOs\FilterParams;
+use App\Traits\Filterable;
 use App\Traits\HasJwtTokens;
 use App\Traits\HasUUIDField;
-use Illuminate\Support\Carbon;
-use App\Traits\Filterable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 
 /**
- * App\Models\User
+ * App\Models\User.
  *
  * @property int $id
  * @property string $uuid
@@ -119,7 +119,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Called when user logs in
+     * Called when user logs in.
      *
      * @return void
      */
@@ -130,7 +130,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Checks if user is admin
+     * Checks if user is admin.
      *
      * @return bool
      */
@@ -140,7 +140,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Run query filters with these columns
+     * Run query filters with these columns.
      *
      * @var array<int, string>
      */
@@ -163,7 +163,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get users
+     * Get users.
      *
      * @param FilterParams $filter_params
      * @return LengthAwarePaginator
@@ -171,7 +171,8 @@ class User extends Authenticatable
      */
     public static function getUsers(FilterParams $filter_params): LengthAwarePaginator
     {
-        $filter_params->__set("is_admin", false);
+        $filter_params->__set('is_admin', false);
+
         return self::getRecords($filter_params, self::$filterable);
     }
 }

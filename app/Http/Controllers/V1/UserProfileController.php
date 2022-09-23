@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\V1;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Gate;
-use App\Http\Services\V1\UserService;
-use App\Http\Resources\V1\UserResource;
 use App\Http\Requests\V1\UpdateUserRequest;
-use Symfony\Component\HttpFoundation\Response;
+use App\Http\Resources\V1\UserResource;
+use App\Http\Services\V1\UserService;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserProfileController extends Controller
 {

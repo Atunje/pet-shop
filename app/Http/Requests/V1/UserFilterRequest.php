@@ -33,17 +33,17 @@ class UserFilterRequest extends FormRequest
     public function rules()
     {
         return [
-            "page" => "integer|nullable",
-            "limit" => "integer|nullable",
-            "sort_by" => "string|nullable",
-            "desc" => "boolean|nullable",
-            "date_range" => "array|nullable",
-            "first_name" => "string|nullable",
-            "email" => "email|nullable",
-            "phone_number" => "string|nullable",
-            "address" => "string|nullable",
-            "created_at" => "date|nullable",
-            "is_marketing" => "boolean|nullable",
+            'page' => 'integer|nullable',
+            'limit' => 'integer|nullable',
+            'sort_by' => 'string|nullable',
+            'desc' => 'boolean|nullable',
+            'date_range' => 'array|nullable',
+            'first_name' => 'string|nullable',
+            'email' => 'email|nullable',
+            'phone_number' => 'string|nullable',
+            'address' => 'string|nullable',
+            'created_at' => 'date|nullable',
+            'is_marketing' => 'boolean|nullable',
         ];
     }
 

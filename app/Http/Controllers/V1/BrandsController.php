@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\V1;
 
-use Exception;
-use App\Models\Brand;
-use Illuminate\Support\Str;
 use App\Http\Requests\V1\BrandRequest;
 use App\Http\Requests\V1\FilterRequest;
 use App\Http\Resources\V1\BrandResource;
-use Symfony\Component\HttpFoundation\Response;
+use App\Models\Brand;
+use Exception;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class BrandsController extends Controller
 {
@@ -104,6 +104,7 @@ class BrandsController extends Controller
         $inputs['slug'] = Str::slug(strval($request->title));
 
         $brand = Brand::create($inputs);
+
         return $this->jsonResponse(data:new BrandResource($brand));
     }
 

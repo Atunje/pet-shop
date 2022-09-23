@@ -20,7 +20,7 @@ class FilterParams
     }
 
     /**
-     * Set  a new object attribute
+     * Set  a new object attribute.
      * @param string $field
      * @param mixed $value
      * @return void
@@ -31,7 +31,7 @@ class FilterParams
     }
 
     /**
-     * Convert object to an array
+     * Convert object to an array.
      *
      * @return array
      */

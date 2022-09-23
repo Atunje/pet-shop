@@ -2,17 +2,17 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\TestCase;
 
 class AdminTest extends TestCase
 {
     use RefreshDatabase;
 
     /**
-     * Test admin can register
+     * Test admin can register.
      *
      * @return void
      */
@@ -33,15 +33,14 @@ class AdminTest extends TestCase
         $this->assertArrayHasKey('token', $data);
     }
 
-
     public function test_admin_can_login()
     {
         //create admin user with default password - password
         $user = User::factory()->admin()->create();
 
         $response = $this->post(route('admin.login'), [
-            "email" => $user->email,
-            "password" => "password"
+            'email' => $user->email,
+            'password' => 'password',
         ]);
 
         $response->assertStatus(200);
@@ -58,13 +57,12 @@ class AdminTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->post(route('admin.login'), [
-            "email" => $user->email,
-            "password" => "password"
+            'email' => $user->email,
+            'password' => 'password',
         ]);
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
-
 
     public function test_admin_cannot_login_with_invalid_credentials()
     {
@@ -72,20 +70,18 @@ class AdminTest extends TestCase
         $user = User::factory()->admin()->create();
 
         $response = $this->post(route('admin.login'), [
-            "email" => $user->email,
-            "password" => "wrong_password"
+            'email' => $user->email,
+            'password' => 'wrong_password',
         ]);
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
-
 
     public function test_admin_can_logout()
     {
         $response = $this->get(route('admin.logout'), $this->getAdminAuthHeaders());
         $response->assertStatus(200);
     }
-
 
     public function test_admin_account_cannot_be_edited()
     {
@@ -119,7 +115,6 @@ class AdminTest extends TestCase
             ->assertJsonPath('data.current_page', 1);
     }
 
-
     public function test_admin_can_edit_user()
     {
         $user = User::factory()->create();
@@ -137,7 +132,6 @@ class AdminTest extends TestCase
         $user->refresh();
         $this->assertEquals($user->first_name, $updated['first_name']);
     }
-
 
     public function test_admin_can_delete_user_account()
     {

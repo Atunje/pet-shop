@@ -34,11 +34,11 @@ class AuthServiceProvider extends ServiceProvider
         Auth::extend('jwt', function ($app, $name, array $config) {
             $provider = Auth::createUserProvider($config['provider']);
 
-            if($provider !== null) {
+            if ($provider !== null) {
                 return new JWTGuard($provider, $app->make('request'), $app->make(JWTLibraryClient::class));
             }
 
-            throw new InvalidArgumentException("UserProvider cannot be null");
+            throw new InvalidArgumentException('UserProvider cannot be null');
         });
     }
 }

@@ -17,7 +17,7 @@ class OrderRequest extends APIFormRequest
     }
 
     /**
-     * Convert all json fields to arrays
+     * Convert all json fields to arrays.
      *
      * @return void
      */
@@ -62,8 +62,8 @@ class OrderRequest extends APIFormRequest
     public function messages(): array
     {
         $messages = parent::messages();
-        $messages['address.array'] = "The address supplied is not a valid json array";
-        $messages['products.array'] = "The products supplied is not a valid json array";
+        $messages['address.array'] = 'The address supplied is not a valid json array';
+        $messages['products.array'] = 'The products supplied is not a valid json array';
 
         return $messages;
     }

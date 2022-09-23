@@ -2,18 +2,18 @@
 
 namespace App\Exceptions;
 
-use Throwable;
-use ErrorException;
-use Illuminate\Http\Request;
 use App\Traits\HandlesResponse;
-use Illuminate\Auth\AuthenticationException;
-use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Validation\UnauthorizedException;
+use ErrorException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Http\Request;
+use Illuminate\Validation\UnauthorizedException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -74,7 +74,7 @@ class Handler extends ExceptionHandler
         return match (true) {
             $e instanceof ModelNotFoundException => $this->jsonResponse(
                 status_code: Response::HTTP_NOT_FOUND,
-                error: __('http.model_not_found', ["model" => $this->getModelName($e->getModel())])
+                error: __('http.model_not_found', ['model' => $this->getModelName($e->getModel())])
             ),
             $e instanceof NotFoundHttpException, $e instanceof MethodNotAllowedHttpException => $this->jsonResponse(
                 status_code: Response::HTTP_NOT_FOUND,
@@ -97,8 +97,9 @@ class Handler extends ExceptionHandler
      */
     private function getModelName(string $model_path)
     {
-        $path = explode("\\", $model_path);
+        $path = explode('\\', $model_path);
         $index = count($path) - 1;
+
         return $path[$index];
     }
 }

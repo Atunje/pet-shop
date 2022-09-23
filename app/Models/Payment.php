@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Traits\HasUUIDField;
 use App\Traits\Filterable;
+use App\Traits\HasUUIDField;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * App\Models\Payment
+ * App\Models\Payment.
  *
  * @property int $id
  * @property string $uuid

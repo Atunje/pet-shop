@@ -3,9 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Http\RedirectResponse;
 
 class APIVersion
 {
@@ -20,6 +20,7 @@ class APIVersion
     public function handle(Request $request, Closure $next, string $guard)
     {
         config(['app.api.version' => $guard]);
+
         return $next($request);
     }
 }

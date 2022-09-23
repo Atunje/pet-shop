@@ -27,21 +27,20 @@ class PaymentFactory extends Factory
 
     private function getDetails($type)
     {
-        if($type == 'credit_card') {
+        if ($type == 'credit_card') {
             return $this->credit_card_details();
         }
 
-        if($type == 'cash_on_delivery') {
+        if ($type == 'cash_on_delivery') {
             return $this->cash_on_delivery_details();
         }
 
-        if($type == 'bank_transfer') {
+        if ($type == 'bank_transfer') {
             return $this->bank_transfer_details();
         }
 
         return null;
     }
-
 
     private function bank_transfer_details(): array
     {
@@ -57,21 +56,21 @@ class PaymentFactory extends Factory
         return [
             'address' => fake()->address(),
             'first_name' => fake()->firstName(),
-            'last_name' => fake()->lastName()
+            'last_name' => fake()->lastName(),
         ];
     }
 
     private function credit_card_details(): array
     {
         return [
-            'ccv' => rand(3,3),
+            'ccv' => rand(3, 3),
             'number' => fake()->creditCardNumber(),
             'expire_date' => fake()->creditCardExpirationDate,
-            'holder_name' => fake()->name()
+            'holder_name' => fake()->name(),
         ];
     }
 
-    public function cash_on_delivery(): PaymentFactory
+    public function cash_on_delivery(): self
     {
         return $this->state(function (array $attributes) {
             return [
@@ -81,7 +80,7 @@ class PaymentFactory extends Factory
         });
     }
 
-    public function credit_card(): PaymentFactory
+    public function credit_card(): self
     {
         return $this->state(function (array $attributes) {
             return [
@@ -91,7 +90,7 @@ class PaymentFactory extends Factory
         });
     }
 
-    public function bank_transfer(): PaymentFactory
+    public function bank_transfer(): self
     {
         return $this->state(function (array $attributes) {
             return [

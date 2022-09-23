@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Models\User;
-use Illuminate\Http\JsonResponse;
-use App\Http\Services\V1\UserService;
-use App\Http\Resources\V1\UserResource;
 use App\Http\Requests\V1\UpdateUserRequest;
 use App\Http\Requests\V1\UserFilterRequest;
+use App\Http\Resources\V1\UserResource;
+use App\Http\Services\V1\UserService;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller

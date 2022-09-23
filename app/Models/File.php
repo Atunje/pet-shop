@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Traits\HasUUIDField;
 use App\Traits\Filterable;
-use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasUUIDField;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\File
+ * App\Models\File.
  *
  * @property int $id
  * @property string $uuid

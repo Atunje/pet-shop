@@ -21,13 +21,13 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->sentence(rand(1,6)),
-            'price' => fake()->randomFloat(2,2, 3),
+            'title' => fake()->sentence(rand(1, 6)),
+            'price' => fake()->randomFloat(2, 2, 3),
             'description' => fake()->text(),
             'category_uuid' => Category::factory()->create()->uuid,
             'metadata' => [
                 'brand' => Brand::factory()->create()->uuid,
-                'image' => File::factory()->create()->uuid
+                'image' => File::factory()->create()->uuid,
             ],
         ];
     }

@@ -2,15 +2,14 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Payment;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class PaymentTest extends TestCase
 {
     use RefreshDatabase;
-
 
     /**
      * @return void
@@ -23,7 +22,6 @@ class PaymentTest extends TestCase
             ->assertJsonPath('data.current_page', 1);
     }
 
-
     /**
      * @return void
      */
@@ -33,8 +31,6 @@ class PaymentTest extends TestCase
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
-
-
     public function test_admin_cannot_create_payment()
     {
         $payment = Payment::factory()->make();
@@ -43,7 +39,6 @@ class PaymentTest extends TestCase
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
-
     public function test_user_can_create_payment()
     {
         $payment = Payment::factory()->make();
@@ -51,7 +46,6 @@ class PaymentTest extends TestCase
         $response = $this->post(route('payment.create'), $payment->toArray(), $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);
     }
-
 
     public function test_admin_can_update_payment()
     {
@@ -70,7 +64,6 @@ class PaymentTest extends TestCase
         $this->assertEquals($payment->swift, $new_payment->swift);
     }
 
-
     public function test_user_cannot_update_payment()
     {
         //create a payment
@@ -82,7 +75,6 @@ class PaymentTest extends TestCase
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
-
     public function test_admin_can_view_payment()
     {
         $payment = Payment::factory()->create();
@@ -90,14 +82,12 @@ class PaymentTest extends TestCase
         $response->assertStatus(Response::HTTP_OK)->assertJsonPath('data.uuid', $payment->uuid);
     }
 
-
     public function test_user_cannot_view_payment()
     {
         $payment = Payment::factory()->create();
         $response = $this->get(route('payment.show', ['payment' => $payment->uuid]), $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
-
 
     public function test_admin_can_delete_payment()
     {
@@ -108,7 +98,6 @@ class PaymentTest extends TestCase
         $payment = Payment::find($payment->id);
         $this->assertNull($payment);
     }
-
 
     public function test_user_cannot_delete_payment()
     {

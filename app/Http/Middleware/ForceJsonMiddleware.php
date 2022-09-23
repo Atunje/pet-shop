@@ -3,9 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Http\RedirectResponse;
 
 class ForceJsonMiddleware
 {
@@ -19,6 +19,7 @@ class ForceJsonMiddleware
     public function handle(Request $request, Closure $next)
     {
         $request->headers->set('accept', 'application/json');
+
         return $next($request);
     }
 }

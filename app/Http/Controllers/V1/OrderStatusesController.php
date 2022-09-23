@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Models\OrderStatus;
 use App\Http\Requests\V1\FilterRequest;
 use App\Http\Requests\V1\OrderStatusRequest;
 use App\Http\Resources\V1\OrderStatusResource;
-use Symfony\Component\HttpFoundation\Response;
+use App\Models\OrderStatus;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class OrderStatusesController extends Controller
 {
@@ -96,6 +96,7 @@ class OrderStatusesController extends Controller
     public function store(OrderStatusRequest $request)
     {
         $order_status = OrderStatus::create($request->validFields());
+
         return $this->jsonResponse(data:new OrderStatusResource($order_status));
     }
 

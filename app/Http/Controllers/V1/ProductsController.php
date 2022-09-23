@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Models\Product;
 use App\Http\Requests\V1\FilterRequest;
 use App\Http\Requests\V1\ProductRequest;
 use App\Http\Resources\V1\ProductResource;
-use Symfony\Component\HttpFoundation\Response;
+use App\Models\Product;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProductsController extends Controller
 {
@@ -105,6 +105,7 @@ class ProductsController extends Controller
     public function store(ProductRequest $request)
     {
         $product = Product::create($request->validFields());
+
         return $this->jsonResponse(data:new ProductResource($product));
     }
 

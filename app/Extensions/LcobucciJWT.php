@@ -2,18 +2,18 @@
 
 namespace App\Extensions;
 
-use Exception;
-use App\Models\JwtToken;
-use Lcobucci\JWT\Signer;
 use App\DTOs\IssuedToken;
+use App\Models\JwtToken;
+use Exception;
 use Illuminate\Support\Str;
 use Lcobucci\Clock\SystemClock;
 use Lcobucci\JWT\Configuration;
-use Lcobucci\JWT\UnencryptedToken;
+use Lcobucci\JWT\Signer;
 use Lcobucci\JWT\Signer\Key\InMemory;
+use Lcobucci\JWT\UnencryptedToken;
 use Lcobucci\JWT\Validation\Constraint\IssuedBy;
-use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use Lcobucci\JWT\Validation\Constraint\LooseValidAt;
+use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use Lcobucci\JWT\Validation\Constraint\StrictValidAt;
 
 class LcobucciJWT extends JWTLibraryClient
@@ -21,7 +21,7 @@ class LcobucciJWT extends JWTLibraryClient
     private Configuration $config;
 
     /**
-     * Issue the jwt and return the string
+     * Issue the jwt and return the string.
      *
      * @param string $user_identifier
      * @return IssuedToken
@@ -30,7 +30,7 @@ class LcobucciJWT extends JWTLibraryClient
     {
         $now = new \DateTimeImmutable();
         $unique_id = Str::random(20);
-        $expires_at = $now->modify('+ '. $this->expires_in . ' seconds');
+        $expires_at = $now->modify('+ '.$this->expires_in.' seconds');
 
         $token = $this->config->builder()
             ->issuedBy($this->issuer) // Configures the issuer (iss claim)
@@ -45,7 +45,7 @@ class LcobucciJWT extends JWTLibraryClient
     }
 
     /**
-     * Get the stored jwtToken if token is valid
+     * Get the stored jwtToken if token is valid.
      *
      * @param string $token
      * @return JwtToken|null

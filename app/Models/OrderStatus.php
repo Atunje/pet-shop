@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Traits\HasUUIDField;
 use App\Traits\Filterable;
+use App\Traits\HasUUIDField;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * App\Models\OrderStatus
+ * App\Models\OrderStatus.
  *
  * @property int $id
  * @property string $uuid
@@ -42,25 +42,25 @@ class OrderStatus extends Model
     ];
 
     /**
-     * Status of shipped order
+     * Status of shipped order.
      *
      * @const string
      */
-    private const ORDER_SHIPPED_STATUS = "shipped";
+    private const ORDER_SHIPPED_STATUS = 'shipped';
 
     /**
-     * Get order status by uuid
+     * Get order status by uuid.
      *
      * @param string $order_status_uuid
      * @return ?self
      */
-    public static function getStatus(string $order_status_uuid): ?OrderStatus
+    public static function getStatus(string $order_status_uuid): ?self
     {
         return self::where('uuid', $order_status_uuid)->first();
     }
 
     /**
-     * Check if status is shipped
+     * Check if status is shipped.
      *
      * @param string $uuid
      * @return bool
@@ -68,6 +68,7 @@ class OrderStatus extends Model
     public static function isShippedStatus(string $uuid): bool
     {
         $status = self::getStatus($uuid);
+
         return $status !== null && strtolower($status->title) === self::ORDER_SHIPPED_STATUS;
     }
 }

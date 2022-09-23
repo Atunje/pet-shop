@@ -2,18 +2,17 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\TestCase;
 
 class UserTest extends TestCase
 {
     use RefreshDatabase;
 
-
     /**
-     * Test user can register
+     * Test user can register.
      *
      * @return void
      */
@@ -34,15 +33,14 @@ class UserTest extends TestCase
         $this->assertArrayHasKey('token', $data);
     }
 
-
     public function test_user_can_login()
     {
         //create admin user with default password - password
         $user = User::factory()->create();
 
         $response = $this->post(route('user.login'), [
-            "email" => $user->email,
-            "password" => "password"
+            'email' => $user->email,
+            'password' => 'password',
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
@@ -59,13 +57,12 @@ class UserTest extends TestCase
         $user = User::factory()->admin()->create();
 
         $response = $this->post(route('user.login'), [
-            "email" => $user->email,
-            "password" => "password"
+            'email' => $user->email,
+            'password' => 'password',
         ]);
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
-
 
     public function test_user_cannot_login_with_invalid_credentials()
     {
@@ -73,20 +70,18 @@ class UserTest extends TestCase
         $user = User::factory()->admin()->create();
 
         $response = $this->post(route('user.login'), [
-            "email" => $user->email,
-            "password" => "wrong_password"
+            'email' => $user->email,
+            'password' => 'wrong_password',
         ]);
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
-
 
     public function test_user_can_logout()
     {
         $response = $this->get(route('user.logout'), $this->getUserAuthHeaders());
         $response->assertStatus(200);
     }
-
 
     public function test_user_can_view_own_profile()
     {
@@ -100,7 +95,6 @@ class UserTest extends TestCase
         $email = $content['data']['email'];
         $this->assertEquals($user->email, $email);
     }
-
 
     public function test_user_can_edit_own_profile()
     {
@@ -125,7 +119,6 @@ class UserTest extends TestCase
         $this->assertEquals($user->address, $updated['address']);
         $this->assertEquals($user->is_marketing, 1);
     }
-
 
     public function test_user_can_delete_own_account()
     {

@@ -2,17 +2,17 @@
 
 namespace App\Http\Services\V1;
 
+use App\DTOs\FilterParams;
+use App\Http\Resources\V1\OrderResource;
+use App\Models\Order;
+use App\Models\OrderStatus;
+use App\Models\Product;
+use App\Models\User;
 use DB;
 use Exception;
-use Throwable;
-use App\Models\User;
-use App\Models\Order;
-use App\Models\Product;
-use App\DTOs\FilterParams;
-use App\Models\OrderStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use App\Http\Resources\V1\OrderResource;
+use Throwable;
 
 class OrderService
 {
@@ -27,14 +27,14 @@ class OrderService
     private $delivery_fee = 15;
 
     /**
-     * Currently logged in user
+     * Currently logged in user.
      *
      * @var User
      */
     private $user;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct(Request $request)
     {
@@ -59,7 +59,7 @@ class OrderService
     }
 
     /**
-     * Creates a new order record
+     * Creates a new order record.
      *
      * @param array $data
      * @return Order|null
@@ -91,7 +91,7 @@ class OrderService
     }
 
     /**
-     * Calculate the total amount of the products and populate the products with product name and price
+     * Calculate the total amount of the products and populate the products with product name and price.
      *
      * @param array $products
      * @return float
@@ -117,7 +117,7 @@ class OrderService
     }
 
     /**
-     * Update order record
+     * Update order record.
      *
      * @param Order $order
      * @param array $data
@@ -133,7 +133,7 @@ class OrderService
     }
 
     /**
-     * Delete order record and the payment attached to it
+     * Delete order record and the payment attached to it.
      *
      * @param Order $order
      * @throws Throwable

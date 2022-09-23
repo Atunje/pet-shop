@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
+use App\DTOs\FilterParams;
+use App\Traits\Filterable;
+use App\Traits\HasUUIDField;
 use DB;
 use Exception;
-use App\DTOs\FilterParams;
-use App\Traits\HasUUIDField;
-use App\Traits\Filterable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * App\Models\Product
+ * App\Models\Product.
  *
  * @property int $id
  * @property string $uuid
@@ -50,7 +50,7 @@ class Product extends Model
 {
     use HasFactory, HasUUIDField, Filterable, SoftDeletes;
 
-    protected $table = "products";
+    protected $table = 'products';
 
     protected $fillable = [
         'title',
@@ -65,49 +65,49 @@ class Product extends Model
     ];
 
     /**
-     * Get the associated category
+     * Get the associated category.
      *
      * @return BelongsTo<Category, Product>
      */
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_uuid', 'uuid');
     }
 
     /**
-     * Get the associated brand to this product
+     * Get the associated brand to this product.
      *
      * @return Brand|null
      */
-    public function getBrand()
+    public function getBrand(): ?Brand
     {
         return Brand::where('uuid', $this->metadata['brand'])->first();
     }
 
     /**
-     * Get the associated brand to this product
+     * Get the associated brand to this product.
      *
      * @return File|null
      */
-    public function getImageFile()
+    public function getImageFile(): ?File
     {
         return File::where('uuid', $this->metadata['image'])->first();
     }
 
     /**
-     * Get all db records
+     * Get all db records.
      *
      * @param FilterParams $filter_params
      * @return LengthAwarePaginator
      * @throws Exception
      */
-    public static function getAll($filter_params)
+    public static function getAll(FilterParams $filter_params): LengthAwarePaginator
     {
         return self::getRecords($filter_params, ['title', 'price']);
     }
 
     /**
-     * Extend the query by adding queries to filter by brand and category
+     * Extend the query by adding queries to filter by brand and category.
      *
      * @return void
      */
@@ -115,7 +115,7 @@ class Product extends Model
     {
         //add special queries based on category
         if (isset($this->filter_params->category)) {
-            $this->query->join('categories', 'categories.uuid', '=', "products.category_uuid")
+            $this->query->join('categories', 'categories.uuid', '=', 'products.category_uuid')
                 ->where('categories.title', $this->filter_params->category);
         }
 

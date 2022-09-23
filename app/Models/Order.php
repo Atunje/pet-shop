@@ -3,16 +3,16 @@
 namespace App\Models;
 
 use App\DTOs\FilterParams;
-use App\Traits\HasUUIDField;
 use App\Traits\Filterable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\HasUUIDField;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * App\Models\Order
+ * App\Models\Order.
  *
  * @property int $id
  * @property string $uuid
@@ -69,7 +69,7 @@ class Order extends Model
     ];
 
     /**
-     * Get the associated user
+     * Get the associated user.
      *
      * @return BelongsTo<User, Order>
      */
@@ -79,7 +79,7 @@ class Order extends Model
     }
 
     /**
-     * Get the associated user
+     * Get the associated user.
      *
      * @return BelongsTo<OrderStatus, Order>
      */
@@ -89,7 +89,7 @@ class Order extends Model
     }
 
     /**
-     * Get the associated user
+     * Get the associated user.
      *
      * @return BelongsTo<Payment, Order>
      */
@@ -99,7 +99,7 @@ class Order extends Model
     }
 
     /**
-     * Get all the orders
+     * Get all the orders.
      *
      * @param FilterParams $filter_params
      * @return LengthAwarePaginator

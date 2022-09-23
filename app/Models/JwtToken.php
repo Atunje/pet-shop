@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\JwtToken
+ * App\Models\JwtToken.
  *
  * @property int $id
  * @property string $unique_id
@@ -71,18 +71,19 @@ class JwtToken extends Model
     ];
 
     /**
-     * Makes token invalid when user logs out
+     * Makes token invalid when user logs out.
      *
      * @return bool
      */
     public function invalidate(): bool
     {
         $this->is_valid = false;
+
         return $this->save();
     }
 
     /**
-     * Checks the validity status of token
+     * Checks the validity status of token.
      *
      * @return bool
      */
@@ -92,13 +93,14 @@ class JwtToken extends Model
     }
 
     /**
-     * Update last time used
+     * Update last time used.
      *
      * @return bool
      */
     public function saveLastUsedTime(): bool
     {
         $this->last_used_at = now();
+
         return $this->save();
     }
 }

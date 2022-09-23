@@ -1,18 +1,18 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\V1\FilesController;
-use App\Http\Controllers\V1\UsersController;
+use App\Http\Controllers\V1\AdminAuthController;
 use App\Http\Controllers\V1\BrandsController;
-use App\Http\Controllers\V1\OrdersController;
+use App\Http\Controllers\V1\CategoriesController;
+use App\Http\Controllers\V1\FilesController;
 use App\Http\Controllers\V1\MainPageController;
+use App\Http\Controllers\V1\OrdersController;
+use App\Http\Controllers\V1\OrderStatusesController;
 use App\Http\Controllers\V1\PaymentsController;
 use App\Http\Controllers\V1\ProductsController;
 use App\Http\Controllers\V1\UserAuthController;
-use App\Http\Controllers\V1\AdminAuthController;
-use App\Http\Controllers\V1\CategoriesController;
 use App\Http\Controllers\V1\UserProfileController;
-use App\Http\Controllers\V1\OrderStatusesController;
+use App\Http\Controllers\V1\UsersController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,11 +26,12 @@ use App\Http\Controllers\V1\OrderStatusesController;
 */
 
 Route::get('/', function () {
-    $response = ["message" => "Welcome to " . config('app.name') . " API v1.0.0", "success" => 1];
+    $response = ['message' => 'Welcome to '.config('app.name').' API v1.0.0', 'success' => 1];
+
     return response()->json($response, 200);
 });
 
-/** Admin Endpoints */
+/* Admin Endpoints */
 Route::group(['prefix' => 'admin'], function () {
     Route::post('create', [AdminAuthController::class, 'register'])->name('admin.create');
     Route::post('login', [AdminAuthController::class, 'login'])->name('admin.login');
@@ -43,7 +44,7 @@ Route::group(['prefix' => 'admin'], function () {
     });
 });
 
-/** User Endpoints */
+/* User Endpoints */
 Route::group(['prefix' => 'user'], function () {
     Route::post('create', [UserAuthController::class, 'create'])->name('user.create');
     Route::post('login', [UserAuthController::class, 'login'])->name('user.login');
@@ -57,14 +58,14 @@ Route::group(['prefix' => 'user'], function () {
     });
 });
 
-/** Main Page Endpoints */
+/* Main Page Endpoints */
 Route::group(['prefix' => 'main'], function () {
     Route::get('promotions', [MainPageController::class, 'promotions'])->name('promotions');
     Route::get('blog', [MainPageController::class, 'posts'])->name('blog');
     Route::get('blog/{post:uuid}', [MainPageController::class, 'showPost'])->name('blog.show');
 });
 
-/** Categories endpoints */
+/* Categories endpoints */
 Route::get('/categories', [CategoriesController::class, 'index'])->name('categories');
 Route::group(['prefix' => 'category'], function () {
     Route::get('{category:uuid}', [CategoriesController::class, 'show'])->name('category.show');
@@ -76,7 +77,7 @@ Route::group(['prefix' => 'category'], function () {
     });
 });
 
-/** Brands Endpoints */
+/* Brands Endpoints */
 Route::get('/brands', [BrandsController::class, 'index'])->name('brands');
 Route::group(['prefix' => 'brand'], function () {
     Route::get('{brand:uuid}', [BrandsController::class, 'show'])->name('brand.show');
@@ -88,7 +89,7 @@ Route::group(['prefix' => 'brand'], function () {
     });
 });
 
-/** Products Endpoints */
+/* Products Endpoints */
 Route::get('/products', [ProductsController::class, 'index'])->name('products');
 Route::group(['prefix' => 'product'], function () {
     Route::get('{product:uuid}', [ProductsController::class, 'show'])->name('product.show');
@@ -100,7 +101,7 @@ Route::group(['prefix' => 'product'], function () {
     });
 });
 
-/** Order statuses Endpoints */
+/* Order statuses Endpoints */
 Route::get('/order-statuses', [OrderStatusesController::class, 'index'])->name('order-statuses');
 Route::group(['prefix' => 'order-status'], function () {
     Route::get('{order_status:uuid}', [OrderStatusesController::class, 'show'])->name('order-status.show');
@@ -112,7 +113,7 @@ Route::group(['prefix' => 'order-status'], function () {
     });
 });
 
-/** Payments Endpoints */
+/* Payments Endpoints */
 Route::get('/payments', [PaymentsController::class, 'index'])->middleware(['auth:api', 'admin'])->name('payments');
 Route::group(['prefix' => 'payment', 'middleware' => ['auth:api']], function () {
     Route::post('create', [PaymentsController::class, 'store'])->middleware('user')->name('payment.create');
@@ -124,13 +125,13 @@ Route::group(['prefix' => 'payment', 'middleware' => ['auth:api']], function () 
     });
 });
 
-/** Files Endpoint */
+/* Files Endpoint */
 Route::group(['prefix' => 'file'], function () {
     Route::get('{file:uuid}', [FilesController::class, 'show'])->name('file.show');
     Route::post('/upload', [FilesController::class, 'store'])->middleware('auth:api')->name('file.upload');
 });
 
-/** Orders Endpoint */
+/* Orders Endpoint */
 Route::group(['prefix' => 'orders', 'middleware' => ['auth:api', 'admin']], function () {
     Route::get('/', [OrdersController::class, 'index'])->name('orders');
     Route::get('dashboard', [OrdersController::class, 'index'])->name('orders.dashboard');

@@ -17,10 +17,11 @@ class BrandFactory extends Factory
      */
     public function definition()
     {
-        $title = fake()->sentence(rand(1,4));
+        $title = fake()->sentence(rand(1, 4));
+
         return [
             'title' => $title,
-            'slug' => Str::slug($title)
+            'slug' => Str::slug($title),
         ];
     }
 }

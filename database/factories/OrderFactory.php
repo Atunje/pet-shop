@@ -25,7 +25,7 @@ class OrderFactory extends Factory
         $order_status = OrderStatus::all()->random();
 
         $payment_uuid = null;
-        if ($order_status->title === "shipped" || $order_status->title === "paid") {
+        if ($order_status->title === 'shipped' || $order_status->title === 'paid') {
             $payment_uuid = Payment::factory()->create()->uuid;
         }
 
@@ -36,24 +36,23 @@ class OrderFactory extends Factory
             'amount' => $amount,
             'address' => fake()->address(),
             'delivery_fee' => $amount > 500 ? 0 : 15,
-            'shipped_at' => $order_status->title == "shipped" ? now() : null,
+            'shipped_at' => $order_status->title == 'shipped' ? now() : null,
         ];
     }
 
-
     private function generateProductItems(): array
     {
-        $products = $this->getProducts(rand(1,5));
+        $products = $this->getProducts(rand(1, 5));
 
         $items = [];
         $total_amount = 0;
 
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $item = [
                 'uuid' => $product->uuid,
                 'product' => $product->title,
                 'price' => $product->price,
-                'quantity' => rand(1,40),
+                'quantity' => rand(1, 40),
             ];
 
             $total_amount += $item['price'] * $item['quantity'];
@@ -64,12 +63,11 @@ class OrderFactory extends Factory
         return [$items, $total_amount];
     }
 
-
     private function getProducts($count)
     {
         $products = Product::all()->random($count);
 
-        if($products->count() < $count) {
+        if ($products->count() < $count) {
             //create new ones
             $n = $count - $products->count();
             $new = Product::factory($n)->create();

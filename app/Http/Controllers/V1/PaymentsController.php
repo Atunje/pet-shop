@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Models\Payment;
 use App\Http\Requests\V1\FilterRequest;
 use App\Http\Requests\V1\PaymentRequest;
 use App\Http\Resources\V1\PaymentResource;
-use Symfony\Component\HttpFoundation\Response;
+use App\Models\Payment;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class PaymentsController extends Controller
 {
@@ -103,6 +103,7 @@ class PaymentsController extends Controller
     public function store(PaymentRequest $request)
     {
         $payment = Payment::create($request->validFields());
+
         return $this->jsonResponse(data: $payment->uuid);
     }
 

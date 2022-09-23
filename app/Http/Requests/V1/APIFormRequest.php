@@ -3,10 +3,10 @@
 namespace App\Http\Requests\V1;
 
 use App\Traits\HandlesResponse;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Symfony\Component\HttpFoundation\Response;
 
 abstract class APIFormRequest extends FormRequest
 {
@@ -24,10 +24,10 @@ abstract class APIFormRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    abstract function rules();
+    abstract public function rules();
 
     /**
-     * Customize the response when validation fails
+     * Customize the response when validation fails.
      */
     protected function failedValidation(Validator $validator)
     {

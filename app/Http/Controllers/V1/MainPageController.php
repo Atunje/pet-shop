@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Models\Post;
-use App\Models\Promotion;
 use App\Http\Requests\V1\FilterRequest;
 use App\Http\Resources\V1\PostResource;
 use App\Http\Resources\V1\PromotionResource;
+use App\Models\Post;
+use App\Models\Promotion;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class MainPageController extends Controller

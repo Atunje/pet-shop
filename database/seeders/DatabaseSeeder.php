@@ -48,8 +48,8 @@ class DatabaseSeeder extends Seeder
 
         //order status seeders
         $statuses = ['open', 'pending payment', 'paid', 'shipped', 'cancelled'];
-        foreach($statuses as $status) {
-            OrderStatus::factory()->create([ "title" => $status ]);
+        foreach ($statuses as $status) {
+            OrderStatus::factory()->create(['title' => $status]);
         }
 
         User::factory()->count(10)->hasOrders(50)->create();

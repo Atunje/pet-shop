@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Http\Requests\V1\CategoryRequest;
+use App\Http\Requests\V1\FilterRequest;
+use App\Http\Resources\V1\CategoryResource;
 use App\Models\Category;
 use Illuminate\Support\Str;
-use App\Http\Requests\V1\FilterRequest;
-use App\Http\Requests\V1\CategoryRequest;
-use App\Http\Resources\V1\CategoryResource;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class CategoriesController extends Controller
 {
@@ -101,6 +101,7 @@ class CategoriesController extends Controller
         $inputs['slug'] = Str::slug(strval($request->title));
 
         $category = Category::create($inputs);
+
         return $this->jsonResponse(data: new CategoryResource($category));
     }
 

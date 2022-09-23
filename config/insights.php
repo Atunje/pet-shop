@@ -9,7 +9,7 @@ return [
     'ide' => 'phpstorm',
 
     'exclude' => [
-        'app/Providers'
+        'app/Providers',
     ],
 
     'add' => [],
@@ -48,7 +48,7 @@ return [
         \PhpCsFixer\Fixer\Import\OrderedImportsFixer::class => [
             'imports_order' => ['class', 'const', 'function'],
             'sort_algorithm' => 'length',
-        ]
+        ],
     ],
 
     'requirements' => [

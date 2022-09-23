@@ -15,6 +15,7 @@
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.12",
         "fakerphp/faker": "^1.9.1",
+        "friendsofphp/php-cs-fixer": "3.9.2",
         "laravel/pint": "^1.0",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.1",
@@ -54,6 +55,9 @@
         ],
         "phpstan": [
             "./vendor/bin/phpstan analyse"
+        ],
+        "cs-fixer": [
+            "./vendor/bin/php-cs-fixer fix"
         ]
     },
     "extra": {

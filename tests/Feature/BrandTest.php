@@ -2,15 +2,14 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Brand;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class BrandTest extends TestCase
 {
     use RefreshDatabase;
-
 
     /**
      * @return void
@@ -23,7 +22,6 @@ class BrandTest extends TestCase
             ->assertJsonPath('data.current_page', 1);
     }
 
-
     public function test_admin_can_view_brand_listing(): void
     {
         $response = $this->get(route('brands'), $this->getAdminAuthHeaders());
@@ -32,13 +30,11 @@ class BrandTest extends TestCase
             ->assertJsonPath('data.current_page', 1);
     }
 
-
-
     public function test_admin_can_create_brand()
     {
-        $title = fake()->sentence(rand(1,4));
+        $title = fake()->sentence(rand(1, 4));
         $response = $this->post(route('brand.create'), [
-            'title' => $title
+            'title' => $title,
         ], $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);
 
@@ -46,12 +42,11 @@ class BrandTest extends TestCase
         $this->assertNotNull($brand);
     }
 
-
     public function test_user_cannot_create_brand()
     {
-        $title = fake()->sentence(rand(1,4));
+        $title = fake()->sentence(rand(1, 4));
         $response = $this->post(route('brand.create'), [
-            'title' => $title
+            'title' => $title,
         ], $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
 
@@ -59,15 +54,14 @@ class BrandTest extends TestCase
         $this->assertNull($brand);
     }
 
-
     public function test_admin_can_update_brand()
     {
         //create a brand
         $brand = Brand::factory()->create();
-        $new_title = fake()->sentence(rand(1,4));
+        $new_title = fake()->sentence(rand(1, 4));
 
         $response = $this->put(route('brand.update', ['brand' => $brand->uuid]), [
-            'title' => $new_title
+            'title' => $new_title,
         ], $this->getAdminAuthHeaders());
         $response->assertStatus(200);
 
@@ -75,15 +69,14 @@ class BrandTest extends TestCase
         $this->assertEquals($brand->title, $new_title);
     }
 
-
     public function test_user_cannot_update_brand()
     {
         //create a brand
         $brand = Brand::factory()->create();
-        $new_title = fake()->sentence(rand(1,4));
+        $new_title = fake()->sentence(rand(1, 4));
 
         $response = $this->put(route('brand.update', ['brand' => $brand->uuid]), [
-            'title' => $new_title
+            'title' => $new_title,
         ], $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
 
@@ -91,14 +84,12 @@ class BrandTest extends TestCase
         $this->assertNotEquals($brand->title, $new_title);
     }
 
-
     public function test_admin_can_view_brand()
     {
         $brand = Brand::factory()->create();
         $response = $this->get(route('brand.show', ['brand' => $brand->uuid]), $this->getAdminAuthHeaders());
-        $response->assertStatus(Response::HTTP_OK);//->assertJsonPath('data.uuid', $brand->uuid);
+        $response->assertStatus(Response::HTTP_OK); //->assertJsonPath('data.uuid', $brand->uuid);
     }
-
 
     public function test_user_can_view_brand()
     {
@@ -116,7 +107,6 @@ class BrandTest extends TestCase
         $brand = Brand::find($brand->id);
         $this->assertNull($brand);
     }
-
 
     public function test_user_cannot_delete_brand()
     {

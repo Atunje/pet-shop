@@ -18,7 +18,7 @@ class OrderStatusFactory extends Factory
     public function definition()
     {
         return [
-            'title' => fake()->sentence(rand(1,4)),
+            'title' => fake()->sentence(rand(1, 4)),
         ];
     }
 }

@@ -2,15 +2,14 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Category;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class CategoryTest extends TestCase
 {
     use RefreshDatabase;
-
 
     /**
      * @return void
@@ -23,7 +22,6 @@ class CategoryTest extends TestCase
             ->assertJsonPath('data.current_page', 1);
     }
 
-
     public function test_admin_can_view_category_listing(): void
     {
         $response = $this->get(route('categories'), $this->getAdminAuthHeaders());
@@ -32,13 +30,11 @@ class CategoryTest extends TestCase
             ->assertJsonPath('data.current_page', 1);
     }
 
-
-
     public function test_admin_can_create_category()
     {
-        $title = fake()->sentence(rand(1,4));
+        $title = fake()->sentence(rand(1, 4));
         $response = $this->post(route('category.create'), [
-            'title' => $title
+            'title' => $title,
         ], $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);
 
@@ -46,12 +42,11 @@ class CategoryTest extends TestCase
         $this->assertNotNull($category);
     }
 
-
     public function test_user_cannot_create_category()
     {
-        $title = fake()->sentence(rand(1,4));
+        $title = fake()->sentence(rand(1, 4));
         $response = $this->post(route('category.create'), [
-            'title' => $title
+            'title' => $title,
         ], $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
 
@@ -59,15 +54,14 @@ class CategoryTest extends TestCase
         $this->assertNull($category);
     }
 
-
     public function test_admin_can_update_category()
     {
         //create a category
         $category = Category::factory()->create();
-        $new_title = fake()->sentence(rand(1,4));
+        $new_title = fake()->sentence(rand(1, 4));
 
         $response = $this->put(route('category.update', ['category' =>$category->uuid]), [
-            'title' => $new_title
+            'title' => $new_title,
         ], $this->getAdminAuthHeaders());
         $response->assertStatus(200);
 
@@ -75,15 +69,14 @@ class CategoryTest extends TestCase
         $this->assertEquals($category->title, $new_title);
     }
 
-
     public function test_user_cannot_update_category()
     {
         //create a category
         $category = Category::factory()->create();
-        $new_title = fake()->sentence(rand(1,4));
+        $new_title = fake()->sentence(rand(1, 4));
 
         $response = $this->put(route('category.update', ['category' =>$category->uuid]), [
-            'title' => $new_title
+            'title' => $new_title,
         ], $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
 
@@ -91,14 +84,12 @@ class CategoryTest extends TestCase
         $this->assertNotEquals($category->title, $new_title);
     }
 
-
     public function test_admin_can_view_category()
     {
         $category = Category::factory()->create();
         $response = $this->get(route('category.show', ['category' =>$category->uuid]), $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)->assertJsonPath('data.uuid', $category->uuid);
     }
-
 
     public function test_user_can_view_category()
     {
@@ -116,7 +107,6 @@ class CategoryTest extends TestCase
         $category = Category::find($category->id);
         $this->assertNull($category);
     }
-
 
     public function test_user_cannot_delete_category()
     {

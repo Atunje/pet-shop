@@ -2,55 +2,55 @@
 
 namespace App\Traits;
 
+use App\DTOs\FilterParams;
 use DateTime;
 use Exception;
-use App\DTOs\FilterParams;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 
 trait Filterable
 {
     /**
-     * The query to be built and executed
+     * The query to be built and executed.
      *
      * @var Builder<self>
      */
     private Builder $query;
 
     /**
-     * Array of key value pairs to add to query's where statement
+     * Array of key value pairs to add to query's where statement.
      */
     private FilterParams $filter_params;
 
     /**
-     * Array of model fields that can make where statements
+     * Array of model fields that can make where statements.
      *
      * @var array<int, string>
      */
     private array $filterables;
 
     /**
-     * Records per page
+     * Records per page.
      */
     private int $per_page;
 
     /**
-     * Field used to sort the records
+     * Field used to sort the records.
      */
     private ?string $sort_by;
 
     /**
-     * Sort the records in descending order
+     * Sort the records in descending order.
      */
     private bool $sort_descending;
 
     /**
-     * Field to use when querying by date range
+     * Field to use when querying by date range.
      */
-    protected string $date_field = "created_at";
+    protected string $date_field = 'created_at';
 
     /**
-     * Get all database records by building the necessary query and returning paginated records
+     * Get all database records by building the necessary query and returning paginated records.
      *
      * @param FilterParams $filter_params
      * @param array $filterables
@@ -76,7 +76,7 @@ trait Filterable
     }
 
     /**
-     * Set the instance parameters
+     * Set the instance parameters.
      *
      * @param self $instance
      * @param FilterParams $filter_params
@@ -121,25 +121,25 @@ trait Filterable
 
             $this->query
                 ->whereDate($this->date_field, '>=', new DateTime($from))
-                ->whereDate($this->date_field, "<=", new DateTime($to));
+                ->whereDate($this->date_field, '<=', new DateTime($to));
         }
     }
 
     /**
-     * Add sorting to the query builder
+     * Add sorting to the query builder.
      *
      * @return void
      */
     protected function sortQuery(): void
     {
         if (! is_null($this->sort_by)) {
-            $order = $this->sort_descending ? "asc" : "desc";
+            $order = $this->sort_descending ? 'asc' : 'desc';
             $this->query->orderBy($this->sort_by, $order);
         }
     }
 
     /**
-     * Allow models to add additional query with the implementation of this method
+     * Allow models to add additional query with the implementation of this method.
      *
      * @return void
      */
@@ -149,7 +149,7 @@ trait Filterable
     }
 
     /**
-     * Get all db records
+     * Get all db records.
      *
      * @param FilterParams $filter_params
      * @return LengthAwarePaginator

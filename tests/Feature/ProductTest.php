@@ -2,15 +2,14 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Product;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class ProductTest extends TestCase
 {
     use RefreshDatabase;
-
 
     /**
      * @return void
@@ -23,7 +22,6 @@ class ProductTest extends TestCase
             ->assertJsonPath('data.current_page', 1);
     }
 
-
     public function test_admin_can_view_product_listing(): void
     {
         $response = $this->get(route('products'), $this->getAdminAuthHeaders());
@@ -31,8 +29,6 @@ class ProductTest extends TestCase
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
     }
-
-
 
     public function test_admin_can_create_product()
     {
@@ -46,7 +42,6 @@ class ProductTest extends TestCase
         $this->assertNotNull($product);
     }
 
-
     public function test_user_cannot_create_product()
     {
         $product = Product::factory()->make();
@@ -58,7 +53,6 @@ class ProductTest extends TestCase
         $product = Product::where('title', $product->title)->first();
         $this->assertNull($product);
     }
-
 
     public function test_admin_can_update_product()
     {
@@ -78,8 +72,6 @@ class ProductTest extends TestCase
         $this->assertEquals(json_encode($product->metadata), $update->metadata);
     }
 
-
-
     public function test_user_cannot_update_product()
     {
         //create a product
@@ -94,14 +86,12 @@ class ProductTest extends TestCase
         $this->assertNotEquals($product->title, $update->title);
     }
 
-
     public function test_admin_can_view_product()
     {
         $product = Product::factory()->create();
         $response = $this->get(route('product.show', ['product' => $product->uuid]), $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)->assertJsonPath('data.uuid', $product->uuid);
     }
-
 
     public function test_user_can_view_product()
     {
@@ -119,7 +109,6 @@ class ProductTest extends TestCase
         $product = Product::find($product->id);
         $this->assertNull($product);
     }
-
 
     public function test_user_cannot_delete_product()
     {

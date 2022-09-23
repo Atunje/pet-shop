@@ -2,11 +2,11 @@
 
 namespace App\Extensions;
 
-use Illuminate\Http\Request;
 use Illuminate\Auth\GuardHelpers;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;
-use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Http\Request;
 
 class JWTGuard implements Guard
 {
@@ -20,14 +20,14 @@ class JWTGuard implements Guard
     protected $user;
 
     /**
-     * Request
+     * Request.
      *
      * @var Request
      */
     private $request;
 
     /**
-     * Jwt implementation class of the selected jwt library
+     * Jwt implementation class of the selected jwt library.
      *
      * @var JWTLibraryClient
      */
@@ -76,11 +76,12 @@ class JWTGuard implements Guard
     public function validate(array $credentials = []): bool
     {
         $user = $this->provider->retrieveByCredentials($credentials);
+
         return $user !== null;
     }
 
     /**
-     * Validates user's credentials and returns access token
+     * Validates user's credentials and returns access token.
      *
      * @param array $credentials
      * @return string|null
@@ -100,7 +101,7 @@ class JWTGuard implements Guard
     }
 
     /**
-     * Logs user out
+     * Logs user out.
      *
      * @return bool
      */

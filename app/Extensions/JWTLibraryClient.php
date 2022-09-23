@@ -2,34 +2,34 @@
 
 namespace App\Extensions;
 
-use App\Models\JwtToken;
 use App\DTOs\IssuedToken;
+use App\Models\JwtToken;
 
 abstract class JWTLibraryClient
 {
     /**
-     * JWT issued by
+     * JWT issued by.
      *
      * @var string
      */
     protected string $issuer;
 
     /**
-     * JWT Expiry in seconds
+     * JWT Expiry in seconds.
      *
      * @var int
      */
     protected int $expires_in;
 
     /**
-     * JWT private key
+     * JWT private key.
      *
      * @var string
      */
     protected string $private_key;
 
     /**
-     * JWT public key
+     * JWT public key.
      *
      * @var string
      */
@@ -46,7 +46,7 @@ abstract class JWTLibraryClient
     }
 
     /**
-     * Get the stored jwtToken if token is valid
+     * Get the stored jwtToken if token is valid.
      *
      * @param string $token
      * @return JwtToken|null
@@ -54,7 +54,7 @@ abstract class JWTLibraryClient
     abstract public function getJwtToken(string $token): ?JwtToken;
 
     /**
-     * Issue the jwt and return the string
+     * Issue the jwt and return the string.
      *
      * @param string $user_identifier
      * @return IssuedToken
@@ -62,14 +62,14 @@ abstract class JWTLibraryClient
     abstract public function issueToken(string $user_identifier): IssuedToken;
 
     /**
-     * Initial configuration
+     * Initial configuration.
      *
      * @return void
      */
     abstract protected function configure(): void;
 
     /**
-     * Get stored jwt token
+     * Get stored jwt token.
      *
      * @param mixed $unique_id
      * @return JwtToken|null

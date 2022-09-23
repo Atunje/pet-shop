@@ -17,7 +17,7 @@ class ProductRequest extends APIFormRequest
     }
 
     /**
-     * Convert all json fields to arrays
+     * Convert all json fields to arrays.
      *
      * @return void
      */
@@ -61,7 +61,7 @@ class ProductRequest extends APIFormRequest
     public function messages()
     {
         $messages = parent::messages();
-        $messages['metadata.array'] = "The metadata supplied is not a valid json array";
+        $messages['metadata.array'] = 'The metadata supplied is not a valid json array';
 
         return $messages;
     }

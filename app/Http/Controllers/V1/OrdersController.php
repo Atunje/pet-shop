@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\V1;
 
-use Throwable;
+use App\Http\Requests\V1\FilterRequest;
+use App\Http\Requests\V1\OrderRequest;
+use App\Http\Resources\V1\OrderResource;
+use App\Http\Services\V1\OrderService;
 use App\Models\Order;
 use Illuminate\Http\JsonResponse;
-use App\Http\Requests\V1\OrderRequest;
-use App\Http\Services\V1\OrderService;
-use App\Http\Requests\V1\FilterRequest;
-use App\Http\Resources\V1\OrderResource;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class OrdersController extends Controller
 {
@@ -67,6 +67,7 @@ class OrdersController extends Controller
     public function index(FilterRequest $request)
     {
         $filter_params = $request->filterParams();
+
         return $this->jsonResponse(data:$this->orderService->getAll($filter_params));
     }
 
@@ -119,6 +120,7 @@ class OrdersController extends Controller
     public function dashboad(FilterRequest $request)
     {
         $filter_params = $request->filterParams();
+
         return $this->jsonResponse(data:$this->orderService->getAll($filter_params));
     }
 

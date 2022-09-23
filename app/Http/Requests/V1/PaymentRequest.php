@@ -15,7 +15,7 @@ class PaymentRequest extends APIFormRequest
     }
 
     /**
-     * Convert all json fields to arrays
+     * Convert all json fields to arrays.
      *
      * @return void
      */
@@ -42,7 +42,7 @@ class PaymentRequest extends APIFormRequest
     public function messages(): array
     {
         $messages = parent::messages();
-        $messages['details.array'] = "The details supplied is not a valid json array";
+        $messages['details.array'] = 'The details supplied is not a valid json array';
 
         return $messages;
     }

@@ -26,7 +26,7 @@ class UserFactory extends Factory
             'avatar' => File::factory()->create()->uuid,
             'phone_number' => fake()->phoneNumber(),
             'address' => fake()->address(),
-            'is_marketing' => rand(0,1),
+            'is_marketing' => rand(0, 1),
             'is_admin' => false,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             //'remember_token' => Str::random(10),
@@ -34,7 +34,7 @@ class UserFactory extends Factory
     }
 
     /**
-     * Indicate that the user's is_marketing field is true
+     * Indicate that the user's is_marketing field is true.
      *
      * @return static
      */
@@ -47,9 +47,8 @@ class UserFactory extends Factory
         });
     }
 
-
     /**
-     * Indicate that the user is admin
+     * Indicate that the user is admin.
      *
      * @return static
      */
@@ -62,9 +61,8 @@ class UserFactory extends Factory
         });
     }
 
-
     /**
-     * Indicate that the user's is_marketing field is true and is admin
+     * Indicate that the user's is_marketing field is true and is admin.
      *
      * @return static
      */
@@ -73,7 +71,7 @@ class UserFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'is_marketing' => true,
-                'is_admin' => true
+                'is_admin' => true,
             ];
         });
     }

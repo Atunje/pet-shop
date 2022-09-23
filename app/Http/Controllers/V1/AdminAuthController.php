@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Http\Requests\V1\LoginRequest;
+use App\Http\Requests\V1\RegisterRequest;
+use App\Http\Services\V1\UserService;
 use Auth;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use App\Http\Services\V1\UserService;
-use App\Http\Requests\V1\LoginRequest;
-use App\Http\Requests\V1\RegisterRequest;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminAuthController extends Controller
@@ -66,6 +66,7 @@ class AdminAuthController extends Controller
         $user_resource = $this->userService->registerAdmin($request->validFields());
 
         $user_resource->token = $this->userService->adminLogin($request->only('email', 'password'));
+
         return $this->jsonResponse(data:$user_resource);
     }
 

@@ -1871,7 +1871,7 @@
                         return $instance->validate($credentials);
         }
                     /**
-         * Validates user's credentials and returns access token
+         * Validates user's credentials and returns access token.
          *
          * @param array $credentials
          * @return string|null 
@@ -1883,7 +1883,7 @@
                         return $instance->attempt($credentials);
         }
                     /**
-         * Logs user out
+         * Logs user out.
          *
          * @return bool 
          * @static 

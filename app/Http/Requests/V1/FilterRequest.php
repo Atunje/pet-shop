@@ -38,20 +38,20 @@ class FilterRequest extends APIFormRequest
     public function rules()
     {
         return [
-            "page" => "integer|nullable",
-            "limit" => "integer|nullable",
-            "sort_by" => "string|nullable",
-            "desc" => "boolean|nullable",
-            "date_range" => "array|nullable",
-            "date_range.from" => "date|nullable",
-            "date_range.to" => "date|nullable",
+            'page' => 'integer|nullable',
+            'limit' => 'integer|nullable',
+            'sort_by' => 'string|nullable',
+            'desc' => 'boolean|nullable',
+            'date_range' => 'array|nullable',
+            'date_range.from' => 'date|nullable',
+            'date_range.to' => 'date|nullable',
         ];
     }
 
     public function messages(): array
     {
         $messages = parent::messages();
-        $messages['date_range.array'] = "The date range must be a json array.";
+        $messages['date_range.array'] = 'The date range must be a json array.';
 
         return $messages;
     }

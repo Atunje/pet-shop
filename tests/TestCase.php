@@ -23,17 +23,7 @@ abstract class TestCase extends BaseTestCase
             $user = $is_admin ? User::factory()->admin()->create() : User::factory()->create();
         }
 
-        $endpoint = $is_admin ? route('admin.login') : route('user.login');
-        $response = $this->post($endpoint, [
-            "email" => $user->email,
-            "password" => "password"
-        ]);
-
-        $content = json_decode($response->content(), true);
-
-        $this->refreshApplication();
-
-        return $content['data']['token'];
+        return $user->createToken();
     }
 
 

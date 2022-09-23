@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-//use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use Tests\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserTest extends TestCase
 {
-    //use RefreshDatabase;
+    use RefreshDatabase;
 
 
     /**
@@ -115,8 +115,6 @@ class UserTest extends TestCase
 
         $response = $this->put(route('user.update'), $updated, $this->getUserAuthHeaders($user));
         $response->assertStatus(Response::HTTP_OK);
-
-        $this->refreshApplication();
 
         $user->refresh();
         $this->assertEquals($user->first_name, $updated['first_name']);

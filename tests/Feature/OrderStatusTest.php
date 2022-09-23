@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-//use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\OrderStatus;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class OrderStatusTest extends TestCase
 {
-    //use RefreshDatabase;
+    use RefreshDatabase;
 
 
     /**

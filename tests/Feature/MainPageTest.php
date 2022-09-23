@@ -2,8 +2,7 @@
 
 namespace Tests\Feature;
 
-//use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\Brand;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Post;
 use App\Models\Promotion;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +10,7 @@ use Tests\TestCase;
 
 class MainPageTest extends TestCase
 {
-    //use RefreshDatabase;
+    use RefreshDatabase;
 
     /**
      * @return void

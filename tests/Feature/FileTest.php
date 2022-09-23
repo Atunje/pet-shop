@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-//use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\File;
 use Tests\TestCase;
 use Illuminate\Http\UploadedFile;
@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FileTest extends TestCase
 {
-    //use RefreshDatabase;
+    use RefreshDatabase;
 
     public function test_user_can_upload_file()
     {

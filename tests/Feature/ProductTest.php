@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-//use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Product;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class ProductTest extends TestCase
 {
-    //use RefreshDatabase;
+    use RefreshDatabase;
 
 
     /**

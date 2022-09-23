@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-//use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use Tests\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminTest extends TestCase
 {
-    //use RefreshDatabase;
+    use RefreshDatabase;
 
     /**
      * Test admin can register

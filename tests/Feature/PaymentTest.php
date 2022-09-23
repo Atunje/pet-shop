@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-//use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Payment;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class PaymentTest extends TestCase
 {
-    //use RefreshDatabase;
+    use RefreshDatabase;
 
 
     /**

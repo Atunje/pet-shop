@@ -23,7 +23,7 @@ class AdminTest extends TestCase
         $user['password_confirmation'] = 'password1';
         $user['is_marketing'] = 'is_marketing';
 
-        $response = $this->post(self::ADMIN_ENDPOINT . 'create', $user);
+        $response = $this->post(route('admin.create'), $user);
 
         $response->assertStatus(200);
 
@@ -39,7 +39,7 @@ class AdminTest extends TestCase
         //create admin user with default password - password
         $user = User::factory()->admin()->create();
 
-        $response = $this->post(self::ADMIN_ENDPOINT . 'login', [
+        $response = $this->post(route('admin.login'), [
             "email" => $user->email,
             "password" => "password"
         ]);
@@ -57,7 +57,7 @@ class AdminTest extends TestCase
         //create user with default password - password
         $user = User::factory()->create();
 
-        $response = $this->post(self::ADMIN_ENDPOINT . 'login', [
+        $response = $this->post(route('admin.login'), [
             "email" => $user->email,
             "password" => "password"
         ]);
@@ -71,7 +71,7 @@ class AdminTest extends TestCase
         //create user with default password - password
         $user = User::factory()->admin()->create();
 
-        $response = $this->post(self::ADMIN_ENDPOINT . 'login', [
+        $response = $this->post(route('admin.login'), [
             "email" => $user->email,
             "password" => "wrong_password"
         ]);
@@ -82,7 +82,7 @@ class AdminTest extends TestCase
 
     public function test_admin_can_logout()
     {
-        $response = $this->get(self::ADMIN_ENDPOINT . 'logout', $this->getAdminAuthHeaders());
+        $response = $this->get(route('admin.logout'), $this->getAdminAuthHeaders());
         $response->assertStatus(200);
     }
 
@@ -98,7 +98,7 @@ class AdminTest extends TestCase
         $updated['password_confirmation'] = 'password';
         $updated = array_merge($user_arr, $updated);
 
-        $response = $this->put(self::USER_ENDPOINT . "edit", $updated, $this->getAdminAuthHeaders($user));
+        $response = $this->put(route('user.update'), $updated, $this->getAdminAuthHeaders($user));
         $response->assertStatus(401);
 
         $user->refresh();
@@ -107,13 +107,13 @@ class AdminTest extends TestCase
 
     public function test_admin_account_cannot_be_deleted()
     {
-        $response = $this->delete(self::USER_ENDPOINT, [], $this->getAdminAuthHeaders());
+        $response = $this->delete(route('user.delete'), [], $this->getAdminAuthHeaders());
         $response->assertStatus(401);
     }
 
     public function test_admin_can_view_user_listing()
     {
-        $response = $this->post(self::ADMIN_ENDPOINT . "user-listing", [], $this->getAdminAuthHeaders());
+        $response = $this->post(route('admin.user-listing'), [], $this->getAdminAuthHeaders());
         $response->assertStatus(200)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
@@ -131,7 +131,7 @@ class AdminTest extends TestCase
         $updated['password_confirmation'] = 'password';
         $updated = array_merge($user_arr, $updated);
 
-        $response = $this->put(self::ADMIN_ENDPOINT . "user-edit/" . $user->uuid, $updated, $this->getAdminAuthHeaders());
+        $response = $this->put(route('admin.user-update', ['user' => $user->uuid]), $updated, $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);
 
         $user->refresh();
@@ -147,7 +147,7 @@ class AdminTest extends TestCase
         $user = User::factory()->create();
 
         //delete the user with admin account
-        $response = $this->delete(self::ADMIN_ENDPOINT . "user-delete/" . $user->uuid, [], $this->getAdminAuthHeaders());
+        $response = $this->delete(route('admin.user-delete', ['user' => $user->uuid]), [], $this->getAdminAuthHeaders());
         $response->assertStatus(200);
 
         //fetch the user afresh from the db

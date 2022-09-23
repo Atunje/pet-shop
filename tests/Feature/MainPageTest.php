@@ -19,7 +19,7 @@ class MainPageTest extends TestCase
     public function test_promotion_listing(): void
     {
         Promotion::factory(10)->create();
-        $response = $this->get(self::MAIN_PAGE_ENDPOINT . 'promotions');
+        $response = $this->get(route('promotions'));
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
@@ -31,7 +31,7 @@ class MainPageTest extends TestCase
     public function test_blog_listing(): void
     {
         Post::factory(10)->create();
-        $response = $this->get(self::MAIN_PAGE_ENDPOINT . 'blog');
+        $response = $this->get(route('blog'));
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
@@ -40,7 +40,7 @@ class MainPageTest extends TestCase
     public function test_viewing_a_blog()
     {
         $post = Post::factory()->create();
-        $response = $this->get(self::MAIN_PAGE_ENDPOINT . 'blog/' . $post->uuid);
+        $response = $this->get(route('blog.show', ['post' => $post->uuid]));
         $response->assertStatus(Response::HTTP_OK)->assertJsonPath('data.uuid', $post->uuid);
     }
 }

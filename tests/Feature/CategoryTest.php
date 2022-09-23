@@ -17,7 +17,7 @@ class CategoryTest extends TestCase
      */
     public function test_user_can_view_category_listing(): void
     {
-        $response = $this->get(self::CATEGORIES_ENDPOINT, $this->getUserAuthHeaders());
+        $response = $this->get(route('categories'), $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
@@ -26,7 +26,7 @@ class CategoryTest extends TestCase
 
     public function test_admin_can_view_category_listing(): void
     {
-        $response = $this->get(self::CATEGORIES_ENDPOINT, $this->getAdminAuthHeaders());
+        $response = $this->get(route('categories'), $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
@@ -37,7 +37,7 @@ class CategoryTest extends TestCase
     public function test_admin_can_create_category()
     {
         $title = fake()->sentence(rand(1,4));
-        $response = $this->post(self::CATEGORY_ENDPOINT . "create", [
+        $response = $this->post(route('category.create'), [
             'title' => $title
         ], $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);
@@ -50,7 +50,7 @@ class CategoryTest extends TestCase
     public function test_user_cannot_create_category()
     {
         $title = fake()->sentence(rand(1,4));
-        $response = $this->post(self::CATEGORY_ENDPOINT . "create", [
+        $response = $this->post(route('category.create'), [
             'title' => $title
         ], $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -66,7 +66,7 @@ class CategoryTest extends TestCase
         $category = Category::factory()->create();
         $new_title = fake()->sentence(rand(1,4));
 
-        $response = $this->put(self::CATEGORY_ENDPOINT . $category->uuid, [
+        $response = $this->put(route('category.update', ['category' =>$category->uuid]), [
             'title' => $new_title
         ], $this->getAdminAuthHeaders());
         $response->assertStatus(200);
@@ -82,7 +82,7 @@ class CategoryTest extends TestCase
         $category = Category::factory()->create();
         $new_title = fake()->sentence(rand(1,4));
 
-        $response = $this->put(self::CATEGORY_ENDPOINT . $category->uuid, [
+        $response = $this->put(route('category.update', ['category' =>$category->uuid]), [
             'title' => $new_title
         ], $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -95,7 +95,7 @@ class CategoryTest extends TestCase
     public function test_admin_can_view_category()
     {
         $category = Category::factory()->create();
-        $response = $this->get(self::CATEGORY_ENDPOINT . $category->uuid, $this->getAdminAuthHeaders());
+        $response = $this->get(route('category.show', ['category' =>$category->uuid]), $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)->assertJsonPath('data.uuid', $category->uuid);
     }
 
@@ -103,14 +103,14 @@ class CategoryTest extends TestCase
     public function test_user_can_view_category()
     {
         $category = Category::factory()->create();
-        $response = $this->get(self::CATEGORY_ENDPOINT . $category->uuid, $this->getUserAuthHeaders());
+        $response = $this->get(route('category.show', ['category' =>$category->uuid]), $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)->assertJsonPath('data.uuid', $category->uuid);
     }
 
     public function test_admin_can_delete_category()
     {
         $category = Category::factory()->create();
-        $response = $this->delete(self::CATEGORY_ENDPOINT . $category->uuid, [], $this->getAdminAuthHeaders());
+        $response = $this->delete(route('category.delete', ['category' =>$category->uuid]), [], $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);
 
         $category = Category::find($category->id);
@@ -121,7 +121,7 @@ class CategoryTest extends TestCase
     public function test_user_cannot_delete_category()
     {
         $category = Category::factory()->create();
-        $response = $this->delete(self::CATEGORY_ENDPOINT . $category->uuid, [], $this->getUserAuthHeaders());
+        $response = $this->delete(route('category.delete', ['category' =>$category->uuid]), [], $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
 
         $category = Category::find($category->id);

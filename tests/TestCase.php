@@ -9,22 +9,6 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    const ROOT_ENDPOINT = '/v1';
-    const ADMIN_ENDPOINT = '/v1/admin/';
-    const USER_ENDPOINT = '/v1/user/';
-    const CATEGORY_ENDPOINT = '/v1/category/';
-    const CATEGORIES_ENDPOINT = '/v1/categories/';
-    const BRAND_ENDPOINT = '/v1/brand/';
-    const BRANDS_ENDPOINT = '/v1/brands/';
-    const PRODUCT_ENDPOINT = '/v1/product/';
-    const PRODUCTS_ENDPOINT = '/v1/products/';
-    const ORDER_STATUS_ENDPOINT = '/v1/order-status/';
-    const ORDER_STATUSES_ENDPOINT = '/v1/order-statuses/';
-    const MAIN_PAGE_ENDPOINT = '/v1/main/';
-    const PAYMENT_ENDPOINT = '/v1/payment/';
-    const PAYMENTS_ENDPOINT = '/v1/payments/';
-    const FILE_ENDPOINT = '/v1/file/';
-
     /**
      * Log an admin user in and return the jwt
      *
@@ -32,15 +16,15 @@ abstract class TestCase extends BaseTestCase
      * @param User|null $user
      * @return mixed
      */
-    protected function getAuthToken(bool $is_admin = false, ?User $user = null)
+    protected function getAuthToken(bool $is_admin = false, ?User $user = null): mixed
     {
         //create admin/user with default password - password
         if($user === null) {
             $user = $is_admin ? User::factory()->admin()->create() : User::factory()->create();
         }
 
-        $endpoint = $is_admin ? self::ADMIN_ENDPOINT : self::USER_ENDPOINT;
-        $response = $this->post($endpoint . 'login', [
+        $endpoint = $is_admin ? route('admin.login') : route('user.login');
+        $response = $this->post($endpoint, [
             "email" => $user->email,
             "password" => "password"
         ]);

@@ -19,7 +19,7 @@ class FileTest extends TestCase
         ];
         $headers = $this->getUserAuthHeaders();
         $headers['Content-type'] = "multipart/form-data";
-        $response = $this->post(self::FILE_ENDPOINT . "upload", $fileData, $headers);
+        $response = $this->post(route('file.upload'), $fileData, $headers);
         $response->assertStatus(Response::HTTP_OK);
     }
 
@@ -30,7 +30,7 @@ class FileTest extends TestCase
         ];
         $headers = $this->getAdminAuthHeaders();
         $headers['Content-type'] = "multipart/form-data";
-        $response = $this->post(self::FILE_ENDPOINT . "upload", $fileData, $headers);
+        $response = $this->post(route('file.upload'), $fileData, $headers);
         $response->assertStatus(Response::HTTP_OK);
     }
 
@@ -42,7 +42,7 @@ class FileTest extends TestCase
         ];
         $headers = [];
         $headers['Content-type'] = "multipart/form-data";
-        $response = $this->post(self::FILE_ENDPOINT . "upload", $fileData, $headers);
+        $response = $this->post(route('file.upload'), $fileData, $headers);
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -51,7 +51,7 @@ class FileTest extends TestCase
     {
         $file = File::factory()->create();
 
-        $response = $this->get(self::FILE_ENDPOINT . $file->uuid);
+        $response = $this->get(route('file.show', ['file' => $file->uuid]));
         $response->assertStatus(Response::HTTP_OK);
     }
 }

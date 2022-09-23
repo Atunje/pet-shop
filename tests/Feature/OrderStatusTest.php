@@ -17,7 +17,7 @@ class OrderStatusTest extends TestCase
      */
     public function test_user_can_view_order_status_listing(): void
     {
-        $response = $this->get(self::ORDER_STATUSES_ENDPOINT, $this->getUserAuthHeaders());
+        $response = $this->get(route('order-statuses'), $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
@@ -26,7 +26,7 @@ class OrderStatusTest extends TestCase
 
     public function test_admin_can_view_order_status_listing(): void
     {
-        $response = $this->get(self::ORDER_STATUSES_ENDPOINT, $this->getAdminAuthHeaders());
+        $response = $this->get(route('order-statuses'), $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
@@ -37,7 +37,7 @@ class OrderStatusTest extends TestCase
     public function test_admin_can_create_order_status()
     {
         $title = fake()->sentence(rand(1,4));
-        $response = $this->post(self::ORDER_STATUS_ENDPOINT . "create", [
+        $response = $this->post(route('order-status.create'), [
             'title' => $title
         ], $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);
@@ -50,7 +50,7 @@ class OrderStatusTest extends TestCase
     public function test_user_cannot_create_order_status()
     {
         $title = fake()->sentence(rand(1,4));
-        $response = $this->post(self::ORDER_STATUS_ENDPOINT . "create", [
+        $response = $this->post(route('order-status.create'), [
             'title' => $title
         ], $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -66,7 +66,7 @@ class OrderStatusTest extends TestCase
         $order_status = OrderStatus::factory()->create();
         $new_title = fake()->sentence(rand(1,4));
 
-        $response = $this->put(self::ORDER_STATUS_ENDPOINT . $order_status->uuid, [
+        $response = $this->put(route('order-status.update', ['order_status' => $order_status->uuid]), [
             'title' => $new_title
         ], $this->getAdminAuthHeaders());
         $response->assertStatus(200);
@@ -82,7 +82,7 @@ class OrderStatusTest extends TestCase
         $order_status = OrderStatus::factory()->create();
         $new_title = fake()->sentence(rand(1,4));
 
-        $response = $this->put(self::ORDER_STATUS_ENDPOINT . $order_status->uuid, [
+        $response = $this->put(route('order-status.update', ['order_status' => $order_status->uuid]), [
             'title' => $new_title
         ], $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -95,7 +95,7 @@ class OrderStatusTest extends TestCase
     public function test_admin_can_view_order_status()
     {
         $order_status = OrderStatus::factory()->create();
-        $response = $this->get(self::ORDER_STATUS_ENDPOINT . $order_status->uuid, $this->getAdminAuthHeaders());
+        $response = $this->get(route('order-status.show', ['order_status' => $order_status->uuid]), $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)->assertJsonPath('data.uuid', $order_status->uuid);
     }
 
@@ -103,14 +103,14 @@ class OrderStatusTest extends TestCase
     public function test_user_can_view_order_status()
     {
         $order_status = OrderStatus::factory()->create();
-        $response = $this->get(self::ORDER_STATUS_ENDPOINT . $order_status->uuid, $this->getUserAuthHeaders());
+        $response = $this->get(route('order-status.show', ['order_status' => $order_status->uuid]), $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)->assertJsonPath('data.uuid', $order_status->uuid);
     }
 
     public function test_admin_can_delete_order_status()
     {
         $order_status = OrderStatus::factory()->create();
-        $response = $this->delete(self::ORDER_STATUS_ENDPOINT . $order_status->uuid, [], $this->getAdminAuthHeaders());
+        $response = $this->delete(route('order-status.delete', ['order_status' => $order_status->uuid]), [], $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);
 
         $order_status = OrderStatus::find($order_status->id);
@@ -121,7 +121,7 @@ class OrderStatusTest extends TestCase
     public function test_user_cannot_delete_order_status()
     {
         $order_status = OrderStatus::factory()->create();
-        $response = $this->delete(self::ORDER_STATUS_ENDPOINT . $order_status->uuid, [], $this->getUserAuthHeaders());
+        $response = $this->delete(route('order-status.delete', ['order_status' => $order_status->uuid]), [], $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
 
         $order_status = OrderStatus::find($order_status->id);

@@ -17,14 +17,14 @@ class UserTest extends TestCase
      *
      * @return void
      */
-    public function test_user_registration()
+    public function test_user_registration(): void
     {
         $user = User::factory()->make()->toArray();
         $user['password'] = 'password1';
         $user['password_confirmation'] = 'password1';
         $user['is_marketing'] = 'is_marketing';
 
-        $response = $this->post(self::USER_ENDPOINT . 'create', $user);
+        $response = $this->post(route('user.create'), $user);
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -40,7 +40,7 @@ class UserTest extends TestCase
         //create admin user with default password - password
         $user = User::factory()->create();
 
-        $response = $this->post(self::USER_ENDPOINT . 'login', [
+        $response = $this->post(route('user.login'), [
             "email" => $user->email,
             "password" => "password"
         ]);
@@ -58,7 +58,7 @@ class UserTest extends TestCase
         //create user with default password - password
         $user = User::factory()->admin()->create();
 
-        $response = $this->post(self::USER_ENDPOINT . 'login', [
+        $response = $this->post(route('user.login'), [
             "email" => $user->email,
             "password" => "password"
         ]);
@@ -72,7 +72,7 @@ class UserTest extends TestCase
         //create user with default password - password
         $user = User::factory()->admin()->create();
 
-        $response = $this->post(self::USER_ENDPOINT . 'login', [
+        $response = $this->post(route('user.login'), [
             "email" => $user->email,
             "password" => "wrong_password"
         ]);
@@ -83,7 +83,7 @@ class UserTest extends TestCase
 
     public function test_user_can_logout()
     {
-        $response = $this->get(self::USER_ENDPOINT . 'logout', $this->getUserAuthHeaders());
+        $response = $this->get(route('user.logout'), $this->getUserAuthHeaders());
         $response->assertStatus(200);
     }
 
@@ -92,7 +92,7 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->get(self::USER_ENDPOINT, $this->getUserAuthHeaders($user));
+        $response = $this->get(route('user.profile'), $this->getUserAuthHeaders($user));
         $response->assertStatus(Response::HTTP_OK);
 
         //check if the email matches
@@ -113,7 +113,7 @@ class UserTest extends TestCase
         $updated['password_confirmation'] = 'password';
         $updated = array_merge($user_arr, $updated);
 
-        $response = $this->put(self::USER_ENDPOINT . "edit", $updated, $this->getUserAuthHeaders($user));
+        $response = $this->put(route('user.update'), $updated, $this->getUserAuthHeaders($user));
         $response->assertStatus(Response::HTTP_OK);
 
         $this->refreshApplication();
@@ -132,13 +132,13 @@ class UserTest extends TestCase
     public function test_user_can_delete_own_account()
     {
         $headers = $this->getUserAuthHeaders();
-        $response = $this->delete(self::USER_ENDPOINT, [], $headers);
+        $response = $this->delete(route('user.delete'), [], $headers);
         $response->assertStatus(Response::HTTP_OK);
 
         $this->refreshApplication();
 
         //test if account is still assessible
-        $response = $this->get(self::USER_ENDPOINT, $headers);
+        $response = $this->get(route('user.profile'), $headers);
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 }

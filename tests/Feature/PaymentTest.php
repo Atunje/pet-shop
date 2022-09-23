@@ -17,7 +17,7 @@ class PaymentTest extends TestCase
      */
     public function test_admin_can_view_payment_listing(): void
     {
-        $response = $this->get(self::PAYMENTS_ENDPOINT, $this->getAdminAuthHeaders());
+        $response = $this->get(route('payments'), $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
@@ -29,7 +29,7 @@ class PaymentTest extends TestCase
      */
     public function test_user_cannot_view_payment_listing(): void
     {
-        $response = $this->get(self::PAYMENTS_ENDPOINT, $this->getUserAuthHeaders());
+        $response = $this->get(route('payments'), $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -39,7 +39,7 @@ class PaymentTest extends TestCase
     {
         $payment = Payment::factory()->make();
         $payment->details = json_encode($payment->details);
-        $response = $this->post(self::PAYMENT_ENDPOINT . "create", $payment->toArray(), $this->getAdminAuthHeaders());
+        $response = $this->post(route('payment.create'), $payment->toArray(), $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -48,7 +48,7 @@ class PaymentTest extends TestCase
     {
         $payment = Payment::factory()->make();
         $payment->details = json_encode($payment->details);
-        $response = $this->post(self::PAYMENT_ENDPOINT . "create", $payment->toArray(), $this->getUserAuthHeaders());
+        $response = $this->post(route('payment.create'), $payment->toArray(), $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);
     }
 
@@ -60,7 +60,7 @@ class PaymentTest extends TestCase
         $new_payment = Payment::factory()->bank_transfer()->make();
         $new_payment->details = json_encode($new_payment->details);
 
-        $response = $this->put(self::PAYMENT_ENDPOINT . $payment->uuid, $new_payment->toArray(), $this->getAdminAuthHeaders());
+        $response = $this->put(route('payment.update', ['payment' => $payment->uuid]), $new_payment->toArray(), $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);
 
         $payment->refresh();
@@ -78,7 +78,7 @@ class PaymentTest extends TestCase
         $new_payment = Payment::factory()->bank_transfer()->make();
         $new_payment->details = json_encode($new_payment->details);
 
-        $response = $this->put(self::PAYMENT_ENDPOINT . $payment->uuid, $new_payment->toArray(), $this->getUserAuthHeaders());
+        $response = $this->put(route('payment.update', ['payment' => $payment->uuid]), $new_payment->toArray(), $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -86,7 +86,7 @@ class PaymentTest extends TestCase
     public function test_admin_can_view_payment()
     {
         $payment = Payment::factory()->create();
-        $response = $this->get(self::PAYMENT_ENDPOINT . $payment->uuid, $this->getAdminAuthHeaders());
+        $response = $this->get(route('payment.show', ['payment' => $payment->uuid]), $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)->assertJsonPath('data.uuid', $payment->uuid);
     }
 
@@ -94,7 +94,7 @@ class PaymentTest extends TestCase
     public function test_user_cannot_view_payment()
     {
         $payment = Payment::factory()->create();
-        $response = $this->get(self::PAYMENT_ENDPOINT . $payment->uuid, $this->getUserAuthHeaders());
+        $response = $this->get(route('payment.show', ['payment' => $payment->uuid]), $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -102,7 +102,7 @@ class PaymentTest extends TestCase
     public function test_admin_can_delete_payment()
     {
         $payment = Payment::factory()->create();
-        $response = $this->delete(self::PAYMENT_ENDPOINT . $payment->uuid, [], $this->getAdminAuthHeaders());
+        $response = $this->delete(route('payment.delete', ['payment' => $payment->uuid]), [], $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);
 
         $payment = Payment::find($payment->id);
@@ -113,7 +113,7 @@ class PaymentTest extends TestCase
     public function test_user_cannot_delete_payment()
     {
         $payment = Payment::factory()->create();
-        $response = $this->delete(self::PAYMENT_ENDPOINT . $payment->uuid, [], $this->getUserAuthHeaders());
+        $response = $this->delete(route('payment.delete', ['payment' => $payment->uuid]), [], $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
 
         $payment = Payment::find($payment->id);

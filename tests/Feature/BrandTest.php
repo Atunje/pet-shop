@@ -17,7 +17,7 @@ class BrandTest extends TestCase
      */
     public function test_user_can_view_brand_listing(): void
     {
-        $response = $this->get(self::BRANDS_ENDPOINT, $this->getUserAuthHeaders());
+        $response = $this->get(route('brands'), $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
@@ -26,7 +26,7 @@ class BrandTest extends TestCase
 
     public function test_admin_can_view_brand_listing(): void
     {
-        $response = $this->get(self::BRANDS_ENDPOINT, $this->getAdminAuthHeaders());
+        $response = $this->get(route('brands'), $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
@@ -37,7 +37,7 @@ class BrandTest extends TestCase
     public function test_admin_can_create_brand()
     {
         $title = fake()->sentence(rand(1,4));
-        $response = $this->post(self::BRAND_ENDPOINT . "create", [
+        $response = $this->post(route('brand.create'), [
             'title' => $title
         ], $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);
@@ -50,7 +50,7 @@ class BrandTest extends TestCase
     public function test_user_cannot_create_brand()
     {
         $title = fake()->sentence(rand(1,4));
-        $response = $this->post(self::BRAND_ENDPOINT . "create", [
+        $response = $this->post(route('brand.create'), [
             'title' => $title
         ], $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -66,7 +66,7 @@ class BrandTest extends TestCase
         $brand = Brand::factory()->create();
         $new_title = fake()->sentence(rand(1,4));
 
-        $response = $this->put(self::BRAND_ENDPOINT . $brand->uuid, [
+        $response = $this->put(route('brand.update', ['brand' => $brand->uuid]), [
             'title' => $new_title
         ], $this->getAdminAuthHeaders());
         $response->assertStatus(200);
@@ -82,7 +82,7 @@ class BrandTest extends TestCase
         $brand = Brand::factory()->create();
         $new_title = fake()->sentence(rand(1,4));
 
-        $response = $this->put(self::BRAND_ENDPOINT . $brand->uuid, [
+        $response = $this->put(route('brand.update', ['brand' => $brand->uuid]), [
             'title' => $new_title
         ], $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -95,7 +95,7 @@ class BrandTest extends TestCase
     public function test_admin_can_view_brand()
     {
         $brand = Brand::factory()->create();
-        $response = $this->get(self::BRAND_ENDPOINT . $brand->uuid, $this->getAdminAuthHeaders());
+        $response = $this->get(route('brand.show', ['brand' => $brand->uuid]), $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);//->assertJsonPath('data.uuid', $brand->uuid);
     }
 
@@ -103,14 +103,14 @@ class BrandTest extends TestCase
     public function test_user_can_view_brand()
     {
         $brand = Brand::factory()->create();
-        $response = $this->get(self::BRAND_ENDPOINT . $brand->uuid, $this->getUserAuthHeaders());
+        $response = $this->get(route('brand.show', ['brand' => $brand->uuid]), $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)->assertJsonPath('data.uuid', $brand->uuid);
     }
 
     public function test_admin_can_delete_brand()
     {
         $brand = Brand::factory()->create();
-        $response = $this->delete(self::BRAND_ENDPOINT . $brand->uuid, [], $this->getAdminAuthHeaders());
+        $response = $this->delete(route('brand.delete', ['brand' => $brand->uuid]), [], $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);
 
         $brand = Brand::find($brand->id);
@@ -121,7 +121,7 @@ class BrandTest extends TestCase
     public function test_user_cannot_delete_brand()
     {
         $brand = Brand::factory()->create();
-        $response = $this->delete(self::BRAND_ENDPOINT . $brand->uuid, [], $this->getUserAuthHeaders());
+        $response = $this->delete(route('brand.delete', ['brand' => $brand->uuid]), [], $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
 
         $brand = Brand::find($brand->id);

@@ -17,7 +17,7 @@ class ProductTest extends TestCase
      */
     public function test_user_can_view_product_listing(): void
     {
-        $response = $this->get(self::PRODUCTS_ENDPOINT, $this->getUserAuthHeaders());
+        $response = $this->get(route('products'), $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
@@ -26,7 +26,7 @@ class ProductTest extends TestCase
 
     public function test_admin_can_view_product_listing(): void
     {
-        $response = $this->get(self::PRODUCTS_ENDPOINT, $this->getAdminAuthHeaders());
+        $response = $this->get(route('products'), $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)
             //confirm if record is paginated
             ->assertJsonPath('data.current_page', 1);
@@ -39,7 +39,7 @@ class ProductTest extends TestCase
         $product = Product::factory()->make();
         $product->metadata = json_encode($product->metadata);
 
-        $response = $this->post(self::PRODUCT_ENDPOINT . "create", $product->toArray(), $this->getAdminAuthHeaders());
+        $response = $this->post(route('product.create'), $product->toArray(), $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);
 
         $product = Product::where('title', $product->title)->first();
@@ -52,7 +52,7 @@ class ProductTest extends TestCase
         $product = Product::factory()->make();
         $product->metadata = json_encode($product->metadata);
 
-        $response = $this->post(self::PRODUCT_ENDPOINT . "create", $product->toArray(), $this->getUserAuthHeaders());
+        $response = $this->post(route('product.create'), $product->toArray(), $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
 
         $product = Product::where('title', $product->title)->first();
@@ -67,7 +67,7 @@ class ProductTest extends TestCase
         $update = Product::factory()->make();
         $update->metadata = json_encode($update->metadata);
 
-        $response = $this->put(self::PRODUCT_ENDPOINT . $product->uuid, $update->toArray(), $this->getAdminAuthHeaders());
+        $response = $this->put(route('product.update', ['product' => $product->uuid]), $update->toArray(), $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);
 
         $product = Product::find($product->id);
@@ -87,7 +87,7 @@ class ProductTest extends TestCase
         $update = Product::factory()->make();
         $update->metadata = json_encode($update->metadata);
 
-        $response = $this->put(self::PRODUCT_ENDPOINT . $product->uuid, $update->toArray(), $this->getUserAuthHeaders());
+        $response = $this->put(route('product.update', ['product' => $product->uuid]), $update->toArray(), $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
 
         $product = Product::find($product->id);
@@ -98,7 +98,7 @@ class ProductTest extends TestCase
     public function test_admin_can_view_product()
     {
         $product = Product::factory()->create();
-        $response = $this->get(self::PRODUCT_ENDPOINT . $product->uuid, $this->getAdminAuthHeaders());
+        $response = $this->get(route('product.show', ['product' => $product->uuid]), $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)->assertJsonPath('data.uuid', $product->uuid);
     }
 
@@ -106,14 +106,14 @@ class ProductTest extends TestCase
     public function test_user_can_view_product()
     {
         $product = Product::factory()->create();
-        $response = $this->get(self::PRODUCT_ENDPOINT . $product->uuid, $this->getUserAuthHeaders());
+        $response = $this->get(route('product.show', ['product' => $product->uuid]), $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_OK)->assertJsonPath('data.uuid', $product->uuid);
     }
 
     public function test_admin_can_delete_product()
     {
         $product = Product::factory()->create();
-        $response = $this->delete(self::PRODUCT_ENDPOINT . $product->uuid, [], $this->getAdminAuthHeaders());
+        $response = $this->delete(route('product.delete', ['product' => $product->uuid]), [], $this->getAdminAuthHeaders());
         $response->assertStatus(Response::HTTP_OK);
 
         $product = Product::find($product->id);
@@ -124,7 +124,7 @@ class ProductTest extends TestCase
     public function test_user_cannot_delete_product()
     {
         $product = Product::factory()->create();
-        $response = $this->delete(self::PRODUCT_ENDPOINT . $product->uuid, [], $this->getUserAuthHeaders());
+        $response = $this->delete(route('product.delete', ['product' => $product->uuid]), [], $this->getUserAuthHeaders());
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
 
         $product = Product::find($product->id);

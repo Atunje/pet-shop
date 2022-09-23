@@ -20,18 +20,14 @@ class JWTGuard implements Guard
     protected $user;
 
     /**
-     * Request.
-     *
-     * @var Request
+     * Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * Jwt implementation class of the selected jwt library.
-     *
-     * @var JWTLibraryClient
      */
-    private $jwtLibraryClient;
+    private JWTLibraryClient $jwtLibraryClient;
 
     public function __construct(UserProvider $provider, Request $request, JWTLibraryClient $jwtLibraryClient)
     {
@@ -86,7 +82,7 @@ class JWTGuard implements Guard
      * @param array $credentials
      * @return string|null
      */
-    public function attempt(array $credentials = [])
+    public function attempt(array $credentials = []): ?string
     {
         $user = $this->provider->retrieveByCredentials($credentials);
 
@@ -105,7 +101,7 @@ class JWTGuard implements Guard
      *
      * @return bool
      */
-    public function logout()
+    public function logout(): bool
     {
         $user = $this->request->user();
 

@@ -37,10 +37,10 @@ abstract class JWTLibraryClient
 
     public function __construct()
     {
-        $this->private_key = strval(env('JWT_SECRET'));
-        $this->public_key = strval(env('JWT_PUBLIC'));
-        $this->issuer = strval(env('APP_URL'));
-        $this->expires_in = intval(env('JWT_EXPIRES_IN', 36000));
+        $this->private_key = config('jwt.secret_key');
+        $this->public_key = config('jwt.public_key');
+        $this->issuer = config('jwt.app_url');
+        $this->expires_in = config('jwt.expires_in');
 
         $this->configure();
     }
